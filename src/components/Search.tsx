@@ -26,7 +26,7 @@ const Search: React.FC = () => {
         try {
           const result: any = await client.models.Annotation.list({
             filter: { category: { eq: category } },
-            limit: 20
+            limit: 5
           });
 
           // Fetch image URLs for each annotation

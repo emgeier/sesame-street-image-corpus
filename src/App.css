@@ -40,3 +40,8 @@
 .read-the-docs {
   color: #888;
 }
+.App {
+  text-align: center;
+  width: 100%;
+  padding-top: 600px; /* Adjust based on the height of the navbar */
+}

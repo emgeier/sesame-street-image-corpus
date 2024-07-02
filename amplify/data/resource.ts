@@ -2,26 +2,26 @@ import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
 const schema = a.schema({
   Image: a.model({
+    episode_id: a.string().required(),
     image_id: a.string().required(),
     isRestricted: a.boolean(),
     source: a.string(),
     height: a.integer(),
     width: a.integer()
     })
-    .identifier(['image_id'])
+    .identifier(['episode_id','image_id'])
     .authorization(allow => [allow.publicApiKey()]),
 
 Annotation: a
   .model({
     image_id: a.string().required(),
+    annotation_id: a.integer().required(),
     deleted: a.boolean(),
     occluded: a.boolean(),
     restricted: a.boolean(),
     verified: a.boolean(),
     category: a.string(),
     polygon: a.json(),
-    type: a.string(),
-    annotation_id: a.integer().required(),
     attributes: a.json(),
     species: a.string(),
     representation: a.string(),
@@ -51,7 +51,7 @@ export const data = defineData({
     defaultAuthorizationMode: "apiKey",
     // API Key is used for a.allow.public() rules
     apiKeyAuthorizationMode: {
-      expiresInDays: 30,
+      expiresInDays: 365,
     },
   },
 });

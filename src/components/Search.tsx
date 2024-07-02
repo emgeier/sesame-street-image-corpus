@@ -6,13 +6,13 @@ function Search() {
   const client = generateClient<Schema>();
   const [annotations, setAnnotations] = useState<Array<Schema["Annotation"]["type"]>>([]);
   const [category, setCategory] = useState<string>("");
-
+  // Eventually implement pagination for search results. 
   useEffect(() => {
     const fetchAnnotations = async () => {
       setAnnotations([]); 
       if (category) {
         try {
-          const result: any = await client.models.Annotation.list({ filter: { category: { eq: category } } });
+          const result: any = await client.models.Annotation.list({ filter: { category: { eq: category } }, limit: 20});
           console.log(result.data);
           console.log(result.data[0]);
           setAnnotations(result.data);

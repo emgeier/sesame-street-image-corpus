@@ -1,18 +1,47 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
-/*== STEP 1 ===============================================================
-The section below creates a Todo database table with a "content" field. Try
-adding a new "isDone" field as a boolean. The authorization rule below
-specifies that any user authenticated via an API key can "create", "read",
-"update", and "delete" any "Todo" records.
-=========================================================================*/
 const schema = a.schema({
-  Todo: a
-    .model({
-      content: a.string(),
+  Image: a.model({
+    image_id: a.string().required(),
+    isRestricted: a.boolean(),
+    source: a.string(),
+    height: a.integer(),
+    width: a.integer()
     })
-    .authorization((allow) => [allow.publicApiKey()]),
+    .identifier(['image_id'])
+    .authorization(allow => [allow.publicApiKey()]),
+
+Annotation: a
+  .model({
+    image_id: a.string().required(),
+    deleted: a.boolean(),
+    occluded: a.boolean(),
+    restricted: a.boolean(),
+    verified: a.boolean(),
+    category: a.string(),
+    polygon: a.json(),
+    type: a.string(),
+    annotation_id: a.integer().required(),
+    attributes: a.json(),
+    species: a.string(),
+    representation: a.string(),
+    ethnicity: a.string(),
+    age: a.string(),
+    orientation: a.string(),
+    angle: a.string(),
+    visibility: a.string(),
+    rotation: a.float(),
+    multiletter: a.string(),
+    singleletter: a.string(),
+    case: a.string(),
+    noun: a.boolean(),
+    content: a.string(),
+    multidigit: a.boolean(),
+  })
+  .identifier(['image_id','annotation_id'] as const)
+  .authorization((allow) => [allow.publicApiKey()]),
 });
+
 
 export type Schema = ClientSchema<typeof schema>;
 
@@ -27,31 +56,3 @@ export const data = defineData({
   },
 });
 
-/*== STEP 2 ===============================================================
-Go to your frontend source code. From your client-side code, generate a
-Data client to make CRUDL requests to your table. (THIS SNIPPET WILL ONLY
-WORK IN THE FRONTEND CODE FILE.)
-
-Using JavaScript or Next.js React Server Components, Middleware, Server 
-Actions or Pages Router? Review how to generate Data clients for those use
-cases: https://docs.amplify.aws/gen2/build-a-backend/data/connect-to-API/
-=========================================================================*/
-
-/*
-"use client"
-import { generateClient } from "aws-amplify/data";
-import type { Schema } from "@/amplify/data/resource";
-
-const client = generateClient<Schema>() // use this Data client for CRUDL requests
-*/
-
-/*== STEP 3 ===============================================================
-Fetch records from the database and use them in your frontend component.
-(THIS SNIPPET WILL ONLY WORK IN THE FRONTEND CODE FILE.)
-=========================================================================*/
-
-/* For example, in a React component, you can use this snippet in your
-  function's RETURN statement */
-// const { data: todos } = await client.models.Todo.list()
-
-// return <ul>{todos.map(todo => <li key={todo.id}>{todo.content}</li>)}</ul>

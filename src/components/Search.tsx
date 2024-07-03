@@ -68,7 +68,7 @@ const Search: React.FC = () => {
   return (
     <main>
       <div className='separator'></div>
-      <h2>Search Annotations by Category</h2>
+      <h2>Search Sesame Street Image Corpus</h2>
       <div>
         <label htmlFor="category">Category: </label>
         <select id="category" value={category} onChange={handleCategoryChange}>

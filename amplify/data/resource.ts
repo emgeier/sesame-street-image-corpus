@@ -7,7 +7,9 @@ const schema = a.schema({
     isRestricted: a.boolean(),
     source: a.string(),
     height: a.integer(),
-    width: a.integer()
+    width: a.integer(),
+    season: a.integer(),
+    episode_title: a.string()
     })
     .identifier(['episode_id','image_id'])
     .authorization(allow => [allow.publicApiKey()]),

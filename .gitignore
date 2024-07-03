@@ -27,3 +27,7 @@ dist-ssr
 .amplify
 amplify_outputs*
 amplifyconfiguration*
+
+# extra
+Pagination.tsx
+SearchOG.tsx

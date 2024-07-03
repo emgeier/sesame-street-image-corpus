@@ -1,5 +1,7 @@
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Authenticator } from '@aws-amplify/ui-react';
+
 
 import Home from './components/Home';
 import About from './components/About';
@@ -11,11 +13,14 @@ import Search from "./components/Search";
 
 function App() {
   return (
+    <Authenticator>
+      {({ signOut }) => (
     <main>
-      <div>
-        <Router>
+      
+        <div>
+            <Router>
               <div>
-                <Navbar />
+                  <Navbar />
                   <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/about" element={<About />} />
@@ -24,8 +29,11 @@ function App() {
                   </Routes>
               </div>
             </Router>
-      </div>
+        </div>
     </main>
+  )}
+  
+  </Authenticator>
   );
 }
 

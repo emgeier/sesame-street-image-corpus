@@ -43,10 +43,10 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
-  color: white;
+  color: rgb(104, 39, 214);
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #ad66e0;
 }
 button:focus,
 button:focus-visible {
@@ -59,13 +59,32 @@ button:focus-visible {
     background-color: #ffffff;
   }
   a:hover {
-    color: #747bff;
+    color: #7753c4;
   }
   button {
     background-color: #f9f9f9;
+    place-items: center;
   }
 }
 li {
   background-color: white;
   padding: 8px;
 }
+
+.page-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-buttons button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+

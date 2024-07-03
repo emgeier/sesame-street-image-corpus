@@ -51,13 +51,15 @@ const Admin: React.FC = () => {
   return (
     <div>
       <input type="file" onChange={handleChange} />
+      <div className='separator'/>
       <button onClick={handleUpload} disabled={!file}>
         Upload
       </button>
-      <img src={url} alt="Uploaded file" style={{ maxWidth: '100%', height: 'auto' }} />
+      <div className='separator'/>
       <button onClick={seeFile} disabled={!file}>
-        See
+        View File Contents
       </button>
+      <img src={url} alt="Uploaded file" style={{ maxWidth: '100%', height: 'auto' }} />
     </div>
   );
 };

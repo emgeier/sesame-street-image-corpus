@@ -116,7 +116,7 @@ const Search: React.FC = () => {
         <p>Loading...</p>
       ) : (
         <ul>
-          {annotations.slice(currentPageIndex, currentPageIndex + itemsPerPage).map((annotation) => (
+          {annotations.slice(currentPageIndex * itemsPerPage, currentPageIndex * itemsPerPage + itemsPerPage).map((annotation) => (
             <ul key={`${annotation.image_id}-${annotation.annotation_id}`}>
               <strong>Category:</strong> {annotation.category}<br />
               <strong>Image Id:</strong> {annotation.image_id}<br />
@@ -127,7 +127,7 @@ const Search: React.FC = () => {
       )}
       <div className="page-buttons">
         <button onClick={handlePreviousPage} disabled={currentPageIndex === 0 || loading}>Previous</button>
-        <button onClick={handleNextPage} disabled={currentPageIndex >= annotations.length - 1 || loading}>Next</button>
+        <button onClick={handleNextPage} disabled={currentPageIndex*itemsPerPage+itemsPerPage >= annotations.length - 1 || loading}>Next</button>
       </div>
     </main>
     <a href="/advsearch"><h2>Advanced Search</h2></a>

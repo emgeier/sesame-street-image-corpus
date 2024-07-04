@@ -74,6 +74,7 @@ const XSearch: React.FC = () => {
             }
           });
       setAnnotations(result.data);
+      console.log(annotations);
       setBoundingBoxes(allBoundingBoxes);
       console.log("boundingBoxes: " + JSON.stringify(allBoundingBoxes));
     } catch (error) {

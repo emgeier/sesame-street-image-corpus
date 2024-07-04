@@ -73,3 +73,13 @@
   button:hover {
   background-color: #640ba3;
   }
+  .main-content {
+    padding-top: 150px; 
+    text-align: center;
+    place-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 800px; /* Adjust the width as needed */
+    margin: 0 auto;
+  }

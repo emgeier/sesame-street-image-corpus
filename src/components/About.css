@@ -24,6 +24,12 @@
     justify-content: center;
     margin: 20px 0;
   }  
+  .top-separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 80px 0;
+  }  
 .intro {
     font-size: 28px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -66,7 +72,7 @@ h1 {
 }
 
 .main-content {
-  padding-top: 250px; 
+  padding-top: 150px; 
   text-align: center;
   place-items: center;
   display: flex;

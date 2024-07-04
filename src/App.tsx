@@ -6,6 +6,7 @@ import { Authenticator } from '@aws-amplify/ui-react';
 import Home from './components/Home';
 import About from './components/About';
 import Admin from './components/Admin';
+import XSearch from './components/XSearch';
 
 import Navbar from './components/Navbar';
 import Search from "./components/Search";
@@ -25,6 +26,7 @@ function App() {
                     <Route path="/about" element={<About />} />
                     <Route path="/search" element={<Search />} />
                     <Route path="/admin" element={<Admin />} />
+                    <Route path="/advsearch" element={<XSearch />} />
                   </Routes>
               </div>
             </Router>

@@ -27,7 +27,7 @@ Annotation: a
     attributes: a.json(),
     species: a.string(),
     representation: a.string(),
-    ethnicity: a.string(),
+    race: a.string(),
     age: a.string(),
     orientation: a.string(),
     angle: a.string(),
@@ -39,6 +39,7 @@ Annotation: a
     noun: a.boolean(),
     content: a.string(),
     multidigit: a.boolean(),
+    keywords: a.string(),
   })
   .identifier(['image_id','annotation_id'] as const)
   .authorization((allow) => [allow.publicApiKey()]),

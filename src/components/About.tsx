@@ -3,7 +3,6 @@ import './About.css';
 function About() {
   return (
     <main className='main-content'>
-      <header className="banner"/>
     
       <h1 className='intro'>About the Sesame Street Image Corpus</h1>
      

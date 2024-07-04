@@ -6,7 +6,6 @@ function Home() {
   return (
     <div className="main-content">
       <main>
-        <header className="banner"/>
         <h1 className='intro'>Sesame Street Image Corpus</h1>
         <div className='separator'></div>
         <p className='indented'>

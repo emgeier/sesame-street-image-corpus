@@ -58,7 +58,6 @@ const XSearch: React.FC = () => {
         const allBoundingBoxes: BoundingBox[] = [];
         result.data.forEach((annotation: any) => {
             const polygon = JSON.parse(annotation.polygon); // Parse the polygon string into an array of numbers
-      
             if (polygon.length === 4) {
               const [x, y, width, height] = polygon;
               const box: BoundingBox = {
@@ -198,7 +197,6 @@ const XSearch: React.FC = () => {
         </div>
         
       )}
-
       {loading ? (
         <p>Loading...</p>
       ) : (

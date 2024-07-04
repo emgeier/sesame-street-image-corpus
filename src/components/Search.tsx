@@ -8,7 +8,7 @@ const Search: React.FC = () => {
   const [annotations, setAnnotations] = useState<Array<Schema["Annotation"]["type"] & { imageUrl?: string }>>([]);
   const [category, setCategory] = useState<string>("");
   const [keyword, setKeyword] = useState<string>("");
-  const itemsPerPage = 5; // Items to display per page 
+  const itemsPerPage = 10; // Items to display per page 
   const [currentPageIndex, setCurrentPageIndex] = useState(0); // Start at the first item
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -24,7 +24,7 @@ const Search: React.FC = () => {
   };
 
   // Function to fetch annotation data from DynamoDB based on search criteria
-  const fetchAnnotations = async () => {
+  const fetchAnnotations = async (token: string | null = null) => {
     setLoading(true); // Set loading state
     
     const filter: any = {
@@ -46,7 +46,8 @@ const Search: React.FC = () => {
     try {
       const result: any = await client.models.Annotation.list({
         filter: Object.keys(filter).length ? filter : undefined,
-        limit: 20, // Fetch 20 items
+        limit: 200,
+        nextToken: token,
       });
 
       // Fetch image URLs for each annotation
@@ -63,6 +64,8 @@ const Search: React.FC = () => {
   };
 
   useEffect(() => {
+    setAnnotations([]); // Clear previous annotations
+    
     fetchAnnotations();
   }, [category, keyword]);
 
@@ -77,7 +80,7 @@ const Search: React.FC = () => {
   };
 
   const handleNextPage = () => {
-    if (currentPageIndex < annotations.length - 1) {
+    if (currentPageIndex < Math.ceil(annotations.length / itemsPerPage) - 1) {
       setCurrentPageIndex(currentPageIndex + 1);
     }
   };
@@ -127,7 +130,7 @@ const Search: React.FC = () => {
       )}
       <div className="page-buttons">
         <button onClick={handlePreviousPage} disabled={currentPageIndex === 0 || loading}>Previous</button>
-        <button onClick={handleNextPage} disabled={currentPageIndex*itemsPerPage+itemsPerPage >= annotations.length - 1 || loading}>Next</button>
+        <button onClick={handleNextPage} disabled={currentPageIndex*itemsPerPage+itemsPerPage >= annotations.length || loading}>Next</button>
       </div>
     </main>
     <a href="/advsearch"><h2>Advanced Search</h2></a>

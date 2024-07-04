@@ -42,7 +42,10 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
   color: rgb(104, 39, 214);
+  align-items: center;
+  margin-top: 10px;
 }
+
 button:hover {
   border-color: #ad66e0;
 }

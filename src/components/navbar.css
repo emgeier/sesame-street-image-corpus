@@ -107,7 +107,8 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-right: 15px;
     }
     button:hover {
-    background-color: #3e0468;
+    background-color: #785790;
     }

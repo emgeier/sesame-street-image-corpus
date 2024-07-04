@@ -183,6 +183,7 @@ const XSearch: React.FC = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
+        <div>
         <ul>
           {images.slice(currentPageIndex * itemsPerPage, currentPageIndex*itemsPerPage + itemsPerPage).map((image) => (
               <ul key={`${image.episode_id}-${image.image_id}`} onClick={() => handleImageClick(image.imageUrl, image.image_id)}>
@@ -190,11 +191,14 @@ const XSearch: React.FC = () => {
                 </ul>
           ))}
         </ul>
-      )}
-      <div className="page-buttons">
+        <div className="page-buttons">
         <button onClick={handlePreviousPage} disabled={currentPageIndex === 0 || loading}>Previous</button>
         <button onClick={handleNextPage} disabled={currentPageIndex*itemsPerPage+itemsPerPage >= images.length - 1 || loading}>Next</button>
       </div>
+        </div>
+        
+      )}
+
       {loading ? (
         <p>Loading...</p>
       ) : (

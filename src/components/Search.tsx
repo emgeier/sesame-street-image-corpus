@@ -91,7 +91,7 @@ const Search: React.FC = () => {
   return (
     <div >
     <main>
-      <div className='top-separator'></div>
+      <div className='main-content'></div>
       <h2>Search</h2>
       
       <div>

@@ -115,7 +115,7 @@ const XSearch: React.FC = () => {
   };
 
   return (
-    <main>
+    <main className="main-content">
       <div className='separator'></div>
       <h2>Advanced Search </h2>
       <div>

@@ -93,7 +93,6 @@ const XSearch: React.FC = () => {
           if (!result || !result.data) {
             throw new Error('No data returned from the API');
           }
-      console.log(result);
       // Fetch image URLs for each annotation
       if(result){
       const withUrls = await Promise.all(result.data.map(async (image: any) => {
@@ -143,7 +142,7 @@ const XSearch: React.FC = () => {
   }, [selectedFullImageId, selectedImage]);
 
   const handleNextPage = () => {
-    if (currentPageIndex < annotations.length - 1) {
+    if (currentPageIndex < images.length - 1) {
       setCurrentPageIndex(currentPageIndex + 1);
     }
   };
@@ -192,7 +191,7 @@ const XSearch: React.FC = () => {
       )}
       <div className="page-buttons">
         <button onClick={handlePreviousPage} disabled={currentPageIndex === 0 || loading}>Previous</button>
-        <button onClick={handleNextPage} disabled={currentPageIndex >= annotations.length - 1 || loading}>Next</button>
+        <button onClick={handleNextPage} disabled={currentPageIndex >= images.length - 1 || loading}>Next</button>
       </div>
       {loading ? (
         <p>Loading...</p>

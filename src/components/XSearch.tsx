@@ -1,30 +1,42 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import type { Schema } from "../../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
 import { getUrl } from 'aws-amplify/storage';
+import AnnotatedImage from "./AnnotatedImage";
+
+interface BoundingBox {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    label: string;
+    colorIndex: number; 
+  }
 
 const XSearch: React.FC = () => {
   const client = generateClient<Schema>();
   
-  const [annotations, setAnnotations] = useState<Array<Schema["Annotation"]["type"] & { imageUrl?: string }>>([]);
- 
+  const [annotations, setAnnotations] = useState<Array<Schema["Annotation"]["type"] >>([]);
+  const [boundingBoxes, setBoundingBoxes] = useState<BoundingBox[]>([]);
   const itemsPerPage = 5; // Items to display per page 
   const [currentPageIndex, setCurrentPageIndex] = useState(0); // Start at the first item
   const [loading, setLoading] = useState<boolean>(false);
 
   const [selectedImage, setSelectedImage] = useState<string>("");
+  const [selectedFullImageId, setSelectedFullImageId] = useState<string>("");
+
   const [images, setImages] = useState<Array<Schema["Image"]["type"] & { imageUrl?: string }>>([]);
   const [season, setSeason] = useState<number | undefined>(undefined);
   const [episodeNumber, setEpisodeNumber] = useState<number | undefined>(undefined);
 
   // Function to fetch URL for each image ID
-  const fetchImageUrl = async (imageId: string): Promise<string | undefined> => {
+  const fetchImageUrl = async (imageId: string): Promise<string> => {
     try {
       const result = await getUrl({ path: `dev/${imageId}` });
       return result.url.href;
     } catch (error) {
       console.error(`Failed to fetch URL for image ID: ${imageId}`, error);
-      return undefined;
+      return ""; // Return an empty string or a placeholder URL
     }
   };
 
@@ -32,20 +44,37 @@ const XSearch: React.FC = () => {
   const fetchAnnotations = async () => {
     setAnnotations([]); // Clear current annotations before fetching new results
     try {
+        console.log("full image id for finding annotations: "+selectedFullImageId);
+        console.log("selected image url: "+selectedImage);
+
         if(!selectedImage){return;}
 
       const result: any = await client.models.Annotation.list({
-        filter: { image_id: { eq: selectedImage } },
+        filter: { image_id: { eq: selectedFullImageId } },
         limit: 20, // Fetch 20 items
       });
-
-      // Fetch image URLs for each annotation
-      const annotationsWithUrls = await Promise.all(result.data.map(async (annotation: any) => {
-        const imageUrl = await fetchImageUrl(annotation.image_id);
-        return { ...annotation, imageUrl };
-      }));
-
-      setAnnotations(annotationsWithUrls);
+        // Initialize an array to accumulate bounding boxes
+        const allBoundingBoxes: BoundingBox[] = [];
+        result.data.forEach((annotation: any) => {
+            const polygon = JSON.parse(annotation.polygon); // Parse the polygon string into an array of numbers
+      
+            if (polygon.length === 4) {
+              const [x, y, width, height] = polygon;
+              const box: BoundingBox = {
+                x: x,
+                y: y,
+                width: width - x, // Convert coordinates to width
+                height: height - y, // Convert coordinates to height
+                label: annotation.category,
+                colorIndex: annotation.annotation_id // Set the color for bounding boxes
+              };
+              allBoundingBoxes.push(box);
+              console.log("box: "+ JSON.stringify(box));
+            }
+          });
+      setAnnotations(result.data);
+      setBoundingBoxes(allBoundingBoxes);
+      console.log("boundingBoxes: " + JSON.stringify(allBoundingBoxes));
     } catch (error) {
       console.error("Failed to fetch annotations:", error);
     }
@@ -71,6 +100,7 @@ const XSearch: React.FC = () => {
         const fullImageId = String(episode_id) +"_" +String(image.image_id) + ".png"
         console.log(fullImageId);
         const imageUrl = await fetchImageUrl(fullImageId);
+        
         return { ...image, imageUrl };
       }));
 
@@ -95,12 +125,22 @@ const XSearch: React.FC = () => {
   const handleEpisodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEpisodeNumber(parseInt(e.target.value));
   };
-  const handleImageClick = (e: string) => {
-    const fullImageId = "S"+String(season)+"-E"+String(season) +String(episodeNumber)+"_" + e + ".png"
-    console.log("photo_id: " + fullImageId)
-    setSelectedImage((fullImageId));
-    fetchAnnotations();
+  const handleImageClick = (imageUrl: string | undefined, image_id: string | undefined) => {
+    if (!imageUrl) return;
+    console.log('image image_id: '+image_id);
+    const fullImageId = `S${String(season)}-E${String(season)}${String(episodeNumber)}_${image_id}.png`;
+    setSelectedFullImageId(fullImageId);
+    console.log("full image id handle click: " + fullImageId);
+    setSelectedImage(imageUrl);
+    console.log("select image url handle click: " + selectedImage);
+
+    
   };
+  useEffect(() => {
+    if (selectedFullImageId && selectedImage) {
+      fetchAnnotations();
+    }
+  }, [selectedFullImageId, selectedImage]);
 
   const handleNextPage = () => {
     if (currentPageIndex < annotations.length - 1) {
@@ -144,7 +184,7 @@ const XSearch: React.FC = () => {
       ) : (
         <ul>
           {images.slice(currentPageIndex, currentPageIndex + itemsPerPage).map((image) => (
-              <ul key={`${image.episode_id}-${image.image_id}`} onClick={() => handleImageClick(image.image_id)}>
+              <ul key={`${image.episode_id}-${image.image_id}`} onClick={() => handleImageClick(image.imageUrl, image.image_id)}>
                 {image.imageUrl && <img src={image.imageUrl} style={{ maxWidth: '200px', height: 'auto', cursor: 'pointer' }} />}
                 </ul>
           ))}
@@ -160,9 +200,10 @@ const XSearch: React.FC = () => {
         <ul>
             <h4>Annotations</h4>
           {annotations.slice(currentPageIndex, currentPageIndex + itemsPerPage).map((note) => (
-              <li key={`${note.annotation_id}-${note.image_id}`}>
+              <ul key={`${note.annotation_id}-${note.image_id}`}>
                 <strong>Category: {note.category}</strong>
-                </li>
+                <AnnotatedImage imageUrl={selectedImage} boundingBoxes={boundingBoxes}></AnnotatedImage>
+                </ul>
           ))}
         </ul>
       )}

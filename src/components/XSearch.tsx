@@ -42,10 +42,11 @@ const XSearch: React.FC = () => {
 
   // Function to fetch annotation data from DynamoDB based on image chosen
   const fetchAnnotations = async () => {
+    console.log("fetchAnnotations");
     setAnnotations([]); // Clear current annotations before fetching new results
     try {
-        console.log("full image id for finding annotations: "+selectedFullImageId);
-        console.log("selected image url: "+selectedImage);
+        console.log("full image id for finding annotations: "+ selectedFullImageId);
+        console.log("selected image url: "+ selectedImage);
 
         if(!selectedImage){return;}
 
@@ -93,7 +94,7 @@ const XSearch: React.FC = () => {
           if (!result || !result.data) {
             throw new Error('No data returned from the API');
           }
-      // Fetch image URLs for each annotation
+      // Fetch image URLs for each image
       if(result){
       const withUrls = await Promise.all(result.data.map(async (image: any) => {
         const fullImageId = String(episode_id) +"_" +String(image.image_id) + ".png"
@@ -126,14 +127,14 @@ const XSearch: React.FC = () => {
   };
   const handleImageClick = (imageUrl: string | undefined, image_id: string | undefined) => {
     if (!imageUrl) return;
+    console.log("handleImageClick");
     console.log('image image_id: '+image_id);
     const fullImageId = `S${String(season)}-E${String(season)}${String(episodeNumber)}_${image_id}.png`;
     setSelectedFullImageId(fullImageId);
     console.log("full image id handle click: " + fullImageId);
     setSelectedImage(imageUrl);
     console.log("select image url handle click: " + selectedImage);
-
-    
+    fetchAnnotations();
   };
   useEffect(() => {
     if (selectedFullImageId && selectedImage) {
@@ -197,13 +198,8 @@ const XSearch: React.FC = () => {
         <p>Loading...</p>
       ) : (
         <ul>
-            <h4>Annotations</h4>
-          {annotations.slice(currentPageIndex, currentPageIndex + itemsPerPage).map((note) => (
-              <ul key={`${note.annotation_id}-${note.image_id}`}>
-                <strong>Category: {note.category}</strong>
-                <AnnotatedImage imageUrl={selectedImage} boundingBoxes={boundingBoxes}></AnnotatedImage>
-                </ul>
-          ))}
+            <h4>Annotated Image</h4>
+            <AnnotatedImage imageUrl={selectedImage} boundingBoxes={boundingBoxes}></AnnotatedImage>
         </ul>
       )}
     </main>

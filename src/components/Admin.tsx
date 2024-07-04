@@ -23,7 +23,6 @@ const Admin: React.FC = () => {
 
    }
 
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files ? event.target.files[0] : null;
     setFile(selectedFile);

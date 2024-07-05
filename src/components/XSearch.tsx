@@ -19,7 +19,7 @@ const XSearch: React.FC = () => {
   
   const [annotations, setAnnotations] = useState<Array<Schema["Annotation"]["type"] >>([]);
   const [boundingBoxes, setBoundingBoxes] = useState<BoundingBox[]>([]);
-  const itemsPerPage = 10; // Items to display per page 
+  const itemsPerPage = 12; // Items to display per page 
   const [currentPageIndex, setCurrentPageIndex] = useState(0); // Start at the first item
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -52,13 +52,19 @@ const XSearch: React.FC = () => {
         if(!selectedImage){return;}
 
       const result: any = await client.models.Annotation.list({
-        filter: { image_id: { eq: selectedFullImageId } },
-        limit: 10, // 
+        filter: { image_id: { eq: selectedFullImageId } }
       });
+        if (result){console.log("results are in: " + result.data);}
+        setAnnotations(result.data);
+        console.log(annotations);
         // Initialize an array to accumulate bounding boxes
         const allBoundingBoxes: BoundingBox[] = [];
         result.data.forEach((annotation: any) => {
+            console.log("polygon from annotation: "+ annotation.polygon);
+            
             const polygon = JSON.parse(annotation.polygon); // Parse the polygon string into an array of numbers
+            console.log("polygon parsed: "+polygon);
+            console.log("Polygon length: "+polygon.length);
             if (polygon.length === 4) {
               const [x, y, width, height] = polygon;
               const box: BoundingBox = {
@@ -74,8 +80,7 @@ const XSearch: React.FC = () => {
               console.log("box: "+ JSON.stringify(box));
             }
           });
-      setAnnotations(result.data);
-      console.log(annotations);
+ 
       setBoundingBoxes(allBoundingBoxes);
       console.log("boundingBoxes: " + JSON.stringify(allBoundingBoxes));
     } catch (error) {
@@ -136,7 +141,7 @@ const XSearch: React.FC = () => {
     console.log("full image id handle click: " + fullImageId);
     setSelectedImage(imageUrl);
     console.log("select image url handle click: " + selectedImage);
-    fetchAnnotations();
+    
   };
   useEffect(() => {
     if (selectedFullImageId && selectedImage) {
@@ -189,6 +194,7 @@ const XSearch: React.FC = () => {
           {images.slice(currentPageIndex * itemsPerPage, currentPageIndex*itemsPerPage + itemsPerPage).map((image) => (
               <ul className="annotation-item" key={`${image.episode_id}-${image.image_id}`} onClick={() => handleImageClick(image.imageUrl, image.image_id)}>
                 {image.imageUrl && <img src={image.imageUrl} style={{ maxWidth: '200px', height: 'auto', cursor: 'pointer' }} />}
+                <strong>Image Id:</strong> {image.image_id}<br />
                 </ul>
           ))}
         </ul>

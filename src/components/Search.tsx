@@ -154,10 +154,8 @@ const Search: React.FC = () => {
 
   return (
     <div>
-      <main>
-        <div className='main-content'></div>
+      <main className='main-content'>
         <h2>Search</h2>
-        
         <div>
           <label htmlFor="category">Category: </label>
           <select id="category" value={category} onChange={handleCategoryChange}>
@@ -178,7 +176,7 @@ const Search: React.FC = () => {
             <div className="tooltip">
               <span>ℹ️</span>
               <div className="tooltiptext">
-                Suggestions: occluded, human, forward, full-view, multi-digit, single-letter, adult, 18, or cariacature.
+                Suggestions: human, puppet, occluded, full-view, multi-digit, child, adult, 18, real or caricature.
               </div>
             </div>
         </div>

@@ -19,7 +19,7 @@ interface AnnotatedImageProps {
 }
 
 const getColorFromIndex = (index: number): string => {
-  const colors = ['red', 'yellow', 'green', 'blue', 'purple'];
+  const colors = ['red', 'yellow', 'green', 'blue', 'orange'];
   console.log("index color: " + colors[index % colors.length]);
   return colors[index % colors.length];
 };

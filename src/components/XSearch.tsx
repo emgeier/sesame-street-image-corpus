@@ -18,7 +18,7 @@ const XSearch: React.FC = () => {
   
   const [annotations, setAnnotations] = useState<Array<Schema["Annotation"]["type"] >>([]);
   const [boundingBoxes, setBoundingBoxes] = useState<BoundingBox[]>([]);
-  const itemsPerPage = 5; // Items to display per page 
+  const itemsPerPage = 10; // Items to display per page 
   const [currentPageIndex, setCurrentPageIndex] = useState(0); // Start at the first item
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -52,7 +52,7 @@ const XSearch: React.FC = () => {
 
       const result: any = await client.models.Annotation.list({
         filter: { image_id: { eq: selectedFullImageId } },
-        limit: 20, // Fetch 20 items
+        limit: 10, // 
       });
         // Initialize an array to accumulate bounding boxes
         const allBoundingBoxes: BoundingBox[] = [];
@@ -183,9 +183,9 @@ const XSearch: React.FC = () => {
         <p>Loading...</p>
       ) : (
         <div>
-        <ul>
+        <ul className="annotation-grid">
           {images.slice(currentPageIndex * itemsPerPage, currentPageIndex*itemsPerPage + itemsPerPage).map((image) => (
-              <ul key={`${image.episode_id}-${image.image_id}`} onClick={() => handleImageClick(image.imageUrl, image.image_id)}>
+              <ul className="annotation-item" key={`${image.episode_id}-${image.image_id}`} onClick={() => handleImageClick(image.imageUrl, image.image_id)}>
                 {image.imageUrl && <img src={image.imageUrl} style={{ maxWidth: '200px', height: 'auto', cursor: 'pointer' }} />}
                 </ul>
           ))}

@@ -18,7 +18,7 @@ const Search: React.FC = () => {
   const [annotations, setAnnotations] = useState<Array<Schema["Annotation"]["type"] & { imageUrl?: string }>>([]);
   const [category, setCategory] = useState<string>("");
   const [keyword, setKeyword] = useState<string>("");
-  const itemsPerPage = 10; // Items to display per page 
+  const itemsPerPage = 12; // Items to display per page 
   const [currentPageIndex, setCurrentPageIndex] = useState(0); // Start at the first item
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string>("");
@@ -173,16 +173,23 @@ const Search: React.FC = () => {
             placeholder="puppet"
             onChange={(e) => handleKeywordChange(e.target.value)}
           />
+            <div className="tooltip">
+              <span>ℹ️</span>
+              <div className="tooltiptext">
+                Suggestions: occluded, human, forward, full-view, multi-digit, single-letter, adult, 18, or cariacature.
+              </div>
+            </div>
         </div>
+        
         {loading ? (
           <p>Loading...</p>
         ) : (
-          <ul>
+          <ul className="annotation-grid">
             {annotations.slice(currentPageIndex * itemsPerPage, currentPageIndex * itemsPerPage + itemsPerPage).map((annotation) => (
-              <ul key={`${annotation.image_id}-${annotation.annotation_id}`} onClick={() => handleImageClick(annotation)}>
+              <ul className="annotation-item" key={`${annotation.image_id}-${annotation.annotation_id}`} onClick={() => handleImageClick(annotation)}>
                 <strong>Category:</strong> {annotation.category ?? ""}<br />
                 <strong>Image Id:</strong> {annotation.image_id}<br />
-                {annotation.imageUrl && <img src={annotation.imageUrl} alt="Image" style={{ maxWidth: '200px', height: 'auto' }} />}
+                {annotation.imageUrl && <img src={annotation.imageUrl} alt="Image" style={{ maxWidth: '180px', height: 'auto' }} />}
               </ul>
             ))}
           </ul>

@@ -1,4 +1,6 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import type { Schema } from "../../amplify/data/resource";
+import AttributePopup from './AttributePopup';
 
 interface BoundingBox {
   x: number;
@@ -7,6 +9,8 @@ interface BoundingBox {
   height: number;
   label: string;
   colorIndex: number; // Change from string to number
+  annotation: Schema["Annotation"]["type"];
+
 }
 
 interface AnnotatedImageProps {
@@ -23,6 +27,7 @@ const getColorFromIndex = (index: number): string => {
 const AnnotatedImage: React.FC<AnnotatedImageProps> = ({ imageUrl, boundingBoxes }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
+  const [selectedAnnotation, setSelectedAnnotation] = useState<Schema["Annotation"]["type"] | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -55,18 +60,44 @@ const AnnotatedImage: React.FC<AnnotatedImageProps> = ({ imageUrl, boundingBoxes
           context.font = '16px Arial';
           context.fillText(box.label, box.x, box.y - 5);
         });
+        canvas.addEventListener('click', handleCanvasClick);
       };
 
       // Trigger image load
       image.src = imageUrl;
       console.log('Image URL:', imageUrl);
     }
+    return () => {
+        // Cleanup event listener
+        if (canvas) {
+          canvas.removeEventListener('click', handleCanvasClick);
+        }
+    };
   }, [imageUrl, boundingBoxes]);
+
+
+  const handleCanvasClick = (event: { clientX: number; clientY: number; }) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    boundingBoxes.forEach(box => {
+      if (x >= box.x && x <= box.x + box.width && y >= box.y && y <= box.y + box.height ) {
+        setSelectedAnnotation(box.annotation);
+      }
+    });
+  };
 
   return (
     <div>
       <img ref={imageRef} src={imageUrl} alt="Annotated" style={{ display: 'none' }} />
-      <canvas ref={canvasRef}></canvas>
+      <canvas ref={canvasRef} onClick={handleCanvasClick}></canvas>
+      {selectedAnnotation && (
+        <AttributePopup annotation={selectedAnnotation} onClose={() => setSelectedAnnotation(null)} />
+      )}
     </div>
   );
 };

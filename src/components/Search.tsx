@@ -11,6 +11,7 @@ interface BoundingBox {
   height: number;
   label: string;
   colorIndex: number;
+  annotation: Schema["Annotation"]["type"];
 }
 
 const Search: React.FC = () => {
@@ -128,6 +129,7 @@ const Search: React.FC = () => {
         height: height - y, // Convert coordinates to height
         label: annotation.category,
         colorIndex: annotation.annotation_id, // Set the color for bounding boxes
+        annotation: annotation,
       };
       allBoundingBoxes.push(box);
       console.log("box: " + JSON.stringify(box));

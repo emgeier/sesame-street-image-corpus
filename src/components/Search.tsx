@@ -18,7 +18,7 @@ const Search: React.FC = () => {
   const client = generateClient<Schema>();
   const [annotations, setAnnotations] = useState<Array<Schema["Annotation"]["type"] & { imageUrl?: string }>>([]);
   const [category, setCategory] = useState<string>("");
-  const [keyword, setKeyword] = useState<string>("");
+  const [keywords, setKeywords] = useState<string[]>([]);
   const itemsPerPage = 12; // Items to display per page 
   const [currentPageIndex, setCurrentPageIndex] = useState(0); // Start at the first item
   const [loading, setLoading] = useState<boolean>(false);
@@ -39,7 +39,7 @@ const Search: React.FC = () => {
   // Function to fetch annotation data from DynamoDB based on search criteria
   const fetchAnnotations = async (token: string | null = null) => {
     setLoading(true); // Set loading state
-    
+
     const filter: any = {
       and: []
     };
@@ -47,8 +47,10 @@ const Search: React.FC = () => {
     if (category) {
       filter.and.push({ category: { eq: category } });
     }
-    if (keyword) {
-      filter.and.push({ keywords: { contains: keyword } });
+    if (keywords.length > 0) {
+      keywords.forEach((keyword) => {
+        filter.and.push({ keywords: { contains: keyword } });
+      });
     }
 
     // Remove the 'and' key if it's empty to avoid unnecessary empty filter
@@ -79,17 +81,16 @@ const Search: React.FC = () => {
   useEffect(() => {
     setAnnotations([]); // Clear previous annotations
     fetchAnnotations();
-  }, [category, keyword]);
+  }, [category, keywords]);
 
   const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setCategory(event.target.value);
     setCurrentPageIndex(0); // Reset to the first page
   };
 
-  const handleKeywordChange = (event: string) => {
-    setKeyword(event);
+  const handleKeywordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setKeywords(event.target.value.split(' ').filter((word) => word.length > 0));
     setCurrentPageIndex(0); // Reset to the first page
-    
   };
 
   const handleImageClick = (annotation: Schema["Annotation"]["type"] & { imageUrl?: string }) => {
@@ -171,14 +172,14 @@ const Search: React.FC = () => {
           <input
             type="text"
             placeholder="puppet"
-            onChange={(e) => handleKeywordChange(e.target.value)}
+            onChange={handleKeywordChange}
           />
-            <div className="tooltip">
-              <span>ℹ️</span>
-              <div className="tooltiptext">
-                Suggestions: human, puppet, occluded, full-view, multi-digit, child, adult, 18, real or caricature.
-              </div>
+          <div className="tooltip">
+            <span>ℹ️</span>
+            <div className="tooltiptext">
+              Suggestions: human, puppet, occluded, full-view, multi-digit, child, adult, 18, uppercase, real or caricature.
             </div>
+          </div>
         </div>
         
         {loading ? (

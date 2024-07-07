@@ -17,8 +17,8 @@ interface BoundingBox {
 const XSearch: React.FC = () => {
   const client = generateClient<Schema>();
   
-  const [annotations, setAnnotations] = useState<Array<Schema["Annotation"]["type"] >>([]);
   const [boundingBoxes, setBoundingBoxes] = useState<BoundingBox[]>([]);
+  //Pagination
   const itemsPerPage = 12; // Items to display per page 
   const [currentPageIndex, setCurrentPageIndex] = useState(0); // Start at the first item
   const [loading, setLoading] = useState<boolean>(false);
@@ -30,41 +30,26 @@ const XSearch: React.FC = () => {
   const [season, setSeason] = useState<number | undefined>(undefined);
   const [episodeNumber, setEpisodeNumber] = useState<number | undefined>(undefined);
 
-  // Function to fetch URL for each image ID
-  const fetchImageUrl = async (imageId: string): Promise<string> => {
-    try {
-      const result = await getUrl({ path: `dev/${imageId}` });
-      return result.url.href;
-    } catch (error) {
-      console.error(`Failed to fetch URL for image ID: ${imageId}`, error);
-      return ""; // Return an empty string or a placeholder URL
-    }
-  };
 
-  // Function to fetch annotation data from DynamoDB based on image chosen
+  // Function to fetch annotation data from DynamoDB based on image selected
   const fetchAnnotations = async () => {
-    console.log("fetchAnnotations");
-    setAnnotations([]); // Clear current annotations before fetching new results
+    
+    setBoundingBoxes([]); // Clear current boxes before fetching new results
     try {
-        console.log("full image id for finding annotations: "+ selectedFullImageId);
-        console.log("selected image url: "+ selectedImage);
 
-        if(!selectedImage){return;}
+      if(!selectedImage){return;}
 
       const result: any = await client.models.Annotation.list({
-        filter: { image_id: { eq: selectedFullImageId } }
+        filter: { image_id: { eq: selectedFullImageId.trim() } }
       });
-        if (result){console.log("results are in: " + result.data);}
-        setAnnotations(result.data);
-        console.log(annotations);
+        if (result){console.log("results data: " + result.data + "length: "+ result.data.length);}
+
         // Initialize an array to accumulate bounding boxes
         const allBoundingBoxes: BoundingBox[] = [];
         result.data.forEach((annotation: any) => {
-            console.log("polygon from annotation: "+ annotation.polygon);
             
             const polygon = JSON.parse(annotation.polygon); // Parse the polygon string into an array of numbers
-            console.log("polygon parsed: "+polygon);
-            console.log("Polygon length: "+polygon.length);
+
             if (polygon.length === 4) {
               const [x, y, width, height] = polygon;
               const box: BoundingBox = {
@@ -77,7 +62,6 @@ const XSearch: React.FC = () => {
                 annotation: annotation
               };
               allBoundingBoxes.push(box);
-              console.log("box: "+ JSON.stringify(box));
             }
           });
  
@@ -92,10 +76,14 @@ const XSearch: React.FC = () => {
   const fetchImages = async (season: number, episode_number: number) => {
     setImages([]); // Clear current selections before fetching new results
     const episode_id: string = "S" + String(season) + "-E" + String(season) + String(episode_number);
-    console.log(episode_id);
+    
+
+    //This is simplified for a single api call, no next token logic-- assumes 200 images or less per episode. 
+    
     try {
         const result: any = await client.models.Image.list({
-            filter: { episode_id: { eq: episode_id } }
+            filter: { episode_id: { eq: episode_id } },
+            limit: 200,
           });
       
           if (!result || !result.data) {
@@ -104,8 +92,8 @@ const XSearch: React.FC = () => {
       // Fetch image URLs for each image
       if(result){
       const withUrls = await Promise.all(result.data.map(async (image: any) => {
+        
         const fullImageId = String(episode_id) +"_" +String(image.image_id) + ".png"
-        console.log(fullImageId);
         const imageUrl = await fetchImageUrl(fullImageId);
         
         return { ...image, imageUrl };
@@ -117,6 +105,16 @@ const XSearch: React.FC = () => {
       console.error("Failed to fetch images:", error);
     }
     setLoading(false); // Reset loading state
+  };
+    // Function to fetch URL for each image ID
+  const fetchImageUrl = async (imageId: string): Promise<string> => {
+    try {
+      const result = await getUrl({ path: `dev/${imageId}` });
+      return result.url.href;
+    } catch (error) {
+      console.error(`Failed to fetch URL for image ID: ${imageId}`, error);
+      return ""; // Return an empty string or a placeholder URL
+    }
   };
 
   const handleEpisodeRequest = () => {
@@ -134,13 +132,12 @@ const XSearch: React.FC = () => {
   };
   const handleImageClick = (imageUrl: string | undefined, image_id: string | undefined) => {
     if (!imageUrl) return;
-    console.log("handleImageClick");
-    console.log('image image_id: '+image_id);
+ 
     const fullImageId = `S${String(season)}-E${String(season)}${String(episodeNumber)}_${image_id}.png`;
     setSelectedFullImageId(fullImageId);
-    console.log("full image id handle click: " + fullImageId);
+    
     setSelectedImage(imageUrl);
-    console.log("select image url handle click: " + selectedImage);
+    
     
   };
   useEffect(() => {

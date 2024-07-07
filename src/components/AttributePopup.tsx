@@ -15,6 +15,7 @@ const AttributePopup: React.FC<AttributePopupProps> = ({ annotation, onClose }) 
       if (key === 'imageUrl'|| key === 'createdAt' || key === 'updatedAt' || key === 'keywords' || key === 'attributes'){return}
 
       if (value === true || value === 0 || value === 'TRUE' || (value && typeof value !== 'object' && value.toString().trim() !== '') ) {
+        if( key === 'noun'){value = 'proper noun';}
         return (
           <li key={key}>
             <strong>{key}:</strong> {value.toString()}

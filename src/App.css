@@ -1,6 +1,6 @@
 #root {
   max-width: 1280px;
-  margin: 0 auto;
+  margin: auto;
   padding: 2rem;
   text-align: center;
 }
@@ -55,5 +55,8 @@
     flex-direction: column;
     align-items: center;
     max-width: 800px; /* Adjust the width as needed */
-    margin: 0 auto;
+    margin: auto auto;
+    padding-bottom: 100px; /* Adjust based on footer height */
+
   }
+  

@@ -1,8 +1,13 @@
 import './About.css';
+import '@aws-amplify/ui-react/styles.css';
 
 function About() {
   return (
-    <main className='main-content'>
+    <div>
+      <header className="banner"></header>
+      <div className='separator'></div>
+    <main>
+      
     
       <h1 className='intro'>About the Sesame Street Image Corpus</h1>
      
@@ -16,17 +21,18 @@ function About() {
       </p>
       <div className="dot-separator"></div>
       <p className='indented'>
-Initially funded by a NSF grant, this project transferred to a NIH grant because of its novelty in the field. It involves five research labs across three universities: University of Texas, Austin; University of Minnesota; and Vanderbilt University. Based at Vanderbilt, LAND Lab (author of this report) specializes in children’s reading and math development through MRI brain imaging. 
-For this project, LAND Lab is creating a Sesame Street image corpus to study children’s brain development. With more than 4,500 episodes of at least 30 minutes each, Sesame Street provides LAND Lab tons of content to work with. A fine-tuned YOLO model trained on 4,000 of labeled images will allow us to label thousands of other Sesame Street frames.
+Initially funded by a NSF grant, this project transferred to a NIH grant because of its novelty in the field. It involves five research labs across three universities: University of Texas, Austin; University of Minnesota; and Vanderbilt University. Based at Vanderbilt, the LAND Lab specializes in children’s reading and math development through MRI brain imaging. 
+For this project, the LAND Lab is creating a Sesame Street image corpus to study children’s brain development. With more than 4,500 episodes of at least 30 minutes each, Sesame Street provides LAND Lab tons of content to work with. A fine-tuned YOLO model trained on 4,000 of labeled images will allow us to label thousands of other Sesame Street frames.
 
       </p>
       <div className="dot-separator"></div>
       <p className='indented'>
-      Three entities operate within the “Sesame Street” brand: (1) the Sesame Workshop, which bears rights to the film characters and generates new episodes in collaboration with (2) WGBH, mainly responsible for broadcasting and archiving episodes (along with AAPB); and (3) the Joan Gantz Cooney Center, researching ways to help children math. The five research labs involved in this project collaborate with Sesame Street.
-
+HOW TO FIND ANNOTATED IMAGES: The corpus uses a controlled vocabulary to encode the images with information about various visual aspects of the images. Here is a comprehensive list of the terms used:. Annotated images can be searched by any combination of these keywords. Clicking on an image will display the highlighted image annotated with the selected keywords. Clicking on the highlighted box, one can see all the annotation details. Further, one can see all the still images of a given episode fully annotated.
       </p>
       {/* About page content */}
+      <div className="dot-separator"></div>
     </main>
+    </div>
   );
 }
 

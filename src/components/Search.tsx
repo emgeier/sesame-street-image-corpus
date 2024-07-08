@@ -157,27 +157,29 @@ const Search: React.FC = () => {
     <div>
       <main className='main-content'>
         <h2>Search</h2>
-        <div>
-          <label htmlFor="category">Category: </label>
-          <select id="category" value={category} onChange={handleCategoryChange}>
-            <option value="">All</option>
-            <option value="FACE">Face</option>
-            <option value="PLACE">Place</option>
-            <option value="NUMBER">Number</option>
-            <option value="WORD">Word</option>
-          </select>
-        </div>
-        <label htmlFor="attribute">Keyword: </label>
-        <div className='input-container'>
-          <input
-            type="text"
-            placeholder="puppet"
-            onChange={handleKeywordChange}
-          />
+        <div className="search-controls">
+      <div className="search-control">
+        <label htmlFor="category">Category: </label>
+        <select id="category" value={category} onChange={handleCategoryChange}>
+          <option value="">All</option>
+          <option value="FACE">Face</option>
+          <option value="PLACE">Place</option>
+          <option value="NUMBER">Number</option>
+          <option value="WORD">Word</option>
+        </select>
+      </div>
+      <div className="search-control">
+        <label htmlFor="keywords">Keywords: </label>
+        <input
+          type="text"
+          id="keywords"
+          placeholder="puppet"
+          onChange={handleKeywordChange}
+        /></div>
           <div className="tooltip">
             <span>ℹ️</span>
             <div className="tooltiptext">
-              Suggestions: human, puppet, occluded, full-view, multi-digit, child, adult, 18, uppercase, real or caricature.
+              Suggestions: human, puppet, occluded, truncated, oblique, single-letter, full-view, multi-digit, child, adult, 18, uppercase, real or caricature.
             </div>
           </div>
         </div>
@@ -185,15 +187,17 @@ const Search: React.FC = () => {
         {loading ? (
           <p>Loading...</p>
         ) : (
+          <div className="annotation-grid-container">
+          
           <ul className="annotation-grid">
             {annotations.slice(currentPageIndex * itemsPerPage, currentPageIndex * itemsPerPage + itemsPerPage).map((annotation) => (
               <ul className="annotation-item" key={`${annotation.image_id}-${annotation.annotation_id}`} onClick={() => handleImageClick(annotation)}>
-                <strong>Category:</strong> {annotation.category ?? ""}<br />
-                <strong>Image Id:</strong> {annotation.image_id}<br />
+
                 {annotation.imageUrl && <img src={annotation.imageUrl} alt="Image" style={{ maxWidth: '180px', height: 'auto' }} />}
               </ul>
             ))}
           </ul>
+          </div>
         )}
         <div className="page-buttons">
           <button onClick={handlePreviousPage} disabled={currentPageIndex === 0 || loading}>Previous</button>
@@ -206,7 +210,6 @@ const Search: React.FC = () => {
           </div>
         )}
       </main>
-      <a href="/advsearch"><h2>Advanced Search</h2></a>
     </div>
   );
 };

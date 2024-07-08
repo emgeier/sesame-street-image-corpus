@@ -162,7 +162,8 @@ const XSearch: React.FC = () => {
     <main className="main-content">
       <div className='separator'></div>
       <h2>Advanced Search </h2>
-      <div>
+      <div className="search-controls">
+      <div className="search-control">
         <label htmlFor="season">Season:</label>
         <input
           type="number"
@@ -172,7 +173,7 @@ const XSearch: React.FC = () => {
           onChange={handleSeasonChange}
         />
       </div>
-      <div>
+      <div className="search-control">
         <label htmlFor="episode">Episode:</label>
         <input
           type="number"
@@ -181,6 +182,7 @@ const XSearch: React.FC = () => {
           value={episodeNumber || ''}
           onChange={handleEpisodeChange}
         />
+      </div>
       </div>
       <button onClick={handleEpisodeRequest}>Search</button>
       {loading ? (
@@ -191,7 +193,7 @@ const XSearch: React.FC = () => {
           {images.slice(currentPageIndex * itemsPerPage, currentPageIndex*itemsPerPage + itemsPerPage).map((image) => (
               <ul className="annotation-item" key={`${image.episode_id}-${image.image_id}`} onClick={() => handleImageClick(image.imageUrl, image.image_id)}>
                 {image.imageUrl && <img src={image.imageUrl} style={{ maxWidth: '200px', height: 'auto', cursor: 'pointer' }} />}
-                <strong>Image Id:</strong> {image.image_id}<br />
+                <strong>Image:</strong> {image.image_id}<br />
                 </ul>
           ))}
         </ul>
@@ -202,9 +204,7 @@ const XSearch: React.FC = () => {
         </div>
         
       )}
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
+      {selectedFullImageId && (
         <ul>
             <h4>Annotated Image</h4>
             <AnnotatedImage imageUrl={selectedImage} boundingBoxes={boundingBoxes}></AnnotatedImage>

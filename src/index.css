@@ -72,6 +72,8 @@ li {
   padding: 8px;
 }
 
+/* Pagination  */
+
 .page-buttons {
   display: flex;
   gap: 10px;
@@ -88,10 +90,37 @@ li {
   padding: 5px;
 }
 
-/* Add this CSS to your stylesheet */
+/* search boxes */
+.search-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.search-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.search-control label {
+  min-width: 100px; /* Adjust as needed */
+}
+
+/* search results */
+
+.annotation-grid-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  margin: auto;
+}
+
 .annotation-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   grid-gap: 10px;
 }
 
@@ -105,6 +134,7 @@ li {
   height: auto;
   cursor: pointer;
 }
+
 /* Tooltip container */
 .tooltip {
   position: relative;

@@ -38,7 +38,7 @@
 .banner {
   width: 100%;
   height: 400px; /* Adjust height as needed */
-  background-image: url('assets/images/bannner.webp');
+  background-image: url('../assets/images/bannner.webp');
   background-size: cover;
   background-position: center;
 }
@@ -62,12 +62,14 @@
   height: auto;
 }  
 .indented {
-margin-left: 120px;
-margin-right: 120px;
+max-width: 70%;
+margin: auto;
+width: 70%;
 }   
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  text-align: center;
 }
 .main-content {
   padding-top: 150px; 
@@ -77,5 +79,5 @@ h1 {
   flex-direction: column;
   align-items: center;
   max-width: 800px; /* Adjust the width as needed */
-  margin: 0 auto;
+  margin: auto ;
 }

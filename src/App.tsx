@@ -10,6 +10,7 @@ import XSearch from './components/XSearch';
 
 import Navbar from './components/Navbar';
 import Search from "./components/Search";
+import Footer from "./components/Footer";
 
 
 function App() {
@@ -28,6 +29,8 @@ function App() {
                     <Route path="/admin" element={<Admin />} />
                     <Route path="/advsearch" element={<XSearch />} />
                   </Routes>
+                  <div className='separator'></div>
+                  <Footer></Footer>
               </div>
             </Router>
         </div>

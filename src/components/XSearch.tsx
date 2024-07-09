@@ -92,7 +92,7 @@ const XSearch: React.FC = () => {
       if(result){
       const withUrls = await Promise.all(result.data.map(async (image: any) => {
         
-        const fullImageId = String(image.episode_id) +"_" +String(image.image_id) + ".png"
+        const fullImageId = String(image.image_id);
         const imageUrl = await fetchImageUrl(fullImageId);
         
         return { ...image, imageUrl };
@@ -130,7 +130,7 @@ const XSearch: React.FC = () => {
   const handleImageClick = (image :Schema["Image"]["type"]  & { imageUrl?: string }) => {
     if (!image.imageUrl) return;
  
-    const fullImageId = `${image.episode_id}_${image.image_id}.png`;
+    const fullImageId = `${image.image_id}.png`;
     setSelectedFullImageId(fullImageId);
     setSelectedImage(image.imageUrl);
   };
@@ -178,7 +178,7 @@ const XSearch: React.FC = () => {
         <div>
         <ul className="annotation-grid">
           {images.slice(currentPageIndex * itemsPerPage, currentPageIndex*itemsPerPage + itemsPerPage).map((image) => (
-              <ul className="annotation-item" key={`${image.episode_id}-${image.image_id}`} onClick={() => handleImageClick(image)}>
+              <ul className="annotation-item" key={`${image.image_id}`} onClick={() => handleImageClick(image)}>
                 {image.imageUrl && <img src={image.imageUrl} style={{ maxWidth: '200px', height: 'auto', cursor: 'pointer' }} />}
                 <strong>Image:</strong> {image.image_id}<br />
                 </ul>

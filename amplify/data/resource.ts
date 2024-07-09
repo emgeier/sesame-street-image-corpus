@@ -2,7 +2,6 @@ import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
 const schema = a.schema({
   Image: a.model({
-    episode_id: a.string().required(),
     image_id: a.string().required(),
     isRestricted: a.boolean(),
     source: a.string(),
@@ -11,7 +10,7 @@ const schema = a.schema({
     season: a.integer(),
     episode_title: a.string()
     })
-    .identifier(['episode_id','image_id'])
+    .identifier(['image_id'])
     .authorization(allow => [allow.publicApiKey()]),
 
 Annotation: a

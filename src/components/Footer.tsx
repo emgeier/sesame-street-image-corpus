@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './footer.css';
+import landlabicon from '../assets/images/LandLab.png';
 
 const Footer: React.FC = () => {
   return (
@@ -21,6 +22,7 @@ const Footer: React.FC = () => {
       <div className="footer-text">
         © 2024 LAND Lab. All rights reserved.
       </div>
+      <img src={landlabicon} alt="LAND Lab icon" className="footer-icon" />
     </footer>
   );
 };

@@ -27,8 +27,8 @@ const XSearch: React.FC = () => {
   const [selectedFullImageId, setSelectedFullImageId] = useState<string>("");
 
   const [images, setImages] = useState<Array<Schema["Image"]["type"] & { imageUrl?: string }>>([]);
-  const [season, setSeason] = useState<number | undefined>(undefined);
-  const [episodeNumber, setEpisodeNumber] = useState<number | undefined>(undefined);
+ 
+  const [episodeTitle, setTitle] = useState<string | undefined>(undefined);
 
 
   // Function to fetch annotation data from DynamoDB based on image selected
@@ -73,16 +73,15 @@ const XSearch: React.FC = () => {
     setLoading(false); // Reset loading state
   };
 
-  const fetchImages = async (season: number, episode_number: number) => {
-    setImages([]); // Clear current selections before fetching new results
-    const episode_id: string = "S" + String(season) + "-E" + String(season) + String(episode_number);
+  const fetchImages = async (episode_title: string) => {
+    setImages([]); // Clear current selections before fetching new result
     
 
     //This is simplified for a single api call, no next token logic-- assumes 200 images or less per episode. 
     
     try {
         const result: any = await client.models.Image.list({
-            filter: { episode_id: { eq: episode_id } },
+            filter: { episode_title: { contains: episode_title } },
             limit: 200,
           });
       
@@ -93,7 +92,7 @@ const XSearch: React.FC = () => {
       if(result){
       const withUrls = await Promise.all(result.data.map(async (image: any) => {
         
-        const fullImageId = String(episode_id) +"_" +String(image.image_id) + ".png"
+        const fullImageId = String(image.episode_id) +"_" +String(image.image_id) + ".png"
         const imageUrl = await fetchImageUrl(fullImageId);
         
         return { ...image, imageUrl };
@@ -118,27 +117,22 @@ const XSearch: React.FC = () => {
   };
 
   const handleEpisodeRequest = () => {
-    if (season && episodeNumber) {
-      fetchImages(season, episodeNumber);
+    if (episodeTitle) {
+      fetchImages(episodeTitle);
     }
   };
 
-  const handleSeasonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSeason(parseInt(e.target.value));
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
   };
 
-  const handleEpisodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEpisodeNumber(parseInt(e.target.value));
-  };
-  const handleImageClick = (imageUrl: string | undefined, image_id: string | undefined) => {
-    if (!imageUrl) return;
+  const handleImageClick = (image :Schema["Image"]["type"]  & { imageUrl?: string }) => {
+    if (!image.imageUrl) return;
  
-    const fullImageId = `S${String(season)}-E${String(season)}${String(episodeNumber)}_${image_id}.png`;
+    const fullImageId = `${image.episode_id}_${image.image_id}.png`;
     setSelectedFullImageId(fullImageId);
-    
-    setSelectedImage(imageUrl);
-    
-    
+    setSelectedImage(image.imageUrl);
   };
   useEffect(() => {
     if (selectedFullImageId && selectedImage) {
@@ -163,26 +157,19 @@ const XSearch: React.FC = () => {
       <div className='separator'></div>
       <h2>Advanced Search </h2>
       <div className="search-controls">
-      <div className="search-control">
-        <label htmlFor="season">Season:</label>
-        <input
-          type="number"
-          id="season"
-          name="season"
-          value={season || ''}
-          onChange={handleSeasonChange}
-        />
-      </div>
-      <div className="search-control">
-        <label htmlFor="episode">Episode:</label>
-        <input
-          type="number"
-          id="episode"
-          name="episode"
-          value={episodeNumber || ''}
-          onChange={handleEpisodeChange}
-        />
-      </div>
+
+
+      
+        <div className="search-control">
+          <label htmlFor="title">Title:</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            value={episodeTitle || ''}
+            onChange={handleTitleChange}
+          />
+        </div>
       </div>
       <button onClick={handleEpisodeRequest}>Search</button>
       {loading ? (
@@ -191,7 +178,7 @@ const XSearch: React.FC = () => {
         <div>
         <ul className="annotation-grid">
           {images.slice(currentPageIndex * itemsPerPage, currentPageIndex*itemsPerPage + itemsPerPage).map((image) => (
-              <ul className="annotation-item" key={`${image.episode_id}-${image.image_id}`} onClick={() => handleImageClick(image.imageUrl, image.image_id)}>
+              <ul className="annotation-item" key={`${image.episode_id}-${image.image_id}`} onClick={() => handleImageClick(image)}>
                 {image.imageUrl && <img src={image.imageUrl} style={{ maxWidth: '200px', height: 'auto', cursor: 'pointer' }} />}
                 <strong>Image:</strong> {image.image_id}<br />
                 </ul>

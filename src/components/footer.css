@@ -59,4 +59,8 @@
       margin-bottom: 20px;
     }
   }
-  
+  .footer-icon {
+    margin-top: 10px;
+    max-width: 3%;
+    height: auto;
+  }  

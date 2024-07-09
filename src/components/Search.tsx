@@ -179,7 +179,7 @@ const Search: React.FC = () => {
           <div className="tooltip">
             <span>ℹ️</span>
             <div className="tooltiptext">
-              Suggestions: human, puppet, occluded, truncated, oblique, single-letter, full-view, multi-digit, child, adult, 18, uppercase, real or caricature.
+              Try: human, puppet, occluded, truncated, oblique, single-letter, word, full-view, multi-digit, child, adult, 18, uppercase, real or caricature.
             </div>
           </div>
         </div>

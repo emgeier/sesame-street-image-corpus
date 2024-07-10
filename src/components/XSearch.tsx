@@ -74,6 +74,7 @@ const XSearch: React.FC = () => {
   };
 
   const fetchImages = async (episode_title: string) => {
+    
     setImages([]); // Clear current selections before fetching new result
     
 
@@ -92,8 +93,9 @@ const XSearch: React.FC = () => {
       if(result){
       const withUrls = await Promise.all(result.data.map(async (image: any) => {
         
-        const fullImageId = String(image.image_id);
-        const imageUrl = await fetchImageUrl(fullImageId);
+        console.log("Image id is : "+image.image_id);
+
+        const imageUrl = await fetchImageUrl(image.image_id);
         
         return { ...image, imageUrl };
       }));
@@ -130,7 +132,7 @@ const XSearch: React.FC = () => {
   const handleImageClick = (image :Schema["Image"]["type"]  & { imageUrl?: string }) => {
     if (!image.imageUrl) return;
  
-    const fullImageId = `${image.image_id}.png`;
+    const fullImageId = `${image.image_id}`;
     setSelectedFullImageId(fullImageId);
     setSelectedImage(image.imageUrl);
   };

@@ -29,6 +29,5 @@ amplify_outputs*
 amplifyconfiguration*
 
 # extra
-Pagination.tsx
-SearchOG.tsx
 xmlConversion.py
+jsonConversion.py

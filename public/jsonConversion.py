@@ -66,6 +66,9 @@ def lambda_handler(event, context):
     def insert_image_to_dynamodb(image_data):
         try:
             episode_id, image_id = separate_filename(image_data['filename'])
+            print(f"image item: {image_data['filename']}")
+            print(f"episode id: {episode_id}")
+            print(f"image id : {image_id}")
             current_time = datetime.utcnow().isoformat() + 'Z'
             image_item = {
                 'episode_id': episode_id,
@@ -80,7 +83,7 @@ def lambda_handler(event, context):
                 'epidsode_title': 'Rosie and Elmo Teach Yoga'
             }
             image_table.put_item(Item=image_item)
-            print(f"image item: {image_data['filename']}")
+
             return image_data['filename']
         except Exception as e:
             print(f"Error inserting image data: {e}")

@@ -93,9 +93,9 @@ const XSearch: React.FC = () => {
       if(result){
       const withUrls = await Promise.all(result.data.map(async (image: any) => {
         
-        console.log("Image id is : "+image.image_id);
-
-        const imageUrl = await fetchImageUrl(image.image_id);
+        console.log("Image id is : "+ image.image_id);
+        const fullImageId = String(image.episode_id) +"_" +String(image.image_id) + ".png"
+        const imageUrl = await fetchImageUrl(fullImageId);
         
         return { ...image, imageUrl };
       }));

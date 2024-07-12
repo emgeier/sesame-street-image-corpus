@@ -94,7 +94,8 @@ const XSearch: React.FC = () => {
       const withUrls = await Promise.all(result.data.map(async (image: any) => {
         
         console.log("Image id is : "+ image.image_id);
-        const fullImageId = String(image.episode_id) +"_" +String(image.image_id) + ".png"
+        const fullImageId = "S" + String(image.season)+"-E" +String(image.episode_id) +"_" +String(image.image_id) + ".png";
+        console.log("Full image id is : "+ fullImageId);
         const imageUrl = await fetchImageUrl(fullImageId);
         
         return { ...image, imageUrl };
@@ -118,6 +119,10 @@ const XSearch: React.FC = () => {
     }
   };
 
+  const concatenateImageIdForAnnotations = (image: Schema["Image"]["type"]) => {
+    return "S" + String(image.season)+"-E" +String(image.episode_id) +"_" +String(image.image_id) + ".png";
+  }
+
   const handleEpisodeRequest = () => {
     if (episodeTitle) {
       fetchImages(episodeTitle);
@@ -132,7 +137,7 @@ const XSearch: React.FC = () => {
   const handleImageClick = (image :Schema["Image"]["type"]  & { imageUrl?: string }) => {
     if (!image.imageUrl) return;
  
-    const fullImageId = `${image.image_id}`;
+    const fullImageId = concatenateImageIdForAnnotations(image);
     setSelectedFullImageId(fullImageId);
     setSelectedImage(image.imageUrl);
   };

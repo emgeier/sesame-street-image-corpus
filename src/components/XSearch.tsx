@@ -29,6 +29,8 @@ const XSearch: React.FC = () => {
   const [images, setImages] = useState<Array<Schema["Image"]["type"] & { imageUrl?: string }>>([]);
  
   const [episodeTitle, setTitle] = useState<string | undefined>(undefined);
+  const [episodeNumber, setEpisodeNumber] = useState<string | undefined>(undefined);
+  const [season, setSeason] = useState<number| undefined>(undefined);
 
 
   // Function to fetch annotation data from DynamoDB based on image selected
@@ -73,7 +75,7 @@ const XSearch: React.FC = () => {
     setLoading(false); // Reset loading state
   };
 
-  const fetchImages = async (episode_title: string) => {
+  const fetchImagesTitle = async (episode_title: string) => {
     
     setImages([]); // Clear current selections before fetching new result
     
@@ -102,6 +104,7 @@ const XSearch: React.FC = () => {
       }));
 
       setImages(withUrls);
+      
     }
     } catch (error) {
       console.error("Failed to fetch images:", error);
@@ -118,22 +121,102 @@ const XSearch: React.FC = () => {
       return ""; // Return an empty string or a placeholder URL
     }
   };
+  const fetchImagesEpisode = async (episode_number: string) => {
+    setImages([]); // Clear current selections before fetching new results
+    
+    
+    //This is simplified for a single api call, no next token logic-- assumes 200 images or less per episode. 
+    
+    try {
+        const result: any = await client.models.Image.list({
+            filter: { episode_id: { eq: episode_number } },
+            limit: 200,
+          });
+      
+          if (!result || !result.data) {
+            throw new Error('No data returned from the API');
+          }
+      // Fetch image URLs for each image
+      if(result){
+      const withUrls = await Promise.all(result.data.map(async (image: any) => {
+        
+        const fullImageId = concatenateImageIdForAnnotations(image)
+        const imageUrl = await fetchImageUrl(fullImageId);
+        
+        return { ...image, imageUrl };
+      }));
 
+      setImages(withUrls);
+    }
+    } catch (error) {
+      console.error("Failed to fetch images:", error);
+    }
+    setLoading(false); // Reset loading state
+  };
+  const fetchImagesSeason = async (season: number) => {
+    setImages([]); // Clear current selections before fetching new results
+            // Clear other input fields
+
+            
+    
+    //This is simplified for a single api call, no next token logic-- assumes 200 images or less per episode. 
+    
+    try {
+        const result: any = await client.models.Image.list({
+            filter: { season: { eq: season } },
+            limit: 200,
+          });
+      
+          if (!result || !result.data) {
+            throw new Error('No data returned from the API');
+          }
+      // Fetch image URLs for each image
+      if(result){
+      const withUrls = await Promise.all(result.data.map(async (image: any) => {
+        
+        const fullImageId = concatenateImageIdForAnnotations(image)
+        const imageUrl = await fetchImageUrl(fullImageId);
+        
+        return { ...image, imageUrl };
+      }));
+
+      setImages(withUrls);
+    }
+    } catch (error) {
+      console.error("Failed to fetch images:", error);
+    }
+    setLoading(false); // Reset loading state
+  };
   const concatenateImageIdForAnnotations = (image: Schema["Image"]["type"]) => {
     return "S" + String(image.season)+"-E" +String(image.episode_id) +"_" +String(image.image_id) + ".png";
   }
 
   const handleEpisodeRequest = () => {
     if (episodeTitle) {
-      fetchImages(episodeTitle);
+      fetchImagesTitle(episodeTitle);
+    } else if (episodeNumber) {
+      fetchImagesEpisode(episodeNumber);
+    } else if (season) {
+      fetchImagesSeason(season);
     }
   };
 
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
+    setSeason(undefined);
+    setEpisodeNumber("");
   };
-
+  const handleEpisodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEpisodeNumber(e.target.value);
+    setSeason(undefined);
+    setTitle("");
+  };
+  const handleSeasonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSeason(e.target.valueAsNumber);
+    setTitle("")
+    setEpisodeNumber("")
+  };
   const handleImageClick = (image :Schema["Image"]["type"]  & { imageUrl?: string }) => {
     if (!image.imageUrl) return;
  
@@ -164,8 +247,26 @@ const XSearch: React.FC = () => {
       <div className='separator'></div>
       <h2>Advanced Search </h2>
       <div className="search-controls">
-
-
+      <div className="search-control">
+          <label htmlFor="episodeNumber">Episode:</label>
+          <input
+            type="text"
+            id="episode"
+            name="episode"
+            value={episodeNumber || ''}
+            onChange={handleEpisodeChange}
+          />
+        </div>
+        <div className="search-control">
+        <label htmlFor="season">Season:</label>
+        <input
+          type="number"
+          id="season"
+          name="season"
+          value={season || ''}
+          onChange={handleSeasonChange}
+        />
+      </div>
       
         <div className="search-control">
           <label htmlFor="title">Title:</label>

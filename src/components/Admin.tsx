@@ -49,8 +49,8 @@ const Admin: React.FC = () => {
    
   return (
     <div className='main-content'>
-        <h1>Coming soon</h1>
-        <h1>upload and view files</h1>
+        <h3>Coming soon</h3>
+        <h3>upload and view files</h3>
       <input type="file" onChange={handleChange} />
       <div className='separator'/>
       <button onClick={handleUpload} disabled={!file}>

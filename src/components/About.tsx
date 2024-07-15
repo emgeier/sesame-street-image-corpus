@@ -21,16 +21,14 @@ function About() {
       </p>
       <div className="dot-separator"></div>
       <p className='indented'>
-Initially funded by a NSF grant, this project transferred to a NIH grant because of its novelty in the field. It involves five research labs across three universities: University of Texas, Austin; University of Minnesota; and Vanderbilt University. Based at Vanderbilt, the LAND Lab specializes in children’s reading and math development through MRI brain imaging. 
-For this project, the LAND Lab is creating a Sesame Street image corpus to study children’s brain development. With more than 4,500 episodes of at least 30 minutes each, Sesame Street provides LAND Lab tons of content to work with. A fine-tuned YOLO model trained on 4,000 of labeled images will allow us to label thousands of other Sesame Street frames.
-
-      </p>
+Initially funded by an NSF grant, this project was transferred to a NIH grant because of its novelty in the field. It involves five research labs across three universities: University of Texas, Austin; University of Minnesota; and Vanderbilt University. Based at Vanderbilt, the LAND Lab specializes in children’s reading and math development through MRI brain imaging. 
+For this project, the LAND Lab has created a Sesame Street image corpus to enhance further research into children’s brain development. With more than 4,500 episodes of at least 30 minutes each, Sesame Street provides LAND Lab extensive content to work with. Through machine-learning, a fine-tuned YOLO model trained on 4,000 labeled images is allowing us to label thousands more Sesame Street still images.</p>
       <div className="dot-separator"></div>
       <p className='indented'>
 HOW TO FIND ANNOTATED IMAGES: The corpus uses a controlled vocabulary to encode the images with information about various visual aspects of the images. Here is a comprehensive list of the terms used:. Annotated images can be searched by any combination of these keywords. Clicking on an image will display the highlighted image annotated with the selected keywords. Clicking on the highlighted box, one can see all the annotation details. Further, one can see all the still images of a given episode fully annotated.
       </p>
+      <div className="separator"></div>
       {/* About page content */}
-      <div className="dot-separator"></div>
     </main>
     </div>
   );

@@ -15,14 +15,13 @@ const Footer: React.FC = () => {
       </div>
       
       <div className="footer-social">
-        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a>
-        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
-        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a className="footer-icon" href="https://www.vanderbiltlandlab.io" target="_blank" rel="noopener noreferrer">
+        <img src={landlabicon} alt="LAND Lab icon" width={50} />
+        </a>
       </div>
       <div className="footer-text">
-        © 2024 LAND Lab. All rights reserved.
+        © 2024 LAND Lab.     
       </div>
-      <img src={landlabicon} alt="LAND Lab icon" className="footer-icon" />
     </footer>
   );
 };

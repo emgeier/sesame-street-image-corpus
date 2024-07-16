@@ -15,7 +15,6 @@ const Navbar: React.FC = () => {
 
   return (
     <div>
-    <div className="top-hover"></div>
     <nav className="navbar">
       <ul className="nav-links">
         <li><Link to="/">Home</Link></li>

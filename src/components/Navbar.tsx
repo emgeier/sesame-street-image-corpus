@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
       <ul className="nav-links">
         <li><Link to="/">Home</Link></li>
         <li><Link to="/search">Search</Link></li>
-        <li><Link to="/advsearch">Advanced Search</Link></li>
+        <li><Link to="/download">Download</Link></li>
         <li><Link to="/about">About</Link></li>
         <li><Link to="/admin">Administration</Link></li>
       </ul>

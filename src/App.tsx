@@ -7,6 +7,7 @@ import Home from './components/Home';
 import About from './components/About';
 import Admin from './components/Admin';
 import XSearch from './components/XSearch';
+import DownloadResults from './components/DownloadResults'
 
 import Navbar from './components/Navbar';
 import Search from "./components/Search";

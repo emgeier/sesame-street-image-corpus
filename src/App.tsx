@@ -7,11 +7,12 @@ import Home from './components/Home';
 import About from './components/About';
 import Admin from './components/Admin';
 import XSearch from './components/XSearch';
-import DownloadResults from './components/DownloadResults'
+import SearchImageAttributes from './components/SearchImageAttributes';
 
 import Navbar from './components/Navbar';
 import Search from "./components/Search";
 import Footer from "./components/Footer";
+
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/search" element={<Search />} />
+                    <Route path="/download" element={<SearchImageAttributes />} />
                     <Route path="/admin" element={<Admin />} />
                     <Route path="/advsearch" element={<XSearch />} />
                   </Routes>

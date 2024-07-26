@@ -1,11 +1,12 @@
 import React from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import { uploadData, getUrl } from 'aws-amplify/storage';
 
 const Admin: React.FC = () => {
   const [file, setFile] = React.useState<File | null>(null);
   const [files, setFiles] = React.useState<FileList | null>(null);
+  const [uploadMessage, setUploadMessage] = useState<string | null>(null); // State to hold the upload message
 
   const [url, setUrl] = React.useState<string | undefined>("");
   const inputRef = React.useRef<HTMLInputElement | null>(null);
@@ -53,17 +54,21 @@ const Admin: React.FC = () => {
           data: file,
         });
         console.log("File ${file.name} uploaded successfully");
+        setUploadMessage("File ${file.name} uploaded successfully");
+
       }
     
       
     } catch (error) {
       console.error("Error uploading file:", error);
+      setUploadMessage("Error uploading file.");
     }
   };
 
   const handleUpload = async () => {
     if (!files) {
       console.error("No files selected");
+      setUploadMessage("No files selected");
       return;
     }
 
@@ -80,11 +85,14 @@ const Admin: React.FC = () => {
           data: file,
         });
         console.log("File ${file.name} uploaded successfully");
+        setUploadMessage("All files uploaded successfully");
       }
     }
       
     } catch (error) {
-      console.error("Error uploading file:", error);
+      console.error("Error uploading files:", error);
+      setUploadMessage("Error uploading files");
+
     }
   };
    
@@ -103,11 +111,14 @@ const Admin: React.FC = () => {
       <button onClick={() => inputRef.current?.click()}>
         Select Folder
       </button>
-      <div className='separator'/>
+      
+     
       <button onClick={handleUpload} disabled={!files}>
         Upload
       </button>
+      {uploadMessage && <p>{uploadMessage}</p>} {/* Display the upload message */}
       <div className='separator' />
+      <div className='separator'/>
       <h3>Upload Individual Image File</h3>
       
       <input
@@ -122,7 +133,7 @@ const Admin: React.FC = () => {
         View File Contents
       </button>
       {url && <img src={url} alt="Uploaded file" style={{ maxWidth: '100%', height: 'auto' }} />}
-    
+      
     </div>
   );
 };

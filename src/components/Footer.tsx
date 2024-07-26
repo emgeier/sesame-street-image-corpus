@@ -12,6 +12,7 @@ const Footer: React.FC = () => {
         <Link to="/advsearch">Advanced Search</Link>
         <Link to="/about">About</Link>
         <Link to="/contact">Contact</Link>
+        <Link to="/download">Download</Link>
       </div>
       
       <div className="footer-social">

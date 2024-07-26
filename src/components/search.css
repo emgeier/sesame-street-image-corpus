@@ -20,7 +20,7 @@ body {
   margin: auto;
   background: linear-gradient(180deg, rgb(117, 81, 194), rgb(255, 255, 255));
   display: flex;
-  height: 100vh;
+  height: 80vh;
   width: 100vw;
   justify-content: center;
   min-width: 320px;
@@ -90,83 +90,9 @@ li {
   padding: 5px;
 }
 
-/* search boxes */
-.search-controls {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
 
-.search-control {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
 
-.search-control label {
-  min-width: 100px; /* Adjust as needed */
-}
 
-/* search results */
-
-.annotation-grid-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 80%;
-  margin: auto;
-}
-
-.annotation-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 10px;
-
-}
-
-.annotation-item {
-  list-style: none;
-  text-align: center;
-}
-
-.annotation-item img {
-  max-width: 100%;
-  height: auto;
-  cursor: pointer;
-}
-
-/* Tooltip container */
-.tooltip {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-  top: 40%;
-}
-
-/* Tooltip text */
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 80%;
-  background-color: rgb(199, 175, 240);
-  color: #8a48e1;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%; /* Position the tooltip above the text */
-  left: 30%;
-  margin-left: 10px; /* Use margin to center the tooltip */
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-/* Show the tooltip text when you mouse over the tooltip container */
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-  opacity: 1;
-}
 
 .popup {
   position: fixed;
@@ -186,4 +112,17 @@ li {
   border-radius: 5px;
   width: 300px;
   max-width: 80%;
+}
+.checkbox-category {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-direction: row;
+}
+.checkbox-category-item {
+  display: inline;
+}
+
+.checkbox-label {
+  margin-left: 10px;
 }

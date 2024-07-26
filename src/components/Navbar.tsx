@@ -20,8 +20,9 @@ const Navbar: React.FC = () => {
         <li><Link to="/">Home</Link></li>
         <li><Link to="/search">Search</Link></li>
         <li><Link to="/download">Download</Link></li>
+        <li><Link to="/admin">Upload</Link></li>
+        <li><Link to="/guide">Guide</Link></li>
         <li><Link to="/about">About</Link></li>
-        <li><Link to="/admin">Administration</Link></li>
       </ul>
       <button onClick={handleSignOut}>Sign out</button>
     </nav>

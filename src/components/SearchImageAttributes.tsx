@@ -4,6 +4,7 @@ import { generateClient } from "aws-amplify/data";
 import { getUrl } from "aws-amplify/storage";
 import AnnotatedImage from "./AnnotatedImage";
 import DownloadResults from "./DownloadResults";
+import "./search.css";
 
 
 interface BoundingBox {
@@ -116,7 +117,7 @@ const SearchImageAttributes: React.FC = () => {
   const faceOptions = {
     species: ["human", "puppet", "animal", "other"],
     representation: ["real", "caricature", "other"],
-    race: ["Asian", "American Indian/Alaska Native", "Black/African American", "Native Hawaiian/Other Pacific Islander","other","white"],
+    race: ["Asian", "American Indian/Alaska Native", "Black/African American", "Native Hawaiian/Other Pacific Islander","white","other"],
     age: ["infant","child", "teen","adult", "elderly", "other"],
     orientation: ["front-face", "side-profile", "other"],
     "camera angle": ["forward", "upward", "downward", "other"],

@@ -98,7 +98,7 @@ const Admin: React.FC = () => {
    
   return (
     <div className='main-content'>
-        <h3>coming soon: upload data to database</h3>
+        <h3>Add data to the database</h3>
         
         <h3>Upload Episode Folder</h3>
       <input

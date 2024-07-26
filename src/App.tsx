@@ -8,6 +8,7 @@ import About from './components/About';
 import Admin from './components/Admin';
 import XSearch from './components/XSearch';
 import SearchImageAttributes from './components/SearchImageAttributes';
+import Guide from './components/Guide';
 
 import Navbar from './components/Navbar';
 import Search from "./components/Search";
@@ -31,6 +32,7 @@ function App() {
                     <Route path="/download" element={<SearchImageAttributes />} />
                     <Route path="/admin" element={<Admin />} />
                     <Route path="/advsearch" element={<XSearch />} />
+                    <Route path="/guide" element={<Guide />} />
                   </Routes>
                   <div className='separator'></div>
                   <Footer></Footer>

@@ -24,6 +24,8 @@ const Search: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string>("");
   const [boundingBoxes, setBoundingBoxes] = useState<BoundingBox[]>([]);
+  const [searchMessage, setSearchMessage] = useState<string | null>(null); // State to hold the user message
+
 
   // Function to fetch URL for each image ID
   const fetchImageUrl = async (imageId: string): Promise<string | undefined> => {
@@ -72,8 +74,12 @@ const Search: React.FC = () => {
       }));
 
       setAnnotations(annotationsWithUrls);
+      const numberSearchResults = annotationsWithUrls.length;
+      setSearchMessage(`Images found: ${numberSearchResults}`);
+
     } catch (error) {
       console.error("Failed to fetch annotations:", error);
+      setSearchMessage(`Failed to get search results.`);
     }
     setLoading(false); // Reset loading state
   };
@@ -176,10 +182,11 @@ const Search: React.FC = () => {
           placeholder="puppet"
           onChange={handleKeywordChange}
         /></div>
+        <div><p>For a list of keywords, see the tooltip. For a full explanation of the controlled vocabulary see the Guide.</p></div>
           <div className="tooltip">
             <span>ℹ️</span>
             <div className="tooltiptext">
-              Try: human, puppet, occluded, truncated, oblique, single-letter, word, full-view, multi-digit, child, adult, 18, uppercase, real or caricature.
+              Keywords: human, puppet, animal, infant, child, teen, adult, elderly, Asian, American Indian/Alaska Native, Black/African American, Native Hawaiian/Other Pacific Islander, white, occluded, truncated, oblique, cardinal, close-up, single, multiple, skyline, domicile, business, attraction, institution, single-letter, word, full-view, multi-digit, child, adult, 18, uppercase, house, row-house, apartment, castle,  clear, blurry, full-view, front-face, side-profile, real or caricature.
             </div>
           </div>
         </div>
@@ -199,9 +206,12 @@ const Search: React.FC = () => {
           </ul>
           </div>
         )}
+        <div>{searchMessage && <p>{searchMessage}</p>} {/* Display the user message */}
+        </div>
         <div className="page-buttons">
           <button onClick={handlePreviousPage} disabled={currentPageIndex === 0 || loading}>Previous</button>
           <button onClick={handleNextPage} disabled={currentPageIndex * itemsPerPage + itemsPerPage >= annotations.length || loading}>Next</button>
+
         </div>
         {selectedImageUrl && (
           <div>

@@ -126,7 +126,7 @@ const Admin: React.FC = () => {
         onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
       />
       <button onClick={handleSingleFileUpload} disabled={!file}>
-        Upload Single File
+        Upload Image File
       </button>
       <div className='separator' />
       <button onClick={seeFile} disabled={!file}>

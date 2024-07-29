@@ -3,6 +3,7 @@ import type { Schema } from "../../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
 import { getUrl } from 'aws-amplify/storage';
 import AnnotatedImage from "./AnnotatedImage";
+import AttributeDetails from "./AttributeDetails";
 
 interface BoundingBox {
   x: number;
@@ -17,6 +18,8 @@ const Search: React.FC = () => {
   const client = generateClient<Schema>();
   const [annotations, setAnnotations] = useState<Array<Schema["Annotation"]["type"] & { imageUrl?: string }>>([]);
   const [groupedAnnotations, setGroupedAnnotations] = useState<{ [key: string]: Array<Schema["Annotation"]["type"] & { imageUrl?: string }> }>({});
+  const [selectedAnnotations, setSelectedAnnotations] = useState<Array<Schema["Annotation"]["type"] & { imageUrl?: string }>>([]);
+
   const [category, setCategory] = useState<string>("");
   const [keywords, setKeywords] = useState<string[]>([]);
   const itemsPerPage = 12; // Items to display per page 
@@ -110,10 +113,11 @@ const Search: React.FC = () => {
   };
   const handleImageClick = (imageId: string) => {
     const selectedAnnotations = groupedAnnotations[imageId];
+    setSelectedAnnotations(selectedAnnotations);
     if (!selectedAnnotations || selectedAnnotations.length === 0) return;
 
     setSelectedImageUrl(selectedAnnotations[0].imageUrl || "");
-
+  
     const allBoundingBoxes: BoundingBox[] = selectedAnnotations.map((annotation) => {
       const polygon = typeof annotation.polygon === 'string' ? JSON.parse(annotation.polygon) : annotation.polygon;
       if (!Array.isArray(polygon) || polygon.length < 4) return null;
@@ -200,6 +204,7 @@ const Search: React.FC = () => {
           <div>
             <h4>Annotated Image</h4>
             <AnnotatedImage imageUrl={selectedImageUrl} boundingBoxes={boundingBoxes} />
+            <AttributeDetails annotations={selectedAnnotations}/>
           </div>
         )}
       </main>

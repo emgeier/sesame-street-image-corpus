@@ -9,8 +9,7 @@ interface BoundingBox {
     y: number;
     width: number;
     height: number;
-    label: string;
-    colorIndex: number;
+    id: number;
     annotation: Schema["Annotation"]["type"]; 
   }
 
@@ -59,8 +58,7 @@ const XSearch: React.FC = () => {
                 y: y,
                 width: width - x, // Convert coordinates to width
                 height: height - y, // Convert coordinates to height
-                label: annotation.category,
-                colorIndex: annotation.annotation_id, // Set the color for bounding boxes
+                id: annotation.annotation_id, // Set the color for bounding boxes
                 annotation: annotation
               };
               allBoundingBoxes.push(box);

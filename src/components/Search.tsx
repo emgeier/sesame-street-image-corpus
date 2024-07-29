@@ -9,14 +9,14 @@ interface BoundingBox {
   y: number;
   width: number;
   height: number;
-  label: string;
-  colorIndex: number;
+  id: number;
   annotation: Schema["Annotation"]["type"];
 }
 
 const Search: React.FC = () => {
   const client = generateClient<Schema>();
   const [annotations, setAnnotations] = useState<Array<Schema["Annotation"]["type"] & { imageUrl?: string }>>([]);
+  const [groupedAnnotations, setGroupedAnnotations] = useState<{ [key: string]: Array<Schema["Annotation"]["type"] & { imageUrl?: string }> }>({});
   const [category, setCategory] = useState<string>("");
   const [keywords, setKeywords] = useState<string[]>([]);
   const itemsPerPage = 12; // Items to display per page 
@@ -74,7 +74,17 @@ const Search: React.FC = () => {
       }));
 
       setAnnotations(annotationsWithUrls);
-      const numberSearchResults = annotationsWithUrls.length;
+      // Group annotations by image ID
+      const grouped = annotationsWithUrls.reduce((acc, annotation) => {
+        if (!acc[annotation.image_id]) {
+          acc[annotation.image_id] = [];
+        }
+        acc[annotation.image_id].push(annotation);
+        return acc;
+      }, {} as { [key: string]: Array<Schema["Annotation"]["type"] & { imageUrl?: string }> });
+
+      setGroupedAnnotations(grouped);
+      const numberSearchResults = Object.keys(grouped).length;
       setSearchMessage(`Images found: ${numberSearchResults}`);
 
     } catch (error) {
@@ -99,50 +109,72 @@ const Search: React.FC = () => {
     setCurrentPageIndex(0); // Reset to the first page
   };
 
-  const handleImageClick = (annotation: Schema["Annotation"]["type"] & { imageUrl?: string }) => {
-    if (!annotation.imageUrl || !annotation.category || !annotation.polygon) return;
-    setSelectedImageUrl(annotation.imageUrl);
+  // const handleImageClick = (annotation: Schema["Annotation"]["type"] & { imageUrl?: string }) => {
+  //   if (!annotation.imageUrl || !annotation.category || !annotation.polygon) return;
+  //   setSelectedImageUrl(annotation.imageUrl);
 
-    // Initialize an array to accumulate bounding boxes
-    const allBoundingBoxes: BoundingBox[] = [];
+  //   // Initialize an array to accumulate bounding boxes
+  //   const allBoundingBoxes: BoundingBox[] = [];
     
-    // Ensure that annotation.polygon is parsed correctly
-    let polygon: number[];
-    if (typeof annotation.polygon === 'string') {
-      try {
-        const parsed = JSON.parse(annotation.polygon);
-        if (Array.isArray(parsed) && parsed.every(item => typeof item === 'number')) {
-          polygon = parsed;
-        } else {
-          throw new Error("Parsed polygon is not an array of numbers");
-        }
-      } catch (error) {
-        console.error("Failed to parse polygon:", error);
-        return;
-      }
-    } else if (Array.isArray(annotation.polygon) && annotation.polygon.every(item => typeof item === 'number')) {
-      polygon = annotation.polygon;
-    } else {
-      console.error("Polygon is not a valid array of numbers:", annotation.polygon);
-      return;
-    }
+  //   // Ensure that annotation.polygon is parsed correctly
+  //   let polygon: number[];
+  //   if (typeof annotation.polygon === 'string') {
+  //     try {
+  //       const parsed = JSON.parse(annotation.polygon);
+  //       if (Array.isArray(parsed) && parsed.every(item => typeof item === 'number')) {
+  //         polygon = parsed;
+  //       } else {
+  //         throw new Error("Parsed polygon is not an array of numbers");
+  //       }
+  //     } catch (error) {
+  //       console.error("Failed to parse polygon:", error);
+  //       return;
+  //     }
+  //   } else if (Array.isArray(annotation.polygon) && annotation.polygon.every(item => typeof item === 'number')) {
+  //     polygon = annotation.polygon;
+  //   } else {
+  //     console.error("Polygon is not a valid array of numbers:", annotation.polygon);
+  //     return;
+  //   }
 
-    if (Array.isArray(polygon) && polygon.length >= 4) {
+  //   if (Array.isArray(polygon) && polygon.length >= 4) {
+  //     const [x, y, width, height] = polygon;
+  //     const box: BoundingBox = {
+  //       x: x,
+  //       y: y,
+  //       width: width - x, // Convert coordinates to width
+  //       height: height - y, // Convert coordinates to height
+  //       id: annotation.annotation_id,
+  //       annotation: annotation,
+  //     };
+  //     allBoundingBoxes.push(box);
+  //     console.log("box: " + JSON.stringify(box));
+  //   } else {
+  //     console.error("Polygon is not an array or does not have enough elements:", polygon);
+  //   }
+
+  //   setBoundingBoxes(allBoundingBoxes);
+  // };
+  const handleImageClick = (imageId: string) => {
+    const selectedAnnotations = groupedAnnotations[imageId];
+    if (!selectedAnnotations || selectedAnnotations.length === 0) return;
+
+    setSelectedImageUrl(selectedAnnotations[0].imageUrl || "");
+
+    const allBoundingBoxes: BoundingBox[] = selectedAnnotations.map((annotation) => {
+      const polygon = typeof annotation.polygon === 'string' ? JSON.parse(annotation.polygon) : annotation.polygon;
+      if (!Array.isArray(polygon) || polygon.length < 4) return null;
+
       const [x, y, width, height] = polygon;
-      const box: BoundingBox = {
+      return {
         x: x,
         y: y,
         width: width - x, // Convert coordinates to width
         height: height - y, // Convert coordinates to height
-        label: annotation.category,
-        colorIndex: annotation.annotation_id, // Set the color for bounding boxes
+        id: annotation.annotation_id,
         annotation: annotation,
-      };
-      allBoundingBoxes.push(box);
-      console.log("box: " + JSON.stringify(box));
-    } else {
-      console.error("Polygon is not an array or does not have enough elements:", polygon);
-    }
+      } as BoundingBox;
+    }).filter(Boolean) as BoundingBox[];
 
     setBoundingBoxes(allBoundingBoxes);
   };
@@ -186,7 +218,7 @@ const Search: React.FC = () => {
           <div className="tooltip">
             <span>ℹ️</span>
             <div className="tooltiptext">
-              Keywords: human, puppet, animal, infant, child, teen, adult, elderly, Asian, American Indian/Alaska Native, Black/African American, Native Hawaiian/Other Pacific Islander, white, occluded, truncated, oblique, cardinal, close-up, single, multiple, skyline, domicile, business, attraction, institution, single-letter, word, full-view, single-digit, multi-digit, uppercase, lowercase, house, row-house, apartment, castle,  clear, blurry, full-view, front-face, side-profile, forward, downward, upward, proper noun, real or caricature.
+              Keywords: human, puppet, animal, infant, child, teen, adult, elderly, Asian, American Indian/Alaska Native, Black/African American, Native Hawaiian/Other Pacific Islander, white, occluded, truncated, oblique, cardinal, close-up, single, multiple, skyline, domicile, business, attraction, institution, single-letter, word, nonword, pronounceable, full-view, single-digit, multi-digit, uppercase, lowercase, house, row-house, apartment, castle,  clear, blurry, full-view, front-face, side-profile, forward, downward, upward, proper noun, real or caricature.
             </div>
           </div>
         </div>
@@ -197,10 +229,11 @@ const Search: React.FC = () => {
           <div className="annotation-grid-container">
           
           <ul className="annotation-grid">
-            {annotations.slice(currentPageIndex * itemsPerPage, currentPageIndex * itemsPerPage + itemsPerPage).map((annotation) => (
-              <ul className="annotation-item" key={`${annotation.image_id}-${annotation.annotation_id}`} onClick={() => handleImageClick(annotation)}>
-
-                {annotation.imageUrl && <img src={annotation.imageUrl} alt="Image" style={{ maxWidth: '180px', height: 'auto' }} />}
+            {Object.keys(groupedAnnotations).slice(currentPageIndex * itemsPerPage, currentPageIndex * itemsPerPage + itemsPerPage).map((imageId) => (
+                <ul className="annotation-item" key={imageId} onClick={() => handleImageClick(imageId)}>
+                {groupedAnnotations[imageId][0].imageUrl && (
+                  <img src={groupedAnnotations[imageId][0].imageUrl} alt="Image" style={{ maxWidth: '180px', height: 'auto' }} />
+                )}
               </ul>
             ))}
           </ul>

@@ -7,8 +7,7 @@ interface BoundingBox {
   y: number;
   width: number;
   height: number;
-  label: string;
-  colorIndex: number; // Change from string to number
+  id: number;
   annotation: Schema["Annotation"]["type"];
 
 }
@@ -51,14 +50,14 @@ const AnnotatedImage: React.FC<AnnotatedImageProps> = ({ imageUrl, boundingBoxes
 
         // Draw bounding boxes and labels
         boundingBoxes.forEach(box => {
-          const color = getColorFromIndex(box.colorIndex);
+          const color = getColorFromIndex(box.id);
           context.strokeStyle = color; // Set stroke color
           context.lineWidth = 2;
           context.strokeRect(box.x, box.y, box.width, box.height);
 
           context.fillStyle = color; // Set text color
           context.font = '16px Arial';
-          context.fillText(box.label, box.x, box.y - 5);
+          context.fillText(box.id.toString(), box.x, box.y - 5);
         });
         canvas.addEventListener('click', handleCanvasClick);
       };

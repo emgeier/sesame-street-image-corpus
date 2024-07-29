@@ -186,7 +186,7 @@ const Search: React.FC = () => {
           <div className="tooltip">
             <span>ℹ️</span>
             <div className="tooltiptext">
-              Keywords: human, puppet, animal, infant, child, teen, adult, elderly, Asian, American Indian/Alaska Native, Black/African American, Native Hawaiian/Other Pacific Islander, white, occluded, truncated, oblique, cardinal, close-up, single, multiple, skyline, domicile, business, attraction, institution, single-letter, word, full-view, multi-digit, child, adult, 18, uppercase, house, row-house, apartment, castle,  clear, blurry, full-view, front-face, side-profile, real or caricature.
+              Keywords: human, puppet, animal, infant, child, teen, adult, elderly, Asian, American Indian/Alaska Native, Black/African American, Native Hawaiian/Other Pacific Islander, white, occluded, truncated, oblique, cardinal, close-up, single, multiple, skyline, domicile, business, attraction, institution, single-letter, word, full-view, single-digit, multi-digit, uppercase, lowercase, house, row-house, apartment, castle,  clear, blurry, full-view, front-face, side-profile, forward, downward, upward, proper noun, real or caricature.
             </div>
           </div>
         </div>

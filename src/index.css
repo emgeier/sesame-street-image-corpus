@@ -72,6 +72,8 @@ li {
   padding: 8px;
 }
 
+
+
 /* Pagination  */
 
 .page-buttons {
@@ -176,8 +178,7 @@ li {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: right; /* popup window to right of image */
 }
 
 .popup-content {
@@ -186,4 +187,12 @@ li {
   border-radius: 5px;
   width: 300px;
   max-width: 80%;
+  margin-right: 5%; /* left margin within box */
+}
+.popup-content ul {
+  background-color: white;
+  text-align: left; /* left justification of text*/
+}
+.popup button {
+  align-items: center;
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Schema } from "../../amplify/data/resource";
+import "./attributedetails.css"
 
 interface AttributePopupProps {
   annotation: Schema["Annotation"]["type"];
@@ -17,9 +18,9 @@ const AttributePopup: React.FC<AttributePopupProps> = ({ annotation, onClose }) 
       if (value === true || value === 0 || value === 'TRUE' || (value && typeof value !== 'object' && value.toString().trim() !== '') ) {
         if( key === 'noun'){value = 'proper noun';}
         return (
-          <li key={key}>
+          <ul key={key}>
             <strong>{key}:</strong> {value.toString()}
-          </li>
+          </ul>
         );
       }
 
@@ -29,12 +30,18 @@ const AttributePopup: React.FC<AttributePopupProps> = ({ annotation, onClose }) 
   return (
     <div className="popup">
       <div className="popup-content">
-        <h3>Annotation Details</h3>
-        <ul>{renderDetails()}</ul>
-        <button onClick={onClose}>Close</button>
+        <div className='attribute-details-container'>
+        <div className="annotation-block">
+          <table>
+            <tbody>{renderDetails()}</tbody>
+          </table>
+          <button className= "attribute-button" onClick={onClose}>Close</button>
+        </div>
+        </div>
       </div>
     </div>
   );
 };
+
 
 export default AttributePopup;

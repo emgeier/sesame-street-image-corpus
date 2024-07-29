@@ -26,7 +26,7 @@ const AttributeDetails: React.FC<{ annotations: Array<Schema["Annotation"]["type
       <h3>Annotations</h3>
       {annotations.map((annotation, index) => (
         <div key={index} className="annotation-block">
-          <h4>Annotation {index + 1}</h4>
+          <h4>Annotation {index}</h4>
           <table>
             <tbody>{renderDetails(annotation)}</tbody>
           </table>

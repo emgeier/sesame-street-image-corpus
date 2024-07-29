@@ -9,10 +9,11 @@ const Footer: React.FC = () => {
       <div className="footer-links">
         <Link to="/">Home</Link>
         <Link to="/search">Search</Link>
-        <Link to="/advsearch">Advanced Search</Link>
+        <Link to="/download">Download</Link>
+        <Link to="/admin">Upload</Link>
+        <Link to="/guide">Guide</Link>
         <Link to="/about">About</Link>
         <Link to="/contact">Contact</Link>
-        <Link to="/download">Download</Link>
       </div>
       
       <div className="footer-social">

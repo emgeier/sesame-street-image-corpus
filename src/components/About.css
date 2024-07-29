@@ -51,11 +51,7 @@
   place-content: center;
   justify-content: center;
 }  
-/* home page begins where navbar ends */
-.home {
-  width: 100%;
-  padding-top: 50px; /* Adjust based on the height of the navbar */
-}
+
 .sesame-image {
   margin-top: 20px;
   max-width: 100%;

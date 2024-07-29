@@ -182,7 +182,7 @@ const Search: React.FC = () => {
           placeholder="puppet"
           onChange={handleKeywordChange}
         /></div>
-        <div><p>For a list of keywords, see the tooltip. For a full explanation of the controlled vocabulary see the Guide.</p></div>
+        <div><p>For a list of keywords, see the tooltip. For a full explanation of the terms used in the SSIC see the Guide.</p></div>
           <div className="tooltip">
             <span>ℹ️</span>
             <div className="tooltiptext">

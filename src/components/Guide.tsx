@@ -10,9 +10,8 @@ function Guide() {
       <h1 className='intro'>The Annotation Schema of the Sesame Street Image Corpus</h1>
       <p className='indented'>
     HOW TO FIND ANNOTATED IMAGES: The corpus uses a controlled vocabulary to encode the images with information about various visual aspects of the images. Here is a comprehensive list of the terms used in the development of the metadata for the Image Corpus:</p>
-
-<p className='indented'>
-<p>
+      <p className='indented'>
+        <p>
   <strong>“Face” Category-Attributes</strong><br/>
   Name: 1. Species<br/>
   Value: human; puppet; animal; other<br/>
@@ -82,10 +81,7 @@ function Guide() {
   Value: full-view; occluded; truncated; occluded-and-truncated; other<br/>
   Name: 6. Clarity<br/>
   Value: clear; blurry; other<br/>
-</p>
-
-
-
+        </p>
       </p>
       <div className="separator"></div>
     </main>

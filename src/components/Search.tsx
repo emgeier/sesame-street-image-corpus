@@ -202,7 +202,7 @@ const Search: React.FC = () => {
         </div>
         {selectedImageUrl && (
           <div>
-            <h4>Annotated Image</h4>
+            <h4>Image: {selectedAnnotations[0].image_id}</h4>
             <AnnotatedImage imageUrl={selectedImageUrl} boundingBoxes={boundingBoxes} />
             <AttributeDetails annotations={selectedAnnotations}/>
           </div>

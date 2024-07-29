@@ -108,53 +108,6 @@ const Search: React.FC = () => {
     setKeywords(event.target.value.split(' ').filter((word) => word.length > 0));
     setCurrentPageIndex(0); // Reset to the first page
   };
-
-  // const handleImageClick = (annotation: Schema["Annotation"]["type"] & { imageUrl?: string }) => {
-  //   if (!annotation.imageUrl || !annotation.category || !annotation.polygon) return;
-  //   setSelectedImageUrl(annotation.imageUrl);
-
-  //   // Initialize an array to accumulate bounding boxes
-  //   const allBoundingBoxes: BoundingBox[] = [];
-    
-  //   // Ensure that annotation.polygon is parsed correctly
-  //   let polygon: number[];
-  //   if (typeof annotation.polygon === 'string') {
-  //     try {
-  //       const parsed = JSON.parse(annotation.polygon);
-  //       if (Array.isArray(parsed) && parsed.every(item => typeof item === 'number')) {
-  //         polygon = parsed;
-  //       } else {
-  //         throw new Error("Parsed polygon is not an array of numbers");
-  //       }
-  //     } catch (error) {
-  //       console.error("Failed to parse polygon:", error);
-  //       return;
-  //     }
-  //   } else if (Array.isArray(annotation.polygon) && annotation.polygon.every(item => typeof item === 'number')) {
-  //     polygon = annotation.polygon;
-  //   } else {
-  //     console.error("Polygon is not a valid array of numbers:", annotation.polygon);
-  //     return;
-  //   }
-
-  //   if (Array.isArray(polygon) && polygon.length >= 4) {
-  //     const [x, y, width, height] = polygon;
-  //     const box: BoundingBox = {
-  //       x: x,
-  //       y: y,
-  //       width: width - x, // Convert coordinates to width
-  //       height: height - y, // Convert coordinates to height
-  //       id: annotation.annotation_id,
-  //       annotation: annotation,
-  //     };
-  //     allBoundingBoxes.push(box);
-  //     console.log("box: " + JSON.stringify(box));
-  //   } else {
-  //     console.error("Polygon is not an array or does not have enough elements:", polygon);
-  //   }
-
-  //   setBoundingBoxes(allBoundingBoxes);
-  // };
   const handleImageClick = (imageId: string) => {
     const selectedAnnotations = groupedAnnotations[imageId];
     if (!selectedAnnotations || selectedAnnotations.length === 0) return;
@@ -222,12 +175,10 @@ const Search: React.FC = () => {
             </div>
           </div>
         </div>
-        
         {loading ? (
           <p>Loading...</p>
         ) : (
           <div className="annotation-grid-container">
-          
           <ul className="annotation-grid">
             {Object.keys(groupedAnnotations).slice(currentPageIndex * itemsPerPage, currentPageIndex * itemsPerPage + itemsPerPage).map((imageId) => (
                 <ul className="annotation-item" key={imageId} onClick={() => handleImageClick(imageId)}>
@@ -244,7 +195,6 @@ const Search: React.FC = () => {
         <div className="page-buttons">
           <button onClick={handlePreviousPage} disabled={currentPageIndex === 0 || loading}>Previous</button>
           <button onClick={handleNextPage} disabled={currentPageIndex * itemsPerPage + itemsPerPage >= annotations.length || loading}>Next</button>
-
         </div>
         {selectedImageUrl && (
           <div>

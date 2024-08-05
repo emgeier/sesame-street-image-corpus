@@ -9,7 +9,6 @@ interface BoundingBox {
   height: number;
   id: number;
   annotation: Schema["Annotation"]["type"];
-
 }
 
 interface AnnotatedImageProps {
@@ -17,10 +16,9 @@ interface AnnotatedImageProps {
   boundingBoxes: BoundingBox[];
 }
 
-const getColorFromIndex = (index: number): string => {
+const getColorFromId = (id: number): string => {
   const colors = ['red', 'yellow', 'green', 'blue', 'orange'];
-  console.log("index color: " + colors[index % colors.length]);
-  return colors[index % colors.length];
+  return colors[id % colors.length];
 };
 
 const AnnotatedImage: React.FC<AnnotatedImageProps> = ({ imageUrl, boundingBoxes }) => {
@@ -35,45 +33,45 @@ const AnnotatedImage: React.FC<AnnotatedImageProps> = ({ imageUrl, boundingBoxes
 
     if (canvas && context && image) {
       image.onload = () => {
-        // Resize canvas to match the image dimensions
         canvas.width = image.width;
         canvas.height = image.height;
-
-        // Clear the canvas before drawing
         context.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Draw the image on the canvas
         context.drawImage(image, 0, 0, image.width, image.height);
 
-        // Log bounding boxes
-        console.log('Bounding Boxes:', boundingBoxes);
-
-        // Draw bounding boxes and labels
         boundingBoxes.forEach(box => {
-          const color = getColorFromIndex(box.id);
-          context.strokeStyle = color; // Set stroke color
+          const color = getColorFromId(box.id);
+          context.strokeStyle = color;
           context.lineWidth = 2;
-          context.strokeRect(box.x, box.y, box.width, box.height);
-
-          context.fillStyle = color; // Set text color
+          context.fillStyle = color;
           context.font = '16px Arial';
+
+          if (box.annotation.rotation) {
+            context.save();
+            context.translate(box.x + box.width / 2, box.y + box.height / 2);
+            context.rotate((box.annotation.rotation * Math.PI) / 180);
+            context.translate(-(box.x + box.width / 2), -(box.y + box.height / 2));
+          }
+
+          context.strokeRect(box.x, box.y, box.width, box.height);
           context.fillText(box.id.toString(), box.x, box.y - 5);
+
+          if (box.annotation.rotation) {
+            context.restore();
+          }
         });
+
         canvas.addEventListener('click', handleCanvasClick);
       };
 
-      // Trigger image load
       image.src = imageUrl;
-      console.log('Image URL:', imageUrl);
     }
+
     return () => {
-        // Cleanup event listener
-        if (canvas) {
-          canvas.removeEventListener('click', handleCanvasClick);
-        }
+      if (canvas) {
+        canvas.removeEventListener('click', handleCanvasClick);
+      }
     };
   }, [imageUrl, boundingBoxes]);
-
 
   const handleCanvasClick = (event: { clientX: number; clientY: number; }) => {
     const canvas = canvasRef.current;
@@ -84,7 +82,7 @@ const AnnotatedImage: React.FC<AnnotatedImageProps> = ({ imageUrl, boundingBoxes
     const y = event.clientY - rect.top;
 
     boundingBoxes.forEach(box => {
-      if (x >= box.x && x <= box.x + box.width && y >= box.y && y <= box.y + box.height ) {
+      if (x >= box.x && x <= box.x + box.width && y >= box.y && y <= box.y + box.height) {
         setSelectedAnnotation(box.annotation);
       }
     });

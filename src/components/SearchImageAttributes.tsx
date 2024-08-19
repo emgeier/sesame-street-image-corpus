@@ -4,8 +4,7 @@ import { generateClient } from "aws-amplify/data";
 import { getUrl } from "aws-amplify/storage";
 import DownloadResults from "./DownloadResults";
 import "./search.css";
-
-
+import { Authenticator } from "@aws-amplify/ui-react";
 
 const SearchImageAttributes: React.FC = () => {
   const client = generateClient<Schema>();
@@ -147,6 +146,8 @@ const SearchImageAttributes: React.FC = () => {
   };
 
   return (
+    <Authenticator hideSignUp className="authenticator-popup">
+    {({  }) => (
     <main className="main-content">
       <div className="separator"></div>
       <h3>Annotation Search</h3>
@@ -173,6 +174,8 @@ const SearchImageAttributes: React.FC = () => {
 
       <div><DownloadResults annotations={annotations} /></div>
     </main>
+    )}
+    </Authenticator>
   );
 };
 

@@ -126,3 +126,8 @@ li {
 .checkbox-label {
   margin-left: 10px;
 }
+.authenticator-popup {
+  z-index: 1000; /* Adjust this value as needed */
+  position: relative; /* Ensure the popup is positioned relative to the page */
+  margin-top: 150px;
+}

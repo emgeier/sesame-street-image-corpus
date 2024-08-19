@@ -40,9 +40,18 @@ const XSearch: React.FC = () => {
 
       if(!selectedImage){return;}
 
-      const result: any = await client.models.Annotation.list({
-        filter: { image_id: { eq: selectedFullImageId.trim() } }
-      });
+      // listAnnotations(image_id: "S48-E4821_00073.png") {
+      //   items {
+      //     annotation_id
+      //     attributes
+      //   }
+
+      // const result: any = await client.models.Annotation.list({
+      //   filter: { image_id: { eq: selectedFullImageId.trim() } }
+      // });
+
+      const result: any = await client.models.Annotation.list({image_id: selectedFullImageId});
+      
         if (result){console.log("results data: " + result.data + "length: "+ result.data.length);}
 
         // Initialize an array to accumulate bounding boxes

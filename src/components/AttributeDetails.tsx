@@ -1,19 +1,39 @@
 import React from 'react';
 import type { Schema } from "../../amplify/data/resource";
-import './attributedetails.css'; // Import the CSS file
+import './attributedetails.css'; 
 
 const AttributeDetails: React.FC<{ annotations: Array<Schema["Annotation"]["type"]> }> = ({ annotations }) => {
   const renderDetails = (annotation: Schema["Annotation"]["type"]) => {
-    const entries = Object.entries(annotation);
-    return entries.map(([key, value]) => {
-      if (key === 'imageUrl' || key === 'createdAt' || key === 'updatedAt' || key === 'keywords' || key === 'attributes') return null;
+    let attributes: { [key: string]: any } = {};
+    
+   // Check if attributes is a valid JSON string before parsing
+   if (annotation.attributes && typeof annotation.attributes === 'string') {
+    try {
+      attributes = JSON.parse(annotation.attributes);
+    } catch (e) {
+      console.error("Error parsing attributes JSON", e);
+    }
+  }
 
-      if (value === true || value === 0 || value === 'TRUE' || (value && typeof value !== 'object' && value.toString().trim() !== '')) {
-        if (key === 'noun') value = 'proper noun';
+    const entries = Object.entries(attributes);
+
+    return entries.map(([key, value]) => {
+      // Handle different types of values and convert to string
+      let displayValue: string;
+      if (typeof value === 'object') {
+        displayValue = JSON.stringify(value);
+      } else if (value === true || value === false) {
+        displayValue = value ? 'true' : 'false';
+      } else {
+        displayValue = value !== null && value !== undefined ? value.toString() : '';
+      }
+
+      if (displayValue.trim() !== '') {
+        if (key === 'noun') displayValue = 'proper noun';
         return (
           <tr key={key}>
             <td><strong>{key}</strong></td>
-            <td>{value.toString()}</td>
+            <td>{displayValue}</td>
           </tr>
         );
       }

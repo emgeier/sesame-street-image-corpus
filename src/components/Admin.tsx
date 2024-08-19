@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { Authenticator } from '@aws-amplify/ui-react';
 
 import { uploadData, getUrl } from 'aws-amplify/storage';
 
@@ -97,6 +98,8 @@ const Admin: React.FC = () => {
   };
    
   return (
+    <Authenticator hideSignUp className="authenticator-popup">
+    {({  }) => (
     <div className='main-content'>
         <h3>Add data to the database</h3>
         
@@ -135,6 +138,8 @@ const Admin: React.FC = () => {
       {url && <img src={url} alt="Uploaded file" style={{ maxWidth: '100%', height: 'auto' }} />}
       
     </div>
+    )}
+    </Authenticator>
   );
 };
 

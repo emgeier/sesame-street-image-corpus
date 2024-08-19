@@ -4,6 +4,7 @@ import { generateClient } from "aws-amplify/data";
 import { getUrl } from 'aws-amplify/storage';
 import AnnotatedImage from "./AnnotatedImage";
 import AttributeDetails from "./AttributeDetails";
+import { Authenticator } from "@aws-amplify/ui-react";
 
 interface BoundingBox {
   x: number;
@@ -149,6 +150,8 @@ const Search: React.FC = () => {
   };
 
   return (
+    <Authenticator hideSignUp className="authenticator-popup">
+                    {({  }) => (
     <div>
       <main className='main-content'>
         <h2>Search</h2>
@@ -209,6 +212,8 @@ const Search: React.FC = () => {
         )}
       </main>
     </div>
+)}
+</Authenticator>
   );
 };
 

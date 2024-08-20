@@ -18,9 +18,10 @@ a {
 }
 body {
   margin: auto;
+  /* background: linear-gradient(180deg, rgb(117, 81, 194), rgb(255, 255, 255)); */
   background: linear-gradient(180deg, rgb(117, 81, 194), rgb(255, 255, 255));
   display: flex;
-  height: 100vh;
+  height: 100%;
   width: 100vw;
   justify-content: center;
   min-width: 320px;
@@ -66,6 +67,22 @@ button:focus-visible {
     background-color: #f9f9f9;
     place-items: center;
   }
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #7753c4;
+  }
+  button {
+    background-color: #f9f9f9;
+    place-items: center;
+  }
+  /* body {
+    background: linear-gradient(180deg, rgb(117, 81, 194), rgb(140, 100, 230));
+  } */
 }
 li {
   background-color: white;

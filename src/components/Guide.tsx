@@ -4,6 +4,7 @@ import '@aws-amplify/ui-react/styles.css';
 function Guide() {
   return (
     <div>
+      <div className='separator'></div>
       <header className="banner"></header>
       <div className='separator'></div>
     <main>

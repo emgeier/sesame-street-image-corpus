@@ -130,3 +130,8 @@ button {
 button:hover {
   background-color: #785790;
 }
+/* Highlight the current page link */
+.nav-links a.current-page {
+  font-weight: 600; /* Bold weight for the current page */
+  color: #131010; /* Optionally change the color as well */
+}

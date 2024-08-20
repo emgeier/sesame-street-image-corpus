@@ -1,20 +1,14 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
-import { Authenticator } from '@aws-amplify/ui-react';
+import { useEffect } from 'react';
 
 import { uploadData, getUrl } from 'aws-amplify/storage';
-import CustomHeader from './CustomMessaging';
 
 const Admin: React.FC = () => {
   const [file, setFile] = React.useState<File | null>(null);
   const [files, setFiles] = React.useState<FileList | null>(null);
-  const [uploadMessage, setUploadMessage] = useState<string | null>(null); // State to hold the upload message
 
   const [url, setUrl] = React.useState<string | undefined>("");
   const inputRef = React.useRef<HTMLInputElement | null>(null);
-  const components = {
-    Header: CustomHeader,
-  };
 
   useEffect(() => {
     if (inputRef.current) {
@@ -59,21 +53,17 @@ const Admin: React.FC = () => {
           data: file,
         });
         console.log("File ${file.name} uploaded successfully");
-        setUploadMessage("File ${file.name} uploaded successfully");
-
       }
     
       
     } catch (error) {
       console.error("Error uploading file:", error);
-      setUploadMessage("Error uploading file.");
     }
   };
 
   const handleUpload = async () => {
     if (!files) {
       console.error("No files selected");
-      setUploadMessage("No files selected");
       return;
     }
 
@@ -90,22 +80,17 @@ const Admin: React.FC = () => {
           data: file,
         });
         console.log("File ${file.name} uploaded successfully");
-        setUploadMessage("All files uploaded successfully");
       }
     }
       
     } catch (error) {
-      console.error("Error uploading files:", error);
-      setUploadMessage("Error uploading files");
-
+      console.error("Error uploading file:", error);
     }
   };
    
   return (
-    <Authenticator hideSignUp className="authenticator-popup" components={components}>
-    {({  }) => (
     <div className='main-content'>
-        <h3>Add data to the database</h3>
+        <h3>coming soon: upload data to database</h3>
         
         <h3>Upload Episode Folder</h3>
       <input
@@ -118,14 +103,11 @@ const Admin: React.FC = () => {
       <button onClick={() => inputRef.current?.click()}>
         Select Folder
       </button>
-      
-     
+      <div className='separator'/>
       <button onClick={handleUpload} disabled={!files}>
         Upload
       </button>
-      {uploadMessage && <p>{uploadMessage}</p>} {/* Display the upload message */}
       <div className='separator' />
-      <div className='separator'/>
       <h3>Upload Individual Image File</h3>
       
       <input
@@ -133,17 +115,15 @@ const Admin: React.FC = () => {
         onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
       />
       <button onClick={handleSingleFileUpload} disabled={!file}>
-        Upload Image File
+        Upload Single File
       </button>
       <div className='separator' />
       <button onClick={seeFile} disabled={!file}>
         View File Contents
       </button>
       {url && <img src={url} alt="Uploaded file" style={{ maxWidth: '100%', height: 'auto' }} />}
-      
+    
     </div>
-    )}
-    </Authenticator>
   );
 };
 

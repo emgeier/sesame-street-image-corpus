@@ -5,6 +5,7 @@ import { getUrl } from 'aws-amplify/storage';
 import AnnotatedImage from "./AnnotatedImage";
 import AttributeDetails from "./AttributeDetails";
 import { Authenticator } from "@aws-amplify/ui-react";
+import CustomHeader from './CustomMessaging';
 
 interface BoundingBox {
   x: number;
@@ -30,6 +31,9 @@ const Search: React.FC = () => {
   const [boundingBoxes, setBoundingBoxes] = useState<BoundingBox[]>([]);
   const [searchMessage, setSearchMessage] = useState<string | null>(null); // State to hold the user message
 
+  const components = {
+    Header: CustomHeader,
+  };
 
   // Function to fetch URL for each image ID
   const fetchImageUrl = async (imageId: string): Promise<string | undefined> => {
@@ -150,7 +154,7 @@ const Search: React.FC = () => {
   };
 
   return (
-    <Authenticator hideSignUp className="authenticator-popup">
+    <Authenticator hideSignUp className="authenticator-popup" components={components}>
                     {({  }) => (
     <div>
       <main className='main-content'>

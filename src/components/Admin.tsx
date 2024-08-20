@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Authenticator } from '@aws-amplify/ui-react';
 
 import { uploadData, getUrl } from 'aws-amplify/storage';
+import CustomHeader from './CustomMessaging';
 
 const Admin: React.FC = () => {
   const [file, setFile] = React.useState<File | null>(null);
@@ -11,6 +12,9 @@ const Admin: React.FC = () => {
 
   const [url, setUrl] = React.useState<string | undefined>("");
   const inputRef = React.useRef<HTMLInputElement | null>(null);
+  const components = {
+    Header: CustomHeader,
+  };
 
   useEffect(() => {
     if (inputRef.current) {
@@ -98,7 +102,7 @@ const Admin: React.FC = () => {
   };
    
   return (
-    <Authenticator hideSignUp className="authenticator-popup">
+    <Authenticator hideSignUp className="authenticator-popup" components={components}>
     {({  }) => (
     <div className='main-content'>
         <h3>Add data to the database</h3>

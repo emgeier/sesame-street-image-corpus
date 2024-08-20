@@ -5,6 +5,7 @@ import { getUrl } from "aws-amplify/storage";
 import DownloadResults from "./DownloadResults";
 import "./search.css";
 import { Authenticator } from "@aws-amplify/ui-react";
+import CustomHeader from "./CustomMessaging";
 
 const SearchImageAttributes: React.FC = () => {
   const client = generateClient<Schema>();
@@ -18,6 +19,10 @@ const SearchImageAttributes: React.FC = () => {
     NUMBER: [],
     WORD: []
   });
+
+  const components = {
+    Header: CustomHeader,
+  };
 
   const fetchSearchResultAnnotations = async (token: string | null = null) => {
     const allAnnotations: any[] = [];
@@ -146,7 +151,7 @@ const SearchImageAttributes: React.FC = () => {
   };
 
   return (
-    <Authenticator hideSignUp className="authenticator-popup">
+    <Authenticator hideSignUp className="authenticator-popup" components={components}>
     {({  }) => (
     <main className="main-content">
       <div className="separator"></div>

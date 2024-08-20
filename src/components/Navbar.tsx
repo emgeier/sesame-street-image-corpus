@@ -2,12 +2,51 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './navbar.css';
 import { signOut } from 'aws-amplify/auth';
+import { useState, useEffect } from 'react';
+import {getCurrentUser } from 'aws-amplify/auth';
+import { Hub } from 'aws-amplify/utils';
 
 const Navbar: React.FC = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  //Always listen for a change in signin status
+  Hub.listen('auth', ({ payload }) => {
+    switch (payload.event) {
+      case 'signedIn':
+        console.log('user have been signedIn successfully.');
+        setIsAuthenticated(true);
+        break;
+      case 'signedOut':
+        console.log('user have been signedOut successfully.');
+        setIsAuthenticated(false);
+        break;
+
+    }
+  });
+
+  //Set signin status upon first load of navbar
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const user = await getCurrentUser();
+        
+        setIsAuthenticated(true);
+        console.log(isAuthenticated);
+        console.log("user: " + user)
+        
+;      } catch {
+        setIsAuthenticated(false);
+        console.log(isAuthenticated);
+      }
+    };
+
+    checkUser();
+  }, []);
+
   const handleSignOut = async () => {
     try {
       await signOut();
       console.log("User signed out successfully");
+      setIsAuthenticated(false);
     } catch (error) {
       console.error("Error signing out", error);
     }
@@ -24,7 +63,9 @@ const Navbar: React.FC = () => {
         <li><Link to="/guide">Guide</Link></li>
         <li><Link to="/about">About</Link></li>
       </ul>
-      <button onClick={handleSignOut}>Sign out</button>
+      { isAuthenticated && 
+      (<button onClick={handleSignOut}>Sign out</button>)
+      }
     </nav>
     </div>
   );

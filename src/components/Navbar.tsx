@@ -13,42 +13,41 @@ const Navbar: React.FC = () => {
 
   // Determine the current path
   const currentPath = location.pathname;
-  //Always listen for a change in signin status
-  Hub.listen('auth', ({ payload }) => {
-    switch (payload.event) {
-      case 'signedIn':
-        console.log('user have been signedIn successfully.');
-        setIsAuthenticated(true);
-        break;
-      case 'signedOut':
-        console.log('user have been signedOut successfully.');
-        setIsAuthenticated(false);
-        break;
-
-    }
-  });
-
-  
-
-  //Set signin status upon first load of navbar
-  useEffect(() => {
+   // Set sign-in status upon the first load of the navbar
+   useEffect(() => {
     const checkUser = async () => {
       try {
         const user = await getCurrentUser();
-        
         setIsAuthenticated(true);
-        console.log(isAuthenticated);
-        console.log("user: " + user)
-        
-;      } catch {
+        console.log("User:", user);
+      } catch {
         setIsAuthenticated(false);
-        console.log(isAuthenticated);
+        console.log("Not authenticated");
       }
     };
 
     checkUser();
-  }, []);
 
+    // Set up the Hub listener
+    const listener = Hub.listen('auth', ({ payload }) => {
+      switch (payload.event) {
+        case 'signedIn':
+          console.log('User has been signed in successfully.');
+          setIsAuthenticated(true);
+          break;
+        case 'signedOut':
+          console.log('User has been signed out successfully.');
+          setIsAuthenticated(false);
+          break;
+        default:
+          break;
+      }
+    });
+    // Cleanup the listener on component unmount
+    return () => {
+      listener(); // Call the unsubscribe function returned by Hub.listen
+    };
+  }, []);
   const handleSignOut = async () => {
     try {
       await signOut();

@@ -1,0 +1,43 @@
+/* carousel.css */
+.carousel-wrapper {
+  position: relative;  /* Ensure the z-index works */
+  z-index: 10;         /* Set the z-index to 10 */
+}
+
+.carousel .slide img {
+  border-width: 1px !important;
+}
+
+.carousel .slide {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.carousel .slide.selected {
+  opacity: 1;
+  z-index: 1;
+  position: relative;
+}
+
+.carousel .carousel-slider {
+  position: relative;
+  height: 100%;
+}
+
+.carousel .slider-wrapper {
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+}
+
+.carousel .slider {
+  display: block;
+}

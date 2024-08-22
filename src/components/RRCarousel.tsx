@@ -20,8 +20,8 @@ const RRCarousel: React.FC = () => (
     showIndicators={false}
     showThumbs={false}
     stopOnHover={true}
-    interval={2000}
-    transitionTime={500}
+    interval={3000}
+    transitionTime={1000}
     swipeScrollTolerance={5}
     emulateTouch={true}
     showStatus={false}

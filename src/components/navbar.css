@@ -143,7 +143,9 @@ button:hover {
 }
 
 @media (max-width: 768px) {
-
+  .navbar {
+    padding: 2px 2px;
+  }
   .nav-links a {
     font-size: 14px;
     padding: 6px;

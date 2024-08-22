@@ -125,3 +125,40 @@ button:hover {
   font-weight: 600; /* Bold weight for the current page */
   color: #131010; /* Optionally change the color as well */
 }
+/* Responsive Design Adjustments */
+@media (max-width: 1024px) {
+  .nav-links {
+    justify-content: space-evenly; /* Distribute links evenly */
+    align-items: center;
+  }
+  .nav-links li {
+    justify-content: space-evenly; /* Distribute links evenly */
+    align-items: center;
+  }
+  .nav-links a {
+    font-size: 16px;
+    padding: 8px;
+    margin-right: 1px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .nav-links a {
+    font-size: 14px;
+    padding: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .nav-links li {
+    margin-right: 1px;
+  }
+
+  .nav-links a {
+    font-size: 12px;
+    padding: 5px;
+    margin-right: 5px;
+  }
+}

@@ -30,6 +30,7 @@ const AttributeDetails: React.FC<{ annotations: Array<Schema["Annotation"]["type
 
       if (displayValue.trim() !== '') {
         if (key === 'noun') displayValue = 'proper noun';
+        if (key === 'single-digit' && value === 'other') return;
         return (
           <tr key={key}>
             <td><strong>{key}</strong></td>

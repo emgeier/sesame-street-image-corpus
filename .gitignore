@@ -32,3 +32,5 @@ amplifyconfiguration*
 xmlConversion.py
 jsonConversion.py
 AttributeDetailsOG.tsx
+Hamburger.tsx
+HamburgerProps

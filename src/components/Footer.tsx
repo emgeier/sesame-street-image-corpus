@@ -8,13 +8,9 @@ const Footer: React.FC = () => {
     <footer className="footer">
       <div className="footer-links">
         <Link to="/">Home</Link>
-        <Link to="/search">Search</Link>
-        <Link to="/download">Download</Link>
-        <Link to="/admin">Upload</Link>
         <Link to="/guide">Guide</Link>
         <Link to="/about">About</Link>
       </div>
-      
       <div className="footer-social">
         <a className="footer-icon" href="https://www.vanderbiltlandlab.io" target="_blank" rel="noopener noreferrer">
         <img src={landlabicon} alt="LAND Lab icon" width={50} />

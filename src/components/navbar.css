@@ -90,16 +90,6 @@
   font-weight: 500;
 }
 
-@media (max-width: 768px) {
-  .menu-toggle {
-    display: block;
-  }
-
-  .nav-links {
-    display: none;
-  }
-}
-
 /* Position the sign-out button */
 .sign-out-button {
   position: flex;

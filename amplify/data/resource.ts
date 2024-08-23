@@ -40,6 +40,10 @@ Annotation: a
     content: a.string(),
     multidigit: a.boolean(),
     keywords: a.string(),
+    x: a.float(),
+    y: a.float(),
+    height: a.float(),
+    width: a.float()
   })
   .identifier(['image_id','annotation_id'] as const)
   .authorization((allow) => [allow.publicApiKey()]),

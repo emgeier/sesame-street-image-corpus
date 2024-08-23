@@ -10,6 +10,9 @@ const Footer: React.FC = () => {
         <Link to="/">Home</Link>
         <Link to="/guide">Guide</Link>
         <Link to="/about">About</Link>
+        <a href="https://peabody.az1.qualtrics.com/jfe/preview/previewId/0419baa6-934b-4d65-a11c-e8e6f79c85b9/SV_eRQUVmfS4d7q4yq?Q_CHL=preview&Q_SurveyVersionID=current" target="_blank" rel="noopener noreferrer">
+              Feedback
+            </a>
       </div>
       <div className="footer-text">
         © 2024 LAND Lab     

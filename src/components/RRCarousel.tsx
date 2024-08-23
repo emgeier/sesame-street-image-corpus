@@ -3,9 +3,7 @@ import { Carousel } from 'react-responsive-carousel';
 
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; 
 import './rrcarousel.css';
-import imagea from "../assets/images/00130.png";
-import imageb from "../assets/images/S48-E4821_01079.png";
-import imagec from "../assets/images/S48-E4821_00085.png";
+
 import image1 from "../assets/images/1.png";
 import image2 from "../assets/images/2.png";
 import image3 from "../assets/images/3.png";

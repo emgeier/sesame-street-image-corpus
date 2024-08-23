@@ -10,6 +10,7 @@ import Guide from './components/Guide';
 import Navbar from './components/Navbar';
 import Search from "./components/Search";
 import Footer from "./components/Footer";
+import Metrics from './components/Metrics';
 
 
 
@@ -28,6 +29,7 @@ function App() {
                     <Route path="/admin" element={<Admin />} />
                     <Route path="/advsearch" element={<XSearch />} />
                     <Route path="/guide" element={<Guide />} />
+                    <Route path="/metrics" element={<Metrics/>} /> 
                   </Routes>
                   <div className='separator'></div>
                   <Footer></Footer>

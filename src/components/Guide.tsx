@@ -1,5 +1,6 @@
 import './About.css';
 import '@aws-amplify/ui-react/styles.css';
+import example from "../assets/images/AnnotatedImageExample.png";
 
 function Guide() {
   return (
@@ -8,12 +9,23 @@ function Guide() {
       <header className="banner"></header>
       <div className='separator'></div>
     <main>
-      <h1 className='intro'>The Annotation Schema of the Sesame Street Image Corpus</h1>
+      
       <p className='indented'>
-    HOW TO FIND ANNOTATED IMAGES: The corpus uses a controlled vocabulary to encode the images with information about various visual aspects of the images. Here is a comprehensive list of the terms used in the development of the metadata for the Image Corpus:</p>
+    HOW TO FIND ANNOTATED IMAGES </p>
+    <br></br>
+    <p className='indented'>
+      The search for images from various episodes of Sesame Street over the course of its history is found on the "Episode Search" page.  One can search by episode number, title, season, or year the episode first aired. The images are displayed with their annotations details and bounding boxes.</p>
+      <br></br>
+      <p className='indented'>
+      The search for annotations with specific characteristics can be done by keyword or by checklist on the "Search" and "Downloads" pages. One can see the images annotated with their bounding boxes and annotation details on the "Search" page.  On the "Downloads" page one can search via checklist and download the search results as a csv file with or without the corresponding image files.</p>
+      <br></br>
+    <p className='indented'>
+    Annotation Schema of the Sesame Street Image Corpus
+    </p><br></br><p className='indented'>
+    The corpus uses a controlled vocabulary to encode the images with information about various visual aspects of the images. Here is a comprehensive list of the terms used in the development of the metadata for the Image Corpus:</p>
       <p className='indented'>
         <p>
-  <strong>“Face” Category-Attributes</strong><br/>
+  <strong>“Face” Category Attributes</strong><br/>
   Name: 1. Species<br/>
   Value: human; puppet; animal; other<br/>
   Name: 2. Representation<br/>
@@ -31,7 +43,7 @@ function Guide() {
   Name: 8. Clarity<br/>
   Value: clear; blurry; other<br/>
   <br/>
-  <strong>“Place” Category-Attributes</strong><br/>
+  <strong>“Place” Category Attributes</strong><br/>
   Name: 1. Representation<br/>
   Value: real; caricature; other<br/>
   Name: 2. Orientation<br/>
@@ -51,7 +63,7 @@ function Guide() {
   Name: 9. Content<br/>
   Value: handwrite (optional)<br/>
   <br/>
-  <strong>“Word” Category-Attributes</strong><br/>
+  <strong>“Word” Category Attributes</strong><br/>
   Name: 1. Single-Letter<br/>
   Value: a; b; c; d; e; f; g; h; i; j; k; l; m; n; o; p; q; r; s; t; u; v; w; x; y; z; other<br/>
   Name: 2. Multi-Letter<br/>
@@ -69,7 +81,7 @@ function Guide() {
   Name: 8. Language<br/>
   Value: English; Spanish; other<br/>
   <br/>
-  <strong>“Number” Category-Attributes</strong><br/>
+  <strong>“Number” Category Attributes</strong><br/>
   Name: 1. Single-Digit<br/>
   Value: 0; 1; 2; 3; 4; 5; 6; 7; 8; 9; other<br/>
   Name: 2. Multi-Digit<br/>
@@ -84,10 +96,20 @@ function Guide() {
   Value: clear; blurry; other<br/>
         </p>
       </p>
+      
+      <br></br>
+      <p className='indented'>  
+      ANNOTATED IMAGE SEARCH RESULT EXAMPLE
+      </p>
+      <br></br> 
+      <div className='indented image-container' >
+        <img src={example} className='eximage centered-image' ></img></div>
       <div className="separator"></div>
+
     </main>
     </div>
   );
 }
 
 export default Guide;
+

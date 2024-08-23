@@ -1,79 +1,90 @@
 /* src/About.css */
 .dot-separator {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0px 0;
-  }
-  
-.dot-separator::before {
-    content: '•';
-    font-size: 24px;
-    margin: 0 10px;
-  }
-  
-.about {
-    text-align: center;
-    width: 100%;
-    padding-top: 100px; /* Adjust based on the height of the navbar */
-  }  
-.separator {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 20px 0;
-  }  
-  .top-separator {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 80px 0;
-  }  
-.intro {
-    font-size: 28px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-weight: 200;
-    place-items: center;
-}   
-.banner {
-  width: 100%;
-  height: 400px; /* Adjust height as needed */
-  background-image: url('../assets/images/bannner.webp');
-  background-size: cover;
-  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0px 0;
 }
 
+.dot-separator::before {
+  content: '•';
+  font-size: 24px;
+  margin: 0 10px;
+}
+
+.about {
+  text-align: center;
+  width: 100%;
+  padding-top: 100px; /* Adjust based on the height of the navbar */
+}  
+.separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+}  
+.top-separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 80px 0;
+}  
 .intro {
   font-size: 28px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 200;
   place-items: center;
-  place-content: center;
-  justify-content: center;
+}   
+.banner {
+width: 100%;
+height: 400px; /* Adjust height as needed */
+background-image: url('../assets/images/bannner.webp');
+background-size: cover;
+background-position: center;
+}
+
+.intro {
+font-size: 28px;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+font-weight: 200;
+place-items: center;
+place-content: center;
+justify-content: center;
 }  
 
 .sesame-image {
-  margin-top: 20px;
-  max-width: 100%;
-  height: auto;
+margin-top: 20px;
+max-width: 100%;
+height: auto;
 }  
+
 .indented {
 max-width: 70%;
 margin: auto;
+display: flex; /* Add this to enable flexbox */
+justify-content: center; /* Centers content horizontally */
+}
+
+.eximage {
 width: 70%;
-}   
+max-width: 70%; /* Ensures the image doesn't exceed the container width */
+height: auto; /* Maintains the aspect ratio of the image */
+display: block; /* Make the image behave like a block element */
+margin: 0 auto; /* Center the image horizontally */
+}
+
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-  text-align: center;
+font-size: 3.2em;
+line-height: 1.1;
+text-align: center;
 }
 .main-content {
-  padding-top: 150px; 
-  text-align: center;
-  place-items: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 800px; /* Adjust the width as needed */
-  margin: auto ;
+padding-top: 150px; 
+text-align: center;
+place-items: center;
+display: flex;
+flex-direction: column;
+align-items: center;
+max-width: 800px; /* Adjust the width as needed */
+margin: auto ;
 }

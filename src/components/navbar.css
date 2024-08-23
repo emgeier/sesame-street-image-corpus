@@ -156,16 +156,67 @@ button:hover {
     padding: 6px;
   }
 }
-
-@media (max-width: 480px) {
+@media (max-width: 580px) {
 
   .nav-links li {
-    margin-right: 1px;
+    margin-right: 0px;
+    margin-left: 0px;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+    padding: 0px;
+    margin-right: 0px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navbar {
+    left: 0; /* Ensure it’s always aligned to the left */
+  }
+
+  .nav-links li {
+    margin-right: 0px;
+
+    
   }
 
   .nav-links a {
     font-size: 12px;
-    padding: 5px;
-    margin-right: 5px;
+    padding: 0px;
+    margin-right: 0px;
   }
+
+}
+@media (max-width: 380px) {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navbar {
+    left: 0; /* Ensure it’s always aligned to the left */
+  }
+
+  .nav-links li {
+    margin-right: 0px;
+
+  }
+
+  .nav-links a {
+    font-size: 10px;
+    padding: 0px;
+    margin-right: 0px;
+  }
+  .navbar-icon {
+    width: 25px; 
+    height: auto;
+  }
+  
+
 }

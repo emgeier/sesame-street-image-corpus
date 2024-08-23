@@ -88,3 +88,13 @@ align-items: center;
 max-width: 800px; /* Adjust the width as needed */
 margin: auto ;
 }
+@media (max-width: 480px) {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  .carousel {
+    max-width: 98%;
+  }
+
+}

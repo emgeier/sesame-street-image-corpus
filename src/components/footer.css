@@ -45,7 +45,7 @@
     margin-top: 20px; /* Space between links and text */
   }
   
-  @media (max-width: 768px) {
+  /* @media (max-width: 768px) {
     .footer-content {
       flex-direction: column;
       align-items: center;
@@ -63,4 +63,4 @@
     margin-top: 10px;
     max-width: 3%;
     height: auto;
-  }  
+  }   */

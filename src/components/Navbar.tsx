@@ -63,8 +63,8 @@ const Navbar: React.FC = () => {
     <div>
     <nav className="navbar">
       <ul className="nav-links">
-        <li>          <Link to="/">
-              <img src={icon} alt="Logo" className="navbar-icon" />
+        <li><Link to="/">
+              <img src={icon} alt="ssic logo" className="navbar-icon" />
             </Link> </li>
         <li><Link to="/"  className={currentPath === '/' ? 'current-page' : ''} >Home</Link></li>
         <li><Link to="/guide"  className={currentPath === '/guide' ? 'current-page' : ''}>Guide</Link></li>

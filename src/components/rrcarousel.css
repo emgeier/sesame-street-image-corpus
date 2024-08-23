@@ -2,6 +2,9 @@
 .carousel-wrapper {
   position: relative;  /* Ensure the z-index works */
   z-index: 10;         /* Set the z-index to 10 */
+  max-width: 100%;     /* Ensure the carousel does not exceed the container's width */
+  margin: 0 auto;      /* Center the carousel horizontally */
+  overflow: hidden;
 }
 
 .carousel .slide img {

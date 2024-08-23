@@ -9,10 +9,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 5px 5px;
   z-index: 1000;
   overflow: hidden;
   transition: top 0.3s;
+}
+.navbar-icon {
+  width: 50px;
 }
 
 .menu-toggle {
@@ -43,6 +46,8 @@
 .nav-links {
   list-style: none;
   display: flex;
+  justify-content: space-evenly; /* Distribute links evenly */
+  align-items: center;
 }
 
 .nav-links.active {

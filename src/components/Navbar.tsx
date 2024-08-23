@@ -5,6 +5,7 @@ import { signOut } from 'aws-amplify/auth';
 import { useState, useEffect } from 'react';
 import {getCurrentUser } from 'aws-amplify/auth';
 import { Hub } from 'aws-amplify/utils';
+import icon from "../../public/favicon.ico";
 
 const Navbar: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -62,6 +63,9 @@ const Navbar: React.FC = () => {
     <div>
     <nav className="navbar">
       <ul className="nav-links">
+        <li>          <Link to="/">
+              <img src={icon} alt="Logo" className="navbar-icon" />
+            </Link> </li>
         <li><Link to="/"  className={currentPath === '/' ? 'current-page' : ''} >Home</Link></li>
         <li><Link to="/guide"  className={currentPath === '/guide' ? 'current-page' : ''}>Guide</Link></li>
         <li><Link to="/about"  className={currentPath === '/about' ? 'current-page' : ''}>About</Link></li>

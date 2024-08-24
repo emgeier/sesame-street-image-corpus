@@ -9,12 +9,12 @@
     flex-wrap: wrap;
   }
   
-  .footer-content {
+  /* .footer-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-  }
+  } */
   
   .footer-links,
   .footer-social {

@@ -47,10 +47,10 @@
   list-style: none;
   display: flex;
   justify-content: space-evenly; /* Distribute links evenly */
-  align-items: center;
+  align-items: center; /*keeps the icon centered with text */
 }
 
-.nav-links.active {
+/* .nav-links.active {
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -60,7 +60,7 @@
   background-color: tra;
   padding: 10px 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+} */
 
 .nav-links li {
   margin-right: 20px;
@@ -196,15 +196,17 @@ button:hover {
 
 }
 @media (max-width: 380px) {
-
+  .navbar {
+    padding-right: 22px;
+  }
 
   .nav-links li {
-    margin-right: 0px;
+    margin-right: 0px; /* margin for individual items */
 
   }
 
   .nav-links a {
-    font-size: 10px;
+    font-size: 8px;
     padding: 0px;
     margin-right: 0px;
   }

@@ -51,10 +51,21 @@ place-items: center;
 place-content: center;
 justify-content: center;
 }  
+.small {
+  font-size: 20px;
+  display: flex;
+  font-size: 20px;
+  margin: 3% 10%;  /* Adds 10% margins on the left and right */
+  text-align: center;
+  max-width: 1000px;  /* Ensures the content doesn't go to the very edge of the screen */
+  margin-left: auto;  /* Center the element horizontally */
+  margin-right: auto; /* Center the element horizontally */
+}
 
 .sesame-image {
 margin-top: 20px;
-max-width: 100%;
+width: 40%;
+max-width: 300px;
 height: auto;
 }  
 

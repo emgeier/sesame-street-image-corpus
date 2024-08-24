@@ -29,6 +29,7 @@
   background-color: #333;
   margin: 5px 0;
   transition: transform 0.3s ease-in-out;
+  z-index: 2000; 
 }
 
 .hamburger.active {
@@ -72,6 +73,7 @@
   margin-left: 0px; /* White strip on the left */
   margin-right: 0px;
   /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+  z-index: 1000; 
 }
 
 .nav-links li {
@@ -94,7 +96,7 @@
   color: rgb(43, 43, 38);
   text-decoration: none;
   font-size: 18px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: inherit;
   font-weight: 200;
 }
 
@@ -175,6 +177,7 @@ button:hover {
 
   .nav-links.active {
     display: flex; /* Show the navbar links when active */
+    top:20px;
   }
 
   .navbar {

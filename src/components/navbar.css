@@ -160,7 +160,11 @@ button:hover {
     padding: 6px;
   }
 }
-@media (max-width: 580px) {
+@media (max-width: 620px) {
+  .navbar {
+    left: 0; /* Ensure it’s always aligned to the left */
+    padding: 10px;
+  }
 
   .nav-links li {
     margin-right: 0px;
@@ -168,9 +172,13 @@ button:hover {
   }
 
   .nav-links a {
-    font-size: 13px;
+    font-size: 12px;
     padding: 0px;
     margin-right: 0px;
+  }
+  .navbar-icon {
+    width: 25px; 
+    height: auto;
   }
 }
 
@@ -179,19 +187,22 @@ button:hover {
   
   .navbar {
     left: 0; /* Ensure it’s always aligned to the left */
-    padding: 0px;
+    padding: 10px;
   }
 
   .nav-links li {
     margin-right: 0px;
-
-    
   }
 
   .nav-links a {
-    font-size: 12px;
+    font-size: 10px;
     padding: 0px;
     margin-right: 0px;
+  }
+
+  .navbar-icon {
+    width: 20px; 
+    height: auto;
   }
 
 }

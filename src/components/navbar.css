@@ -7,11 +7,11 @@
   background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  /* justify-content: space-between; */
+  /* align-items: center; */
   padding: 5px 5px;
   z-index: 1000;
-  overflow: hidden;
+  /* overflow: hidden; */
   transition: top 0.3s;
 }
 .navbar-icon {
@@ -23,7 +23,7 @@
   cursor: pointer;
 }
 
-.hamburger {
+/* .hamburger {
   width: 25px;
   height: 3px;
   background-color: #333;
@@ -41,13 +41,14 @@
 
 .hamburger.active:after {
   transform: rotate(-90deg) translateX(-5px);
-}
+} */
 
 .nav-links {
   list-style: none;
   display: flex;
   justify-content: space-evenly; /* Distribute links evenly */
   align-items: center; /*keeps the icon centered with text */
+  margin-right: 20px;
 }
 
 /* .nav-links.active {
@@ -63,7 +64,7 @@
 } */
 
 .nav-links li {
-  margin-right: 20px;
+  margin-right: 20px; /* to keep the list away from sign out button on right*/
 }
 
 .nav-links li:last-child {
@@ -159,20 +160,24 @@ button:hover {
     font-size: 14px;
     padding: 6px;
   }
+  .navbar-icon {
+    width: 35px; 
+    height: auto;
+  }
 }
-@media (max-width: 620px) {
+@media (max-width: 600px) {
   .navbar {
-    left: 0; /* Ensure it’s always aligned to the left */
-    padding: 10px;
+    left: 0; 
+    padding: 8px;
   }
 
   .nav-links li {
-    margin-right: 0px;
+    margin-right: 5px;
     margin-left: 0px;
   }
 
   .nav-links a {
-    font-size: 12px;
+    font-size: 14px;
     padding: 0px;
     margin-right: 0px;
   }
@@ -187,7 +192,7 @@ button:hover {
   
   .navbar {
     left: 0; /* Ensure it’s always aligned to the left */
-    padding: 10px;
+    padding-right: 22px;
   }
 
   .nav-links li {
@@ -195,7 +200,7 @@ button:hover {
   }
 
   .nav-links a {
-    font-size: 10px;
+    font-size: 13px;
     padding: 0px;
     margin-right: 0px;
   }
@@ -206,23 +211,47 @@ button:hover {
   }
 
 }
-@media (max-width: 380px) {
+@media (max-width: 420px) {
   .navbar {
     padding-right: 22px;
   }
 
   .nav-links li {
     margin-right: 0px; /* margin for individual items */
-
+    margin: 0px;
   }
 
   .nav-links a {
-    font-size: 8px;
+    font-size: 12px;
     padding: 0px;
     margin-right: 0px;
   }
   .navbar-icon {
     width: 20px; 
+    height: auto;
+  }
+
+} 
+@media (max-width: 360px) {
+  .navbar {
+    padding-right: 15%;
+    padding-left: 0%;
+  }
+
+  .nav-links li {
+    margin-right: 0px; /* margin for individual items */
+    margin: 0px;
+    margin-left: 0px;
+    margin-bottom: 0px;
+  }
+
+  .nav-links a {
+    font-size: 11px;
+    padding: 0px;
+    margin-right: 0px;
+  }
+  .navbar-icon {
+    width: 15px; 
     height: auto;
   }
 

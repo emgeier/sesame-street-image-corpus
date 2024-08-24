@@ -9,6 +9,7 @@ import icon from "../../public/favicon.ico";
 
 const Navbar: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false); // New state for menu toggle
 
   const location = useLocation();
 
@@ -58,11 +59,20 @@ const Navbar: React.FC = () => {
       console.error("Error signing out", error);
     }
   }
+  //switch from open to close collapsable menu
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  }
 
   return (
     <div>
     <nav className="navbar">
-      <ul className="nav-links">
+    <div className="menu-toggle" onClick={toggleMenu}>
+          <div className={`hamburger ${menuOpen ? 'active' : ''}`}></div>
+          <div className={`hamburger ${menuOpen ? 'active' : ''}`}></div>
+          <div className={`hamburger ${menuOpen ? 'active' : ''}`}></div>
+        </div>
+        <ul className={`nav-links ${menuOpen ? 'active' : ''}`}>
         <li><Link to="/">
               <img src={icon} alt="ssic logo" className="navbar-icon" />
             </Link> </li>

@@ -7,11 +7,11 @@
   background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
-  /* justify-content: space-between; */
-  /* align-items: center; */
+  justify-content: space-between; 
+  align-items: center; 
   padding: 5px 5px;
   z-index: 1000;
-  /* overflow: hidden; */
+  overflow: hidden;
   transition: top 0.3s;
 }
 .navbar-icon {
@@ -23,7 +23,7 @@
   cursor: pointer;
 }
 
-/* .hamburger {
+.hamburger {
   width: 25px;
   height: 3px;
   background-color: #333;
@@ -41,7 +41,7 @@
 
 .hamburger.active:after {
   transform: rotate(-90deg) translateX(-5px);
-} */
+}
 
 .nav-links {
   list-style: none;
@@ -49,22 +49,33 @@
   justify-content: space-evenly; /* Distribute links evenly */
   align-items: center; /*keeps the icon centered with text */
   margin-right: 20px;
+  margin-left: 20px;
 }
 
-/* .nav-links.active {
+.nav-links.active {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   position: absolute;
-  top: 100%;
+  /* top: 100%; */
   left: 0;
   width: 100%;
   background-color: tra;
-  padding: 10px 0;
+  padding: 1px 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-} */
+  align-items: center; /*keeps the icon centered with text */
+
+  top: 0px; /* Adjust based on your navbar height */
+  left: 0; /* Aligns to the upper left */
+  width: 100%; /* Set the width of the dropdown */
+  background-color: #fff;
+  padding: 0px 0; /* Padding inside the dropdown */
+  margin-left: 0px; /* White strip on the left */
+  margin-right: 0px;
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+}
 
 .nav-links li {
-  margin-right: 20px; /* to keep the list away from sign out button on right*/
+  margin-right: 0px; /* to keep the list away from sign out button on right*/
 }
 
 .nav-links li:last-child {
@@ -153,6 +164,19 @@ button:hover {
 }
 
 @media (max-width: 768px) {
+  .menu-toggle {
+    display: block; /* Show the menu toggle on small screens */
+  }
+
+  .nav-links {
+    display: none; /* Hide the navbar links initially */
+    flex-direction: column; /* Make them stack vertically */
+  }
+
+  .nav-links.active {
+    display: flex; /* Show the navbar links when active */
+  }
+
   .navbar {
     padding: 0px;
   }
@@ -165,19 +189,19 @@ button:hover {
     height: auto;
   }
 }
-@media (max-width: 600px) {
+@media (max-width: 610px) {
   .navbar {
     left: 0; 
-    padding: 8px;
+    padding: 10px;
   }
 
   .nav-links li {
-    margin-right: 5px;
+    margin-right: 0px;
     margin-left: 0px;
   }
 
   .nav-links a {
-    font-size: 14px;
+    font-size: 12px;
     padding: 0px;
     margin-right: 0px;
   }
@@ -192,7 +216,12 @@ button:hover {
   
   .navbar {
     left: 0; /* Ensure it’s always aligned to the left */
-    padding-right: 22px;
+    padding: 10px;
+    
+  }
+  .nav-links{
+    align-items: center; /*keeps the icon centered with text */
+
   }
 
   .nav-links li {
@@ -233,6 +262,10 @@ button:hover {
 
 } 
 @media (max-width: 360px) {
+  .nav-links {
+    align-items: center; /*keeps the icon centered with text */
+
+  }
   .navbar {
     padding-right: 15%;
     padding-left: 0%;

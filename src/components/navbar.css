@@ -60,7 +60,7 @@
   /* top: 100%; */
   left: 0;
   width: 100%;
-  background-color: tra;
+  background-color: white;
   padding: 1px 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   align-items: center; /*keeps the icon centered with text */
@@ -167,21 +167,40 @@ button:hover {
 
 @media (max-width: 768px) {
   .menu-toggle {
-    display: block; /* Show the menu toggle on small screens */
+    display: none; /* Show the menu toggle on small screens */
   }
 
   .nav-links {
-    display: none; /* Hide the navbar links initially */
-    flex-direction: column; /* Make them stack vertically */
+    display: flex; /* Don't hide the navbar links initially */
+    flex-direction: row;
+    position: relative;
+    /* top: 100%; */
+    left: 0;
+    width: 100%;
+    padding: 1px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    align-items: center; /*keeps the icon centered with text */
+  
+    top: 0px; /* Adjust based on your navbar height */
+    left: 0; /* Aligns to the upper left */
+    width: 100%; /* Set the width of the dropdown */
+    background-color: #fff;
+    padding: 0px 0; /* Padding inside the dropdown */
+    margin-left: 0px; /* White strip on the left */
+    margin-right: 0px;
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+    z-index: 1000; 
   }
 
-  .nav-links.active {
+  /* .nav-links.active {
     display: flex; /* Show the navbar links when active */
-    top:20px;
-  }
+    /* top:20px;
+  } */ */
 
   .navbar {
     padding: 10px;
+    left:0;
+    top:0;
   }
   .nav-links a {
     font-size: 14px;

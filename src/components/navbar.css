@@ -147,8 +147,7 @@ button:hover {
 /* Responsive Design Adjustments */
 @media (max-width: 1024px) {
   .navbar {
-    padding: 0px;
-
+    padding: 10px;
   }
   .nav-links {
     justify-content: space-evenly; /* Distribute links evenly */
@@ -234,7 +233,6 @@ button:hover {
 }
 
 @media (max-width: 480px) {
-
   
   .navbar {
     left: 0; /* Ensure it’s always aligned to the left */
@@ -263,9 +261,6 @@ button:hover {
 
 }
 @media (max-width: 420px) {
-  .navbar {
-    padding-right: 22px;
-  }
 
   .nav-links li {
     margin-right: 0px; /* margin for individual items */
@@ -284,22 +279,6 @@ button:hover {
 
 } 
 @media (max-width: 360px) {
-  .nav-links {
-    align-items: center; /*keeps the icon centered with text */
-
-  }
-  .navbar {
-    padding-right: 15%;
-    padding-left: 0%;
-  }
-
-  .nav-links li {
-    margin-right: 0px; /* margin for individual items */
-    margin: 0px;
-    margin-left: 0px;
-    margin-bottom: 0px;
-  }
-
   .nav-links a {
     font-size: 11px;
     padding: 0px;

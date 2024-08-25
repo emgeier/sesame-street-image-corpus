@@ -22,7 +22,7 @@ function Guide() {
     <p className='indented'>
     Annotation Schema of the Sesame Street Image Corpus
     </p><br></br><p className='indented'>
-    The corpus uses a controlled vocabulary to encode the images with information about various visual aspects of the images. Here is a comprehensive list of the terms used in the development of the metadata for the Image Corpus:</p>
+    The corpus uses a controlled vocabulary to encode the images with information about various visual aspects of the images. Here is a comprehensive list of the terms used in the development of the metadata for the Sesame Street Image Corpus:</p>
       <p className='indented'>
         <p>
   <strong>“Face” Category Attributes</strong><br/>

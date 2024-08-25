@@ -23,7 +23,7 @@ function About() {
         For this project, the LAND Lab has created a Sesame Street image corpus to enhance further research into children’s brain development. With more than 4,500 episodes of at least 30 minutes each, Sesame Street provides LAND Lab extensive content to work with. Through machine-learning, a fine-tuned YOLO model trained on 4,000 labeled images is allowing us to label thousands more Sesame Street still images.</p>
       <div className="separator"></div>
       <p className='indented'>
-      For SSIC and LaND Lab inquiries, contact Sophia Vinci-Booher at sophia.vinci-booher@vanderbilt.edu
+      For SSIC and LAND Lab inquiries, contact Sophia Vinci-Booher at sophia.vinci-booher@vanderbilt.edu
       </p>
       <div className="separator"></div>
     </main>

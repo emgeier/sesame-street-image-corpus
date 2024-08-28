@@ -29,12 +29,7 @@
   justify-content: center;
   margin: 80px 0;
 }  
-.intro {
-  font-size: 28px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-weight: 200;
-  place-items: center;
-}   
+
 .banner {
 width: 100%;
 height: 400px; /* Adjust height as needed */
@@ -54,12 +49,10 @@ justify-content: center;
 .small {
   font-size: 20px;
   display: flex;
-  font-size: 20px;
-  margin: 3% 10%;  /* Adds 10% margins on the left and right */
-  text-align: center;
+  text-align: left;
+  margin: 5% 10%;  /* Adds 10% margins on the left and right */
   max-width: 1000px;  /* Ensures the content doesn't go to the very edge of the screen */
-  margin-left: auto;  /* Center the element horizontally */
-  margin-right: auto; /* Center the element horizontally */
+
 }
 
 .sesame-image {

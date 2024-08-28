@@ -16,11 +16,11 @@ const Footer: React.FC = () => {
             </a>
       </div>
       <div className="footer-text">
-        © 2024 LAND Lab     
+        © 2024 LANDLAB    
       </div>
       <div className="footer-social">
         <a className="footer-icon" href="https://www.vanderbiltlandlab.io" target="_blank" rel="noopener noreferrer">
-        <img src={landlabicon} alt="LAND Lab icon" width={50} />
+        <img src={landlabicon} alt="LANDLab icon" width={50} />
         </a>
       </div>
 

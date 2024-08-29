@@ -62,6 +62,7 @@ const Search: React.FC = () => {
         filter.and.push({ keywords: { contains: keyword } });
       });
     }
+    
 
     // Remove the 'and' key if it's empty to avoid unnecessary empty filter
     if (filter.and.length === 0) {

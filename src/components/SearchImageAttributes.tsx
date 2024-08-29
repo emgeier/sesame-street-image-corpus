@@ -4,7 +4,7 @@ import { generateClient } from "aws-amplify/data";
 import { getUrl } from "aws-amplify/storage";
 import DownloadResults from "./DownloadResults";
 import "./search.css";
-import { Authenticator } from "@aws-amplify/ui-react";
+import { Authenticator, Divider } from "@aws-amplify/ui-react";
 import CustomHeader from "./CustomMessaging";
 
 const SearchImageAttributes: React.FC = () => {
@@ -12,7 +12,14 @@ const SearchImageAttributes: React.FC = () => {
 
   const [searchMessage, setSearchMessage] = useState<string | null>(null); // State to hold the user message
   const [annotations, setAnnotations] = useState<Array<Schema["Annotation"]["type"] & { imageUrl?: string }>>([]);
-  const [keywords] = useState<string[]>([]);
+  const [boxQueryX, setBoxQueryX]= useState<number | null>(null); // 
+  const [boxQueryY, setBoxQueryY]= useState<number | null>(null); // 
+  const [boxQueryHeight, setBoxQueryHeight]= useState<number | null>(null); // 
+  const [boxQueryWidth, setBoxQueryWidth]= useState<number | null>(null); // 
+
+  const [keywords] = useState<string[]>([]);  
+
+
   const [selectedCategories, setSelectedCategories] = useState<{ [key: string]: string[] }>({
     FACE: [],
     PLACE: [],
@@ -28,17 +35,31 @@ const SearchImageAttributes: React.FC = () => {
     const allAnnotations: any[] = [];
 
     try {
+      const filter: any = {
+        and: []
+      };
+      if (boxQueryX) {
+        filter.and.push({ x: { ge: boxQueryX } });
+      }
+      if (boxQueryY) {
+        filter.and.push({ y: { ge: boxQueryY } });
+      }
+      if (boxQueryHeight) {
+        filter.and.push({ height: { le: boxQueryHeight } });
+      }
+      if (boxQueryWidth) {
+        filter.and.push({ width: { le: boxQueryWidth } });
+      }
       for (const category of Object.keys(selectedCategories)) {
         if (selectedCategories[category].length > 0 || keywords.length > 0) {
-          const filter: any = {
-            and: [
-              { category: { eq: category } },
-              ...selectedCategories[category].map((attribute) => ({
-                keywords: { contains: attribute }
-              })),
-              ...keywords.map((keyword) => ({ keywords: { contains: keyword } }))
-            ],
-          };
+         
+          filter.and.push({ category: { eq: category } });
+          
+          selectedCategories[category].forEach((attribute) => {
+            filter.and.push({ keywords: { contains: attribute } });
+          });
+          
+        }
 
           const result: any = await client.models.Annotation.list({
             filter: filter.and.length ? filter : undefined,
@@ -54,14 +75,12 @@ const SearchImageAttributes: React.FC = () => {
           );
 
           allAnnotations.push(...annotationsWithUrls);
-        }
       }
 
       setAnnotations(allAnnotations);
       const numberSearchResults = allAnnotations.length.toString();
-      console.log(numberSearchResults);
-      
       setSearchMessage(`Search results returned: ${numberSearchResults}`);
+
     } catch (error) {
       console.error("Failed to fetch annotations:", error);
       setSearchMessage("Failed to return search results for ${category}.");
@@ -149,6 +168,22 @@ const SearchImageAttributes: React.FC = () => {
       </div>
     ));
   };
+  const handleBoxXLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setBoxQueryX(parseInt(event.target.value));
+    
+  };
+  const handleBoxYLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setBoxQueryY(parseInt(event.target.value));
+    
+  };
+  const handleBoxHeightLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setBoxQueryHeight(parseInt(event.target.value));
+    
+  };
+  const handleBoxWidthLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setBoxQueryWidth(parseInt(event.target.value));
+    
+  };
 
   return (
     <Authenticator hideSignUp className="authenticator-popup" components={components}>
@@ -156,29 +191,79 @@ const SearchImageAttributes: React.FC = () => {
     <main className="main-content">
       <div className="separator"></div>
       <h3>Annotation Search</h3>
+      <Divider></Divider>
+
       <div className="search-controls">
         <div className="checkbox-row">
+        
+
           <h3>Faces</h3>
           {renderCheckboxes(faceOptions, 'FACE')}
         </div>
+        <Divider></Divider>
         <div className="checkbox-row">
+        
           <h3>Places</h3>
           {renderCheckboxes(placeOptions, 'PLACE')}
         </div>
+        <Divider></Divider>
+
         <div className="checkbox-row">
           <h3>Numbers</h3>
           {renderCheckboxes(numberOptions, 'NUMBER')}
         </div>
+        <Divider></Divider>
+
         <div className="checkbox-row">
           <h3>Words</h3>
           {renderCheckboxes(wordOptions, 'WORD')}
         </div>
+        <Divider></Divider>
+        <h3>Coordinates of Bounding Box</h3>
+        
+        <div >
+        <div >
+        <label htmlFor="x-coordinate">x-coordinate of top left corner: </label>
+        <input
+          type="number"
+          id="x-coordinate"
+          placeholder="x"
+          onChange={handleBoxXLocationChange}
+        /></div>
+                <div >
+        <label htmlFor="y-coordinate">y-coordinate of top left corner: </label>
+        <input
+          type="number"
+          id="y-coordinate"
+          placeholder="y"
+          onChange={handleBoxYLocationChange}
+        /></div>
+                <div >
+        <label htmlFor="height">height: </label>
+        <input
+          type="number"
+          id="height"
+          placeholder="50"
+          onChange={handleBoxHeightLocationChange}
+        /></div>
+        <div >
+          <label htmlFor="width">width: </label>
+          <input
+          type="number"
+          id="width"
+          placeholder="100"
+          onChange={handleBoxWidthLocationChange}
+          />
+        </div>
+        <h5>Search for annotations within these parameters</h5>
+        <div className="separator"></div>
+        <Divider></Divider>
+      </div>
       </div>
       <button onClick={() => fetchSearchResultAnnotations()}>Search</button>
       {searchMessage && <p>{searchMessage}</p>} {/* Display the user message */}
-
       <div><DownloadResults annotations={annotations} /></div>
-    </main>
+      </main>
     )}
     </Authenticator>
   );

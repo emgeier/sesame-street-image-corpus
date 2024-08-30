@@ -9,6 +9,7 @@ const schema = a.schema({
     height: a.integer(),
     width: a.integer(),
     season: a.integer(),
+    air_year: a.integer(),
     episode_title: a.string()
     })
     .identifier(['episode_id','image_id'])

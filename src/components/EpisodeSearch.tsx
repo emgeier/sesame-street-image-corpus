@@ -1,83 +1,74 @@
-import React, { useState , useEffect} from "react";
+import React, { useEffect, useState } from "react";
 import type { Schema } from "../../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
-import { getUrl } from 'aws-amplify/storage';
-import AnnotatedImage from "./AnnotatedImage";
-import AttributeDetails from "./AttributeDetails";
 
-interface BoundingBox {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-    id: number;
-    annotation: Schema["Annotation"]["type"]; 
-  }
+import DownloadResults from "./DownloadResults";
+
+
 
 const EpisodeSearch: React.FC = () => {
   const client = generateClient<Schema>();
+  const [searchMessage, setSearchMessage] = useState<string | null>(null); // State to hold the user message
+
   
-  const [boundingBoxes, setBoundingBoxes] = useState<BoundingBox[]>([]);
-  //Pagination
-  const itemsPerPage = 12; // Items to display per page 
-  const [currentPageIndex, setCurrentPageIndex] = useState(0); // Start at the first item
-  const [loading, setLoading] = useState<boolean>(false);
+  // const [boundingBoxes, setBoundingBoxes] = useState<BoundingBox[]>([]);
+  // //Pagination
+  // const itemsPerPage = 12; // Items to display per page 
+  // const [currentPageIndex, setCurrentPageIndex] = useState(0); // Start at the first item
 
-  const [selectedImage, setSelectedImage] = useState<string>("");
-  const [selectedFullImageId, setSelectedFullImageId] = useState<string>("");
 
-  const [images, setImages] = useState<Array<Schema["Image"]["type"] & { imageUrl?: string }>>([]);
-  const [selectedAnnotations, setSelectedAnnotations] = useState<Array<Schema["Annotation"]["type"]>>([]);
+  // const [selectedImage, setSelectedImage] = useState<string>("");
+  // const [selectedFullImageId, setSelectedFullImageId] = useState<string>("");
 
- 
+  const [images, setImages] = useState<Array<Schema["Image"]["type"] >>([]);
+  const [allAnnotations, setSelectedAnnotations] = useState<Array<Schema["Annotation"]["type"]>>([]);
+
   const [episodeTitle, setTitle] = useState<string | undefined>(undefined);
   const [episodeNumber, setEpisodeNumber] = useState<string | undefined>(undefined);
   const [season, setSeason] = useState<number| undefined>(undefined);
   const [airYear, setAirYear] = useState<number| undefined>(undefined);
 
 
-  // Function to fetch annotation data from DynamoDB based on image selected
+  // Function to fetch annotation data from DynamoDB based on images found
   const fetchAnnotations = async () => {
     
-    setBoundingBoxes([]); // Clear current boxes before fetching new results
     try {
 
-      if(!selectedImage){return;}
+      if(!images){return;}
+      const allAnnotationsTemp: Array<Schema["Annotation"]["type"]> = [];
+      for (const image of images) {
+        console.log(image.image_id);
+        const fullImageId = concatenateImageIdForAnnotations(image);
+        console.log(fullImageId);
+        const result: any = await client.models.Annotation.list({
+          filter: { image_id: { eq: "S48-E4833_00152.png" } }
+        });
 
-      const result: any = await client.models.Annotation.list({
-        filter: { image_id: { eq: selectedFullImageId.trim() } }
-      });
         if (result){console.log("results data: " + result.data + "length: "+ result.data.length);}
+        if (result && result.data && result.data.length > 0) {
+          console.log(`Fetched ${result.data.length} annotations for image_id ${fullImageId}`);
+          allAnnotationsTemp.push(...result.data);
+        } else {
+          console.log(`No annotations found for image_id ${fullImageId}`);
+        }
+        // Use array to accumulate annotations
 
-        // Initialize an array to accumulate bounding boxes
-        const allBoundingBoxes: BoundingBox[] = [];
-        const allAnnotations: Array<Schema["Annotation"]["type"]> = [];
-        result.data.forEach((annotation: any) => {
-            
-            const polygon = JSON.parse(annotation.polygon); // Parse the polygon string into an array of numbers
-
-            if (polygon.length === 4) {
-              const [x, y, width, height] = polygon;
-              const box: BoundingBox = {
-                x: x,
-                y: y,
-                width: width - x, // Convert coordinates to width
-                height: height - y, // Convert coordinates to height
-                id: annotation.annotation_id, // Set the color for bounding boxes
-                annotation: annotation
-              };
-              allBoundingBoxes.push(box);
-              allAnnotations.push(annotation);
-            }
-          });
+        
+        // result.data.forEach((annotation: any) => {
+        //       console.log(annotation);
+        //       allAnnotations.push(annotation);
+        //     }
+        // );
  
-      setBoundingBoxes(allBoundingBoxes);
-      setSelectedAnnotations(allAnnotations);
-      console.log("boundingBoxes: " + JSON.stringify(allBoundingBoxes));
+      
+      setSelectedAnnotations(allAnnotationsTemp);
+      }
+      
     } catch (error) {
       console.error("Failed to fetch annotations:", error);
     }
-    setLoading(false); // Reset loading state
+    
+
   };
 
   const fetchImagesTitle = async (episode_title: string) => {
@@ -97,35 +88,36 @@ const EpisodeSearch: React.FC = () => {
             throw new Error('No data returned from the API');
           }
       // Fetch image URLs for each image
-      if(result){
-      const withUrls = await Promise.all(result.data.map(async (image: any) => {
+      // if(result){
+      // const withUrls = await Promise.all(result.data.map(async (image: any) => {
         
-        console.log("Image id is : "+ image.image_id);
-        const fullImageId = "S" + String(image.season)+"-E" +String(image.episode_id) +"_" +String(image.image_id) + ".png";
-        console.log("Full image id is : "+ fullImageId);
-        const imageUrl = await fetchImageUrl(fullImageId);
+      //   console.log("Image id is : "+ image.image_id);
+      //   const fullImageId = "S" + String(image.season)+"-E" +String(image.episode_id) +"_" +String(image.image_id) + ".png";
+      //   console.log("Full image id is : "+ fullImageId);
+      //   const imageUrl = await fetchImageUrl(fullImageId);
         
-        return { ...image, imageUrl };
-      }));
+      //   return { ...image, imageUrl };
+      // }));
 
-      setImages(withUrls);
+      setImages(result.data);
       
-    }
+      
+    
     } catch (error) {
       console.error("Failed to fetch images:", error);
     }
-    setLoading(false); // Reset loading state
+    
   };
     // Function to fetch URL for each image ID
-  const fetchImageUrl = async (imageId: string): Promise<string> => {
-    try {
-      const result = await getUrl({ path: `dev/${imageId}` });
-      return result.url.href;
-    } catch (error) {
-      console.error(`Failed to fetch URL for image ID: ${imageId}`, error);
-      return ""; // Return an empty string or a placeholder URL
-    }
-  };
+  // const fetchImageUrl = async (imageId: string): Promise<string> => {
+  //   try {
+  //     const result = await getUrl({ path: `dev/${imageId}` });
+  //     return result.url.href;
+  //   } catch (error) {
+  //     console.error(`Failed to fetch URL for image ID: ${imageId}`, error);
+  //     return ""; // Return an empty string or a placeholder URL
+  //   }
+  // };
   const fetchImagesEpisode = async (episode_number: string) => {
     setImages([]); // Clear current selections before fetching new results
     
@@ -141,22 +133,15 @@ const EpisodeSearch: React.FC = () => {
           if (!result || !result.data) {
             throw new Error('No data returned from the API');
           }
-      // Fetch image URLs for each image
-      if(result){
-      const withUrls = await Promise.all(result.data.map(async (image: any) => {
-        
-        const fullImageId = concatenateImageIdForAnnotations(image)
-        const imageUrl = await fetchImageUrl(fullImageId);
-        
-        return { ...image, imageUrl };
-      }));
+      
 
-      setImages(withUrls);
-    }
+      setImages(result.data);
+      setSearchMessage("Search results: " + result.data.length);
+    
     } catch (error) {
       console.error("Failed to fetch images:", error);
     }
-    setLoading(false); // Reset loading state
+    
   };
   const fetchImagesSeason = async (season: number) => {
     setImages([]); // Clear current selections before fetching new results
@@ -175,22 +160,14 @@ const EpisodeSearch: React.FC = () => {
           if (!result || !result.data) {
             throw new Error('No data returned from the API');
           }
-      // Fetch image URLs for each image
-      if(result){
-      const withUrls = await Promise.all(result.data.map(async (image: any) => {
-        
-        const fullImageId = concatenateImageIdForAnnotations(image)
-        const imageUrl = await fetchImageUrl(fullImageId);
-        
-        return { ...image, imageUrl };
-      }));
 
-      setImages(withUrls);
-    }
+
+      setImages(result.data);
+    
     } catch (error) {
       console.error("Failed to fetch images:", error);
     }
-    setLoading(false); // Reset loading state
+   
   };
   const fetchImagesAirYear = async (airYear: number) => {
     setImages([]); // Clear current selections before fetching new results
@@ -209,28 +186,23 @@ const EpisodeSearch: React.FC = () => {
           if (!result || !result.data) {
             throw new Error('No data returned from the API');
           }
-      // Fetch image URLs for each image
-      if(result){
-      const withUrls = await Promise.all(result.data.map(async (image: any) => {
-        
-        const fullImageId = concatenateImageIdForAnnotations(image)
-        const imageUrl = await fetchImageUrl(fullImageId);
-        
-        return { ...image, imageUrl };
-      }));
 
-      setImages(withUrls);
-    }
+      setImages(result.data);
+    
     } catch (error) {
       console.error("Failed to fetch images:", error);
     }
-    setLoading(false); // Reset loading state
+   
   };
   const concatenateImageIdForAnnotations = (image: Schema["Image"]["type"]) => {
     return "S" + String(image.season)+"-E" +String(image.episode_id) +"_" +String(image.image_id) + ".png";
   }
 
   const handleEpisodeRequest = () => {
+
+    setSelectedAnnotations([]); // Clear previous annotations
+    setSearchMessage(null); // Clear previous search messages
+
     if (episodeTitle) {
       fetchImagesTitle(episodeTitle);
     } else if (episodeNumber) {
@@ -246,16 +218,19 @@ const EpisodeSearch: React.FC = () => {
     setTitle(e.target.value);
     setSeason(undefined);
     setEpisodeNumber("");
+    setAirYear(undefined);
   };
   const handleEpisodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEpisodeNumber(e.target.value);
     setSeason(undefined);
     setTitle("");
+    setAirYear(undefined);
   };
   const handleSeasonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSeason(e.target.valueAsNumber);
     setTitle("")
     setEpisodeNumber("")
+    setAirYear(undefined);
   };
   const handleAirYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAirYear(e.target.valueAsNumber);
@@ -263,34 +238,17 @@ const EpisodeSearch: React.FC = () => {
     setEpisodeNumber("")
     setSeason(undefined)
   };
-  const handleImageClick = (image :Schema["Image"]["type"]  & { imageUrl?: string }) => {
-    if (!image.imageUrl) return;
- 
-    const fullImageId = concatenateImageIdForAnnotations(image);
-    setSelectedFullImageId(fullImageId);
-    setSelectedImage(image.imageUrl);
-  };
+
   useEffect(() => {
-    if (selectedFullImageId && selectedImage) {
+    if (images.length > 0) {
       fetchAnnotations();
     }
-  }, [selectedFullImageId, selectedImage]);
+  }, [images]);
+  
 
-  const handleNextPage = () => {
-    if (currentPageIndex < images.length - 1) {
-      setCurrentPageIndex(currentPageIndex + 1);
-    }
-  };
-
-  const handlePreviousPage = () => {
-    if (currentPageIndex > 0) {
-      setCurrentPageIndex(currentPageIndex - 1);
-    }
-  };
 
   return (
-    <div >
-
+  <div className="main-content">
       <h2>Episode Search </h2>
       <div className="search-controls">
       <div className="search-control">
@@ -335,35 +293,15 @@ const EpisodeSearch: React.FC = () => {
         />
       </div>
       </div>
-      <button onClick={handleEpisodeRequest}>Search</button>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
+      <button onClick={handleEpisodeRequest}>Search</button>  
         <div>
-        <ul className="annotation-grid">
-          {images.slice(currentPageIndex * itemsPerPage, currentPageIndex*itemsPerPage + itemsPerPage).map((image) => (
-              <ul className="annotation-item" key={`${image.image_id}`} onClick={() => handleImageClick(image)}>
-                {image.imageUrl && <img src={image.imageUrl} style={{ maxWidth: '200px', height: 'auto', cursor: 'pointer' }} />}
-                <strong>Image:</strong> {image.image_id}<br />
-                </ul>
-          ))}
-        </ul>
-        <div className="page-buttons">
-        <button onClick={handlePreviousPage} disabled={currentPageIndex === 0 || loading}>Previous</button>
-        <button onClick={handleNextPage} disabled={currentPageIndex*itemsPerPage+itemsPerPage >= images.length - 1 || loading}>Next</button>
-      </div>
-        </div>
-        
-      )}
-      {selectedFullImageId && (
-        <ul>
-            <h4>Annotated Image</h4>
-            <AnnotatedImage imageUrl={selectedImage} boundingBoxes={boundingBoxes}></AnnotatedImage>
-            <AttributeDetails annotations={selectedAnnotations}></AttributeDetails>
-        </ul>
-      )}
-    </div>
+        {searchMessage && <p>{searchMessage}</p>} {/* Display the user message */}
+
+        <div><DownloadResults annotations={allAnnotations} /></div>
+
+</div>
+</div>
   );
-};
+}; 
 
 export default EpisodeSearch;

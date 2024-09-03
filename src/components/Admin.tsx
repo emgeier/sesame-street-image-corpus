@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { uploadData, getUrl } from 'aws-amplify/storage';
-import { Authenticator } from '@aws-amplify/ui-react';
-import CustomHeader from './CustomMessaging';
+
 
 const Admin: React.FC = () => {
   //Individual image file upload
@@ -115,13 +114,12 @@ const Admin: React.FC = () => {
       setMessage(undefined); // Clear the message after 5 seconds
     }, 5000);
   };
-  const components = {
-    Header: CustomHeader,
-  };
+  // const components = {
+  //   Header: CustomHeader,
+  // };
 
   return (
-    <Authenticator hideSignUp className="authenticator-popup" components={components}>
-    {({  }) => (
+  
     <div className="main-content">
       <h3>Upload Folder</h3>
       <input
@@ -151,8 +149,7 @@ const Admin: React.FC = () => {
       </button>
       {url && <img src={url} alt="Uploaded file" style={{ maxWidth: '100%', height: 'auto' }} />}
     </div>
-    )}
-</Authenticator>
+
   );
 };
 

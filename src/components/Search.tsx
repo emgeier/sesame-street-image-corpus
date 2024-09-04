@@ -93,8 +93,8 @@ const Search: React.FC = () => {
       }, {} as { [key: string]: Array<Schema["Annotation"]["type"] & { imageUrl?: string }> });
 
       setGroupedAnnotations(grouped);
-      const numberSearchResults = Object.keys(grouped).length;
-      setSearchMessage(`Images found: ${numberSearchResults}`);
+      // const numberSearchResults = Object.keys(grouped).length;
+      setSearchMessage(`Annotations found: ${annotationsWithUrls.length}`);
 
     } catch (error) {
       console.error("Failed to fetch annotations:", error);

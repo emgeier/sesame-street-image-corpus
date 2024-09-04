@@ -30,6 +30,7 @@ const XSearch: React.FC = () => {
   const [episodeTitle, setTitle] = useState<string | undefined>(undefined);
   const [episodeNumber, setEpisodeNumber] = useState<string | undefined>(undefined);
   const [season, setSeason] = useState<number| undefined>(undefined);
+  const [searchMessage, setSearchMessage] = useState<string | null>(null); // State to hold the user message
 
 
   // Function to fetch annotation data from DynamoDB based on image selected
@@ -76,6 +77,8 @@ const XSearch: React.FC = () => {
  
       setBoundingBoxes(allBoundingBoxes);
       console.log("boundingBoxes: " + JSON.stringify(allBoundingBoxes));
+      
+
     } catch (error) {
       console.error("Failed to fetch annotations:", error);
     }
@@ -154,6 +157,7 @@ const XSearch: React.FC = () => {
       }));
 
       setImages(withUrls);
+      setSearchMessage(`Images found: ${withUrls.length}`);
     }
     } catch (error) {
       console.error("Failed to fetch images:", error);
@@ -295,10 +299,11 @@ const XSearch: React.FC = () => {
           {images.slice(currentPageIndex * itemsPerPage, currentPageIndex*itemsPerPage + itemsPerPage).map((image) => (
               <ul className="annotation-item" key={`${image.image_id}`} onClick={() => handleImageClick(image)}>
                 {image.imageUrl && <img src={image.imageUrl} style={{ maxWidth: '200px', height: 'auto', cursor: 'pointer' }} />}
-                <strong>Image:</strong> {image.image_id}<br />
+                <br></br><strong>Image:</strong> {image.image_id}<br />
                 </ul>
           ))}
         </ul>
+        <div>{searchMessage && <p>{searchMessage}</p>} </div>
         <div className="page-buttons">
         <button onClick={handlePreviousPage} disabled={currentPageIndex === 0 || loading}>Previous</button>
         <button onClick={handleNextPage} disabled={currentPageIndex*itemsPerPage+itemsPerPage >= images.length - 1 || loading}>Next</button>

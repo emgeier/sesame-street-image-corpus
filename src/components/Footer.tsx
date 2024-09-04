@@ -11,8 +11,8 @@ const Footer: React.FC = () => {
         <Link to="/guide">Guide</Link>
         <Link to="/about">About</Link>
         <Link to="/metrics">Metrics</Link>
-        <a href="https://peabody.az1.qualtrics.com/jfe/preview/previewId/0419baa6-934b-4d65-a11c-e8e6f79c85b9/SV_eRQUVmfS4d7q4yq?Q_CHL=preview&Q_SurveyVersionID=current" target="_blank" rel="noopener noreferrer">
-              Feedback
+        <a href="https://peabody.az1.qualtrics.com/jfe/form/SV_eRQUVmfS4d7q4yq" target="_blank" rel="noopener noreferrer">
+              Survey
             </a>
       </div>
       <div className="footer-text">

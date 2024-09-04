@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import Home from './components/Home';
 import About from './components/About';
-import Admin from './components/Admin';
+import Admin from './components/Admin.tsx';
 import XSearch from './components/XSearch';
 import SearchImageAttributes from './components/SearchImageAttributes';
 import Guide from './components/Guide';

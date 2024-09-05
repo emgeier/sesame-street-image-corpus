@@ -29,7 +29,6 @@ const Search: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string>("");
   const [boundingBoxes, setBoundingBoxes] = useState<BoundingBox[]>([]);
-  const [searchMessage, setSearchMessage] = useState<string | null>(null); // State to hold the user message
 
   const components = {
     Header: CustomHeader,
@@ -94,11 +93,9 @@ const Search: React.FC = () => {
 
       setGroupedAnnotations(grouped);
       // const numberSearchResults = Object.keys(grouped).length;
-      setSearchMessage(`Annotations found: ${annotationsWithUrls.length}`);
 
     } catch (error) {
       console.error("Failed to fetch annotations:", error);
-      setSearchMessage(`Failed to get search results.`);
     }
     setLoading(false); // Reset loading state
   };
@@ -202,8 +199,6 @@ const Search: React.FC = () => {
           </ul>
           </div>
         )}
-        <div>{searchMessage && <p>{searchMessage}</p>} {/* Display the user message */}
-        </div>
         <div className="page-buttons">
           <button onClick={handlePreviousPage} disabled={currentPageIndex === 0 || loading}>Previous</button>
           <button onClick={handleNextPage} disabled={currentPageIndex * itemsPerPage + itemsPerPage >= annotations.length || loading}>Next</button>

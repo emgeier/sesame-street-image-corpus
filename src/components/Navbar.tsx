@@ -5,7 +5,7 @@ import { signOut } from 'aws-amplify/auth';
 import { useState, useEffect } from 'react';
 import {getCurrentUser } from 'aws-amplify/auth';
 import { Hub } from 'aws-amplify/utils';
-import icon from "../../public/favicon.ico";
+import icon from "../../favicon.ico";
 
 const Navbar: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

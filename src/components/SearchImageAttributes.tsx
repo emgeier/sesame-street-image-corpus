@@ -168,6 +168,8 @@ const SearchImageAttributes: React.FC = () => {
             <input
               type="checkbox"
               value={option}
+              checked={selectedCategories[category]?.includes(option) || false} 
+
               onChange={(e) => handleKeywordChange(option, e.target.checked, category)}
             />
             {option}

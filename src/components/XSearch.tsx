@@ -30,6 +30,8 @@ const XSearch: React.FC = () => {
   const [episodeTitle, setTitle] = useState<string | undefined>(undefined);
   const [episodeNumber, setEpisodeNumber] = useState<string | undefined>(undefined);
   const [season, setSeason] = useState<number| undefined>(undefined);
+  const [airYear, setAirYear] = useState<number| undefined>(undefined);
+
   const [searchMessage, setSearchMessage] = useState<string | null>(null); // State to hold the user message
 
   // Function to fetch annotation data from DynamoDB based on image selected
@@ -179,6 +181,39 @@ const XSearch: React.FC = () => {
     }
     setLoading(false); // Reset loading state
   };
+  const fetchImagesAirYear = async (airYear: number) => {
+    setImages([]); // Clear current selections before fetching new results
+  
+    //This is inefficient, a scan through all the items up to 40000. Will need to implement GSIs or OpenSearch 
+    try {
+        const result: any = await client.models.Image.list({
+            filter: { air_year: { eq: airYear } },
+            limit: 40000,
+          });
+      
+          if (!result || !result.data) {
+            throw new Error('No data returned from the API');
+          }
+      // Fetch image URLs for each image
+      if(result){
+      const withUrls = await Promise.all(result.data.map(async (image: any) => {
+        
+        const fullImageId = concatenateImageIdForAnnotations(image)
+        const imageUrl = await fetchImageUrl(fullImageId);
+        
+        return { ...image, imageUrl };
+      }));
+
+      setImages(withUrls);
+      setSearchMessage(`Images found: ${result.data.length}`);
+
+    }
+    } catch (error) {
+      console.error("Failed to fetch images:", error);
+    }
+    setLoading(false); // Reset loading state
+  };
+
   const concatenateImageIdForAnnotations = (image: Schema["Image"]["type"]) => {
     return "S" + String(image.season)+"-E" +String(image.episode_id) +"_" +String(image.image_id) + ".png";
   }
@@ -191,28 +226,39 @@ const XSearch: React.FC = () => {
       fetchImagesEpisode(episodeNumber);
     } else if (season) {
       fetchImagesSeason(season);
-    }
-  };
+    } else if (airYear) {fetchImagesAirYear(airYear);}
+  }; 
 
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
     setSeason(undefined);
     setEpisodeNumber("");
+    setAirYear(undefined);
+
   };
   const handleEpisodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEpisodeNumber(e.target.value);
     setSeason(undefined);
     setTitle("");
+    setAirYear(undefined);
+
   };
   const handleSeasonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSeason(e.target.valueAsNumber);
     setTitle("")
     setEpisodeNumber("")
+    setAirYear(undefined);
   };
+  const handleAirYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSeason(undefined);
+    setTitle("")
+    setEpisodeNumber("")
+    setAirYear(e.target.valueAsNumber);
+  };
+
   const handleImageClick = (image :Schema["Image"]["type"]  & { imageUrl?: string }) => {
     if (!image.imageUrl) return;
- 
     const fullImageId = concatenateImageIdForAnnotations(image);
     setSelectedFullImageId(fullImageId);
     setSelectedImage(image.imageUrl);
@@ -260,7 +306,7 @@ const XSearch: React.FC = () => {
           onChange={handleSeasonChange}
         />
       </div>
-      
+ 
         <div className="search-control">
           <label htmlFor="title">Title:</label>
           <input
@@ -271,6 +317,16 @@ const XSearch: React.FC = () => {
             onChange={handleTitleChange}
           />
         </div>
+        <div className="search-control">
+        <label htmlFor="airYear">Year Aired:</label>
+        <input
+          type="number"
+          id="airYear"
+          name="airYear"
+          value={airYear || ''}
+          onChange={handleAirYearChange}
+        />
+      </div>    
       </div>
       <button onClick={handleEpisodeRequest}>Search</button>
       {loading ? (

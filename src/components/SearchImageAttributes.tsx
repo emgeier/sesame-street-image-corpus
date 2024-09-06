@@ -16,16 +16,10 @@ const SearchImageAttributes: React.FC = () => {
   const [boxQueryY, setBoxQueryY]= useState<number | null>(null); // 
   const [boxQueryHeight, setBoxQueryHeight]= useState<number | null>(null); // 
   const [boxQueryWidth, setBoxQueryWidth]= useState<number | null>(null); // 
-
   const [keywords] = useState<string[]>([]);  
 
-
   const [selectedCategories, setSelectedCategories] = useState<{ [key: string]: string[] }>({
-    FACE: [],
-    PLACE: [],
-    NUMBER: [],
-    WORD: []
-  });
+  }); 
 
   const components = {
     Header: CustomHeader,
@@ -33,7 +27,7 @@ const SearchImageAttributes: React.FC = () => {
 
   const fetchSearchResultAnnotations = async (token: string | null = null) => {
     const allAnnotations: any[] = [];
-
+    let nextToken: string | null = token;
     try {
       const filter: any = {
         and: []
@@ -50,6 +44,7 @@ const SearchImageAttributes: React.FC = () => {
       if (boxQueryWidth) {
         filter.and.push({ width: { le: boxQueryWidth } });
       }
+      //Set up for multiple category searches, but currently works for only one 
       for (const category of Object.keys(selectedCategories)) {
         if (selectedCategories[category].length > 0 || keywords.length > 0) {
          
@@ -60,12 +55,14 @@ const SearchImageAttributes: React.FC = () => {
           });
           
         }
-
+        
           const result: any = await client.models.Annotation.list({
             filter: filter.and.length ? filter : undefined,
-            limit: 200,
+            limit: 40000,
             nextToken: token,
           });
+
+          //Currently urls will expire due to security requirements, eliminate ?
 
           const annotationsWithUrls = await Promise.all(
             result.data.map(async (annotation: any) => {
@@ -76,18 +73,16 @@ const SearchImageAttributes: React.FC = () => {
 
           allAnnotations.push(...annotationsWithUrls);
       }
-
-      setAnnotations(allAnnotations);
-      const numberSearchResults = allAnnotations.length.toString();
-      setSearchMessage(`Search results returned: ${numberSearchResults}`);
-
-    } catch (error) {
-      console.error("Failed to fetch annotations:", error);
-      setSearchMessage("Failed to return search results for ${category}.");
-
-    }
-  };
-
+        setAnnotations(allAnnotations);
+        const numberSearchResults = allAnnotations.length.toString();
+        setSearchMessage(nextToken ? `Search results returned: ${numberSearchResults}. More results available.` : `Search results returned: ${numberSearchResults}`);
+    
+      } catch (error) {
+        console.error("Failed to fetch annotations:", error);
+        setSearchMessage("Failed to return search results.");
+      }
+    };
+  // Code retained for if we want to restore the visualization of the search in this component  
   const fetchImageUrl = async (imageId: string): Promise<string> => {
     try {
       const result = await getUrl({ path: `dev/${imageId}` });
@@ -100,14 +95,27 @@ const SearchImageAttributes: React.FC = () => {
 
   const handleKeywordChange = (keyword: string, checked: boolean, category: string) => {
     setSelectedCategories((prevCategories) => {
-      const updatedCategory = checked
-        ? [...(prevCategories[category] || []), keyword]
-        : prevCategories[category].filter((kw) => kw !== keyword);
-      return { ...prevCategories, [category]: updatedCategory };
+      // If the checkbox is checked, add the keyword to the category array
+      if (checked) {
+        const updatedCategory = [...(prevCategories[category] || []), keyword];
+        return { ...prevCategories, [category]: updatedCategory }; // Return the updated categories
+      } else {
+        // If unchecked, remove the keyword from the category array
+        const updatedCategory = prevCategories[category].filter((kw) => kw !== keyword);
+        
+        // If the category is empty after removing the keyword, remove the category entirely
+        if (updatedCategory.length === 0) {
+          const { [category]: _, ...remainingCategories } = prevCategories; // Destructure to remove the category
+          return remainingCategories; // Return the categories without the empty category
+        }
+  
+        // Otherwise, return the updated categories with the modified category
+        return { ...prevCategories, [category]: updatedCategory };
+      }
     });
-    
   };
 
+  // These may need to be rendered dynamically eventually to make the search results dynamically include new attributes
   const faceOptions = {
     species: ["human", "puppet", "animal", "other"],
     representation: ["real", "caricature", "other"],
@@ -168,6 +176,7 @@ const SearchImageAttributes: React.FC = () => {
       </div>
     ));
   };
+  
   const handleBoxXLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setBoxQueryX(parseInt(event.target.value));
     
@@ -185,6 +194,22 @@ const SearchImageAttributes: React.FC = () => {
     
   };
 
+  const clearSearch = () => {
+
+    // Clear previous search criteria
+    setSelectedCategories({});
+
+    // Reset bounding box queries
+    setBoxQueryX(null);
+    setBoxQueryY(null);
+    setBoxQueryHeight(null);
+    setBoxQueryWidth(null);
+    
+    // Clear the search results and message
+    setAnnotations([]);
+    setSearchMessage(null);
+  };
+
   return (
     <Authenticator hideSignUp className="authenticator-popup" components={components}>
     {({  }) => (
@@ -196,7 +221,6 @@ const SearchImageAttributes: React.FC = () => {
       <div className="search-controls">
         <div className="checkbox-row">
         
-
           <h3>Faces</h3>
           {renderCheckboxes(faceOptions, 'FACE')}
         </div>
@@ -220,7 +244,6 @@ const SearchImageAttributes: React.FC = () => {
         </div>
         <Divider></Divider>
         <h3>Coordinates of Bounding Box</h3>
-        
         <div >
         <div >
         <label htmlFor="x-coordinate">x-coordinate of top left corner: </label>
@@ -238,7 +261,7 @@ const SearchImageAttributes: React.FC = () => {
           placeholder="y"
           onChange={handleBoxYLocationChange}
         /></div>
-                <div >
+        <div>
         <label htmlFor="height">height: </label>
         <input
           type="number"
@@ -261,7 +284,8 @@ const SearchImageAttributes: React.FC = () => {
       </div>
       </div>
       <button onClick={() => fetchSearchResultAnnotations()}>Search</button>
-      {searchMessage && <p>{searchMessage}</p>} {/* Display the user message */}
+      <button onClick={() => clearSearch()}>Clear Search</button>
+      {searchMessage && <p>{searchMessage}</p>} {/* Display the user message for search result numbers */}
       <div><DownloadResults annotations={annotations} /></div>
       </main>
     )}

@@ -21,6 +21,7 @@ const Search: React.FC = () => {
   const [annotations, setAnnotations] = useState<Array<Schema["Annotation"]["type"] & { imageUrl?: string }>>([]);
   const [groupedAnnotations, setGroupedAnnotations] = useState<{ [key: string]: Array<Schema["Annotation"]["type"] & { imageUrl?: string }> }>({});
   const [selectedAnnotations, setSelectedAnnotations] = useState<Array<Schema["Annotation"]["type"] & { imageUrl?: string }>>([]);
+  // const [searchMessage, setSearchMessage] = useState<string | null>(null); // State to hold the user message
 
   const [category, setCategory] = useState<string>("");
   const [keywords, setKeywords] = useState<string[]>([]);
@@ -71,7 +72,7 @@ const Search: React.FC = () => {
     try {
       const result: any = await client.models.Annotation.list({
         filter: Object.keys(filter).length ? filter : undefined,
-        limit: 200,
+        limit: 40000,
         nextToken: token,
       });
 
@@ -93,7 +94,7 @@ const Search: React.FC = () => {
 
       setGroupedAnnotations(grouped);
       // const numberSearchResults = Object.keys(grouped).length;
-
+      // setSearchMessage(`Images found: ${numberSearchResults}`);
     } catch (error) {
       console.error("Failed to fetch annotations:", error);
     }

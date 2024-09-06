@@ -5,7 +5,7 @@ import { signOut } from 'aws-amplify/auth';
 import { useState, useEffect } from 'react';
 import {getCurrentUser } from 'aws-amplify/auth';
 import { Hub } from 'aws-amplify/utils';
-import icon from "../../public/favicon.ico";
+import icon from "../../favicon.ico";
 
 const Navbar: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -86,8 +86,8 @@ const Navbar: React.FC = () => {
         <li><Link to="/search"  onClick={closeMenu} className={currentPath === '/search' ? 'current-page' : ''}>Search</Link></li>
         <li><Link to="/download"  onClick={closeMenu} className={currentPath === '/download' ? 'current-page' : ''}>Download</Link></li>
         <li><Link to="/admin"  onClick={closeMenu} className={currentPath === '/admin' ? 'current-page' : ''}>Upload</Link></li>
-        <li><a href="https://peabody.az1.qualtrics.com/jfe/preview/previewId/0419baa6-934b-4d65-a11c-e8e6f79c85b9/SV_eRQUVmfS4d7q4yq?Q_CHL=preview&Q_SurveyVersionID=current" target="_blank" rel="noopener noreferrer">
-              Feedback
+        <li><a href="https://peabody.az1.qualtrics.com/jfe/form/SV_eRQUVmfS4d7q4yq" target="_blank" rel="noopener noreferrer">
+              Survey
             </a></li>
       </ul>
       { isAuthenticated && 

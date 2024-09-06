@@ -18,7 +18,7 @@ a {
 }
 body {
   /* margin: auto; */
-  background: linear-gradient(180deg, rgb(117, 81, 194), rgb(255, 255, 255));
+  background: linear-gradient(180deg, rgb(255, 255, 255), rgb(255, 255, 255));
   /* display: flex; */
   /* height: 100%;
   width: 100%;
@@ -208,3 +208,4 @@ li {
 .popup button {
   align-items: center;
 }
+

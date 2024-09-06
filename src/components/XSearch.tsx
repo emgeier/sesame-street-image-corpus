@@ -30,7 +30,7 @@ const XSearch: React.FC = () => {
   const [episodeTitle, setTitle] = useState<string | undefined>(undefined);
   const [episodeNumber, setEpisodeNumber] = useState<string | undefined>(undefined);
   const [season, setSeason] = useState<number| undefined>(undefined);
-
+  const [searchMessage, setSearchMessage] = useState<string | null>(null); // State to hold the user message
 
   // Function to fetch annotation data from DynamoDB based on image selected
   const fetchAnnotations = async () => {
@@ -39,16 +39,6 @@ const XSearch: React.FC = () => {
     try {
 
       if(!selectedImage){return;}
-
-      // listAnnotations(image_id: "S48-E4821_00073.png") {
-      //   items {
-      //     annotation_id
-      //     attributes
-      //   }
-
-      // const result: any = await client.models.Annotation.list({
-      //   filter: { image_id: { eq: selectedFullImageId.trim() } }
-      // });
 
       const result: any = await client.models.Annotation.list({image_id: selectedFullImageId});
       
@@ -76,6 +66,8 @@ const XSearch: React.FC = () => {
  
       setBoundingBoxes(allBoundingBoxes);
       console.log("boundingBoxes: " + JSON.stringify(allBoundingBoxes));
+      
+
     } catch (error) {
       console.error("Failed to fetch annotations:", error);
     }
@@ -85,14 +77,11 @@ const XSearch: React.FC = () => {
   const fetchImagesTitle = async (episode_title: string) => {
     
     setImages([]); // Clear current selections before fetching new result
-    
-
-    //This is simplified for a single api call, no next token logic-- assumes 200 images or less per episode. 
-    
+        
     try {
         const result: any = await client.models.Image.list({
             filter: { episode_title: { contains: episode_title } },
-            limit: 200,
+            limit: 40000,
           });
       
           if (!result || !result.data) {
@@ -109,8 +98,8 @@ const XSearch: React.FC = () => {
         
         return { ...image, imageUrl };
       }));
-
       setImages(withUrls);
+      setSearchMessage(`Images found: ${result.data.length}`);
       
     }
     } catch (error) {
@@ -131,13 +120,10 @@ const XSearch: React.FC = () => {
   const fetchImagesEpisode = async (episode_number: string) => {
     setImages([]); // Clear current selections before fetching new results
     
-    
-    //This is simplified for a single api call, no next token logic-- assumes 200 images or less per episode. 
-    
     try {
         const result: any = await client.models.Image.list({
             filter: { episode_id: { eq: episode_number } },
-            limit: 200,
+            limit: 40000,
           });
       
           if (!result || !result.data) {
@@ -154,6 +140,7 @@ const XSearch: React.FC = () => {
       }));
 
       setImages(withUrls);
+      setSearchMessage(`Images found: ${result.data.length}`);
     }
     } catch (error) {
       console.error("Failed to fetch images:", error);
@@ -162,16 +149,12 @@ const XSearch: React.FC = () => {
   };
   const fetchImagesSeason = async (season: number) => {
     setImages([]); // Clear current selections before fetching new results
-            // Clear other input fields
-
-            
-    
-    //This is simplified for a single api call, no next token logic-- assumes 200 images or less per episode. 
-    
+  
+    //This is inefficient, a scan through all the items up to 40000. Will need to implement GSIs or OpenSearch 
     try {
         const result: any = await client.models.Image.list({
             filter: { season: { eq: season } },
-            limit: 200,
+            limit: 40000,
           });
       
           if (!result || !result.data) {
@@ -188,6 +171,8 @@ const XSearch: React.FC = () => {
       }));
 
       setImages(withUrls);
+      setSearchMessage(`Images found: ${result.data.length}`);
+
     }
     } catch (error) {
       console.error("Failed to fetch images:", error);
@@ -199,6 +184,7 @@ const XSearch: React.FC = () => {
   }
 
   const handleEpisodeRequest = () => {
+    setSearchMessage("");
     if (episodeTitle) {
       fetchImagesTitle(episodeTitle);
     } else if (episodeNumber) {
@@ -252,7 +238,7 @@ const XSearch: React.FC = () => {
   return (
     <main className="main-content">
       <div className='separator'></div>
-      <h2>Advanced Search </h2>
+      <h2>Episode Search </h2>
       <div className="search-controls">
       <div className="search-control">
           <label htmlFor="episodeNumber">Episode:</label>
@@ -295,10 +281,11 @@ const XSearch: React.FC = () => {
           {images.slice(currentPageIndex * itemsPerPage, currentPageIndex*itemsPerPage + itemsPerPage).map((image) => (
               <ul className="annotation-item" key={`${image.image_id}`} onClick={() => handleImageClick(image)}>
                 {image.imageUrl && <img src={image.imageUrl} style={{ maxWidth: '200px', height: 'auto', cursor: 'pointer' }} />}
-                <strong>Image:</strong> {image.image_id}<br />
+                <br></br><strong>Image:</strong> {image.image_id}<br />
                 </ul>
           ))}
         </ul>
+        <div>{searchMessage && <p>{searchMessage}</p>} </div>
         <div className="page-buttons">
         <button onClick={handlePreviousPage} disabled={currentPageIndex === 0 || loading}>Previous</button>
         <button onClick={handleNextPage} disabled={currentPageIndex*itemsPerPage+itemsPerPage >= images.length - 1 || loading}>Next</button>

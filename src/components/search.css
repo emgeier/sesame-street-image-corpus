@@ -1,31 +1,4 @@
-/* :root {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-a {
-  font-weight: 800;
-  text-decoration: inherit;
-} */
-/* body {
-  margin: auto;
-  background: linear-gradient(180deg, rgb(117, 81, 194), rgb(255, 255, 255));
-  display: flex;
-  height: 80vh;
-  width: 100vw;
-  justify-content: center;
-  min-width: 320px;
-  min-height: 100vh;
-} */
 h1 {
   font-size: 3.2em;
   line-height: 1.1;

@@ -21,6 +21,7 @@ const Search: React.FC = () => {
   const [annotations, setAnnotations] = useState<Array<Schema["Annotation"]["type"] & { imageUrl?: string }>>([]);
   const [groupedAnnotations, setGroupedAnnotations] = useState<{ [key: string]: Array<Schema["Annotation"]["type"] & { imageUrl?: string }> }>({});
   const [selectedAnnotations, setSelectedAnnotations] = useState<Array<Schema["Annotation"]["type"] & { imageUrl?: string }>>([]);
+  // const [searchMessage, setSearchMessage] = useState<string | null>(null); // State to hold the user message
 
   const [category, setCategory] = useState<string>("");
   const [keywords, setKeywords] = useState<string[]>([]);
@@ -29,7 +30,6 @@ const Search: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string>("");
   const [boundingBoxes, setBoundingBoxes] = useState<BoundingBox[]>([]);
-  const [searchMessage, setSearchMessage] = useState<string | null>(null); // State to hold the user message
 
   const components = {
     Header: CustomHeader,
@@ -72,7 +72,7 @@ const Search: React.FC = () => {
     try {
       const result: any = await client.models.Annotation.list({
         filter: Object.keys(filter).length ? filter : undefined,
-        limit: 200,
+        limit: 40000,
         nextToken: token,
       });
 
@@ -93,12 +93,10 @@ const Search: React.FC = () => {
       }, {} as { [key: string]: Array<Schema["Annotation"]["type"] & { imageUrl?: string }> });
 
       setGroupedAnnotations(grouped);
-      const numberSearchResults = Object.keys(grouped).length;
-      setSearchMessage(`Images found: ${numberSearchResults}`);
-
+      // const numberSearchResults = Object.keys(grouped).length;
+      // setSearchMessage(`Images found: ${numberSearchResults}`);
     } catch (error) {
       console.error("Failed to fetch annotations:", error);
-      setSearchMessage(`Failed to get search results.`);
     }
     setLoading(false); // Reset loading state
   };
@@ -202,8 +200,6 @@ const Search: React.FC = () => {
           </ul>
           </div>
         )}
-        <div>{searchMessage && <p>{searchMessage}</p>} {/* Display the user message */}
-        </div>
         <div className="page-buttons">
           <button onClick={handlePreviousPage} disabled={currentPageIndex === 0 || loading}>Previous</button>
           <button onClick={handleNextPage} disabled={currentPageIndex * itemsPerPage + itemsPerPage >= annotations.length || loading}>Next</button>

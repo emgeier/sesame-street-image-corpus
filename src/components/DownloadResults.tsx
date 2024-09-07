@@ -37,7 +37,7 @@ const DownloadResults: React.FC<DownloadResultsProps> = ({ annotations }) => {
 
   return (
     <div>
-      <button onClick={downloadCSV}>Download Data as CSV </button>
+      <button onClick={downloadCSV}>Download Results as CSV </button>
       <button onClick={downloadAll}>Download CSV and Images</button>
     </div>
   );

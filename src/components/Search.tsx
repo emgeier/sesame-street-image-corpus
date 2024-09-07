@@ -6,6 +6,7 @@ import AnnotatedImage from "./AnnotatedImage";
 import AttributeDetails from "./AttributeDetails";
 import { Authenticator } from "@aws-amplify/ui-react";
 import CustomHeader from './CustomMessaging';
+import DownloadResults from "./DownloadResults";
 
 interface BoundingBox {
   x: number;
@@ -22,7 +23,7 @@ const Search: React.FC = () => {
   const [groupedAnnotations, setGroupedAnnotations] = useState<{ [key: string]: Array<Schema["Annotation"]["type"] & { imageUrl?: string }> }>({});
   const [selectedAnnotations, setSelectedAnnotations] = useState<Array<Schema["Annotation"]["type"] & { imageUrl?: string }>>([]);
   // const [searchMessage, setSearchMessage] = useState<string | null>(null); // State to hold the user message
-
+  const [selectedImage, setSelectedImage] = useState<Schema["Image"]["type"]>();
   const [category, setCategory] = useState<string>("");
   const [keywords, setKeywords] = useState<string[]>([]);
   const itemsPerPage = 12; // Items to display per page 
@@ -138,7 +139,26 @@ const Search: React.FC = () => {
     }).filter(Boolean) as BoundingBox[];
 
     setBoundingBoxes(allBoundingBoxes);
+    fetchImageInfo(imageId);
   };
+  const fetchImageInfo = async (imageId: string) => {
+    console.log("imageId: "+imageId);
+    const episode_number = imageId.split("-")[1].split("_")[0].substring(1);
+    console.log("episode: "+episode_number);
+    const image_number = imageId.split("-")[1].split("_")[1].split(".")[0];
+    console.log("image number: "+image_number);
+
+    try {
+      const result: any = await client.models.Image.get({
+        episode_id: episode_number, image_id: image_number}
+      )
+      console.log(result);
+      if(result.data){setSelectedImage(result.data);}
+    } catch (error) {
+      console.error("Failed to fetch annotations:", error);
+    }
+  }
+
 
   const handleNextPage = () => {
     if (currentPageIndex < Math.ceil(annotations.length / itemsPerPage) - 1) {
@@ -193,7 +213,7 @@ const Search: React.FC = () => {
             {Object.keys(groupedAnnotations).slice(currentPageIndex * itemsPerPage, currentPageIndex * itemsPerPage + itemsPerPage).map((imageId) => (
                 <ul className="annotation-item" key={imageId} onClick={() => handleImageClick(imageId)}>
                 {groupedAnnotations[imageId][0].imageUrl && (
-                  <img src={groupedAnnotations[imageId][0].imageUrl} alt="Image" style={{ maxWidth: '180px', height: 'auto' }} />
+                  <img src={groupedAnnotations[imageId][0].imageUrl} alt="Image" style={{ maxWidth: '200px', height: 'auto' }} />
                 )}
               </ul>
             ))}
@@ -204,13 +224,17 @@ const Search: React.FC = () => {
           <button onClick={handlePreviousPage} disabled={currentPageIndex === 0 || loading}>Previous</button>
           <button onClick={handleNextPage} disabled={currentPageIndex * itemsPerPage + itemsPerPage >= annotations.length || loading}>Next</button>
         </div>
+        <DownloadResults annotations={annotations}></DownloadResults>
         {selectedImageUrl && (
           <div>
-            <h4>Image: {selectedAnnotations[0].image_id}</h4>
+            {selectedImage && (
+            <h3>{selectedImage?.episode_title} <br/>Season {selectedImage?.season}<br/> {selectedImage?.air_year}</h3>
+          )}
             <AnnotatedImage imageUrl={selectedImageUrl} boundingBoxes={boundingBoxes} />
             <AttributeDetails annotations={selectedAnnotations}/>
           </div>
         )}
+        
       </main>
     </div>
 )}

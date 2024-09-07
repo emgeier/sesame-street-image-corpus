@@ -127,7 +127,7 @@
   margin-left: 10px; /* Add some space between buttons */
 }
 
-button {
+/* button {
   padding: 2px 4%;
   background-color: #7234d0;
   color: #fff;
@@ -135,16 +135,17 @@ button {
   border-radius: 5px;
   cursor: pointer;
   margin-right: 15px;
-}
+} */
 
-button:hover {
+/* button:hover {
   background-color: #785790;
-}
+} */
 /* Highlight the current page link */
 .nav-links a.current-page {
   font-weight: 600; /* Bold weight for the current page */
   color: #131010; /* Optionally change the color as well */
 }
+
 /* Responsive Design Adjustments */
 @media (max-width: 1024px) {
   .navbar {

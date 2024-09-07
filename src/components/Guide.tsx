@@ -11,7 +11,8 @@ function Guide() {
     <main>
       
       <p className='indented'>
-    HOW TO FIND ANNOTATED IMAGES </p>
+    HOW TO FIND ANNOTATED IMAGES 
+      </p>
     <br></br>
     <p className='indented'>
       The search for images from various episodes of Sesame Street over the course of its history is found through the "Episode Search".  One can search by episode number, title, season, or year the episode first aired. The images are displayed with their annotations details and bounding boxes.</p>
@@ -21,10 +22,12 @@ function Guide() {
       <br></br>
     <p className='indented'>
     Annotation Schema of the Sesame Street Image Archive
-    </p><br></br><p className='indented'>
+    </p>
+    <br></br>
+    <p className='indented'>
     The SSIA uses a controlled vocabulary to encode the images with information about various visual aspects of the images. Here is a comprehensive list of the terms used in the development of the metadata for the Sesame Street Image Archive:</p>
       <p className='indented'>
-        <p>
+        <div>
   <strong>“Face” Category Attributes</strong><br/>
   Name: 1. Species<br/>
   Value: human; puppet; animal; other<br/>
@@ -94,7 +97,7 @@ function Guide() {
   Value: full-view; occluded; truncated; occluded-and-truncated; other<br/>
   Name: 6. Clarity<br/>
   Value: clear; blurry; other<br/>
-        </p>
+        </div>
       </p>
       
       <br></br>

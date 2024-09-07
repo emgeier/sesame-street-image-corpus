@@ -17,6 +17,7 @@ const SearchImageAttributes: React.FC = () => {
   const [boxQueryHeight, setBoxQueryHeight]= useState<number | null>(null); // 
   const [boxQueryWidth, setBoxQueryWidth]= useState<number | null>(null); // 
   const [keywords] = useState<string[]>([]);  
+  const [singleLetter, setSingleLetter] = useState<string>(""); // New state for single letter search
 
   const [selectedCategories, setSelectedCategories] = useState<{ [key: string]: string[] }>({
   }); 
@@ -26,6 +27,7 @@ const SearchImageAttributes: React.FC = () => {
   };
 
   const fetchSearchResultAnnotations = async (token: string | null = null) => {
+    console.log(singleLetter);
     const allAnnotations: any[] = [];
     let nextToken: string | null = token;
     try {
@@ -43,6 +45,36 @@ const SearchImageAttributes: React.FC = () => {
       }
       if (boxQueryWidth) {
         filter.and.push({ width: { le: boxQueryWidth } });
+      }
+      // Add single letter filter if it's selected
+      if (singleLetter) {
+        filter.and.push({ singleletter: { eq: singleLetter } });
+
+        
+        console.log("Letter: "+singleLetter);
+
+        console.log("Categories selected: "+Object.keys(selectedCategories).length)
+        if(Object.keys(selectedCategories).length == 0){
+          filter.and.push({ category: { eq: "WORD" } });
+          console.log("if selected categories are empty");
+          const result: any = await client.models.Annotation.list({
+            filter: filter.and.length ? filter : undefined,
+            limit: 40000,
+            nextToken: token,
+          });
+
+          //Currently urls will expire due to security requirements, eliminate ?
+
+          const annotationsWithUrls = await Promise.all(
+            result.data.map(async (annotation: any) => {
+              const imageUrl = await fetchImageUrl(annotation.image_id);
+              return { ...annotation, imageUrl };
+            })
+          );
+
+          allAnnotations.push(...annotationsWithUrls);
+
+        }
       }
       //Set up for multiple category searches, but currently works for only one 
       for (const category of Object.keys(selectedCategories)) {
@@ -114,55 +146,56 @@ const SearchImageAttributes: React.FC = () => {
       }
     });
   };
+  const handleSingleLetterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSingleLetter(e.target.value); 
+  };
 
   // These may need to be rendered dynamically eventually to make the search results dynamically include new attributes
   const faceOptions = {
-    species: ["human", "puppet", "animal", "other"],
-    representation: ["real", "caricature", "other"],
-    age: ["infant","child", "teen","adult", "elderly", "other"],
-    orientation: ["front-face", "side-profile", "other"],
-    "camera angle": ["forward", "upward", "downward", "other"],
-    clarity: ["clear", "blurry", "other"],
-    visibility: ["occluded", "truncated", "full-view", "other"],
-    race: ["Asian", "American Indian/Alaska Native", "Black/African American", "Native Hawaiian/Other Pacific Islander","white","other"],
+    Species: ["human", "puppet", "animal", "other"],
+    Representation: ["real", "caricature", "other"],
+    Age: ["infant","child", "teen","adult", "elderly", "other"],
+    Orientation: ["front-face", "side-profile", "other"],
+    "Camera angle": ["forward", "upward", "downward", "other"],
+    Clarity: ["clear", "blurry", "other"],
+    Visibility: ["occluded", "truncated", "full-view", "other"],
+    Race: ["Asian", "American Indian/Alaska Native", "Black/African American", "Native Hawaiian/Other Pacific Islander","white","other"],
     
   };
 
   const placeOptions = {
-    representation: ["real", "caricature", "other"],
-    orientation: ["cardinal", "oblique", "other"],
-
-  
-    scope: ["close-up", "single", "multiple", "skyline", "other"],
-    user: ["human", "animal", "other"],
-    function: ["domicile", "business", "attraction","institution","other"],
-    construction: ["house","row-house","apartment", "castle", "other"],
-    clarity: ["clear", "blurry", "other"],
-    visibility: ["occluded", "truncated", "full-view", "other"]
+    Representation: ["real", "caricature", "other"],
+    Orientation: ["cardinal", "oblique", "other"],
+    Scope: ["close-up", "single", "multiple", "skyline", "other"],
+    User: ["human", "animal", "other"],
+    Function: ["domicile", "business", "attraction","institution","other"],
+    Construction: ["house","row-house","apartment", "castle", "other"],
+    Clarity: ["clear", "blurry", "other"],
+    Visibility: ["occluded", "truncated", "full-view", "other"]
   };
 
   const numberOptions = {
-    number: ["multi-digit", "0","1","2","3","4","5","6","7","8","9"],
-    representation: ["non-symbolic", "symbolic"],
-    clarity: ["clear", "blurry", "other"],
-    visibility: ["occluded", "truncated", "full-view", "other"]
+    Number: ["multi-digit", "0","1","2","3","4","5","6","7","8","9"],
+    Representation: ["non-symbolic", "symbolic"],
+    Clarity: ["clear", "blurry", "other"],
+    Visibility: ["occluded", "truncated", "full-view", "other"]
     
   };
 
   const wordOptions = {
-    case: ["uppercase", "lowercase"],
-    "single-letter": ["a", "b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"],
-    "multi-letter": ["word", "nonword-pronounceable", "nonword-unpronounceable", "proper noun", "other"],
-    language: ["English", "Spanish", "other"],
-    clarity: ["clear", "blurry", "other"],
-    visibility: ["occluded", "truncated", "full-view", "other"]
+    "Multi-letter": ["word", "nonword-pronounceable", "nonword-unpronounceable", "proper noun", "other"],
+    Case: ["uppercase", "lowercase"],
+    // "single-letter": ["a", "b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"],
+    Language: ["English", "Spanish", "other"],
+    Clarity: ["clear", "blurry", "other"],
+    Visibility: ["occluded", "truncated", "full-view", "other"]
     
   };
 
   const renderCheckboxes = (options: { [key: string]: string[] }, category: string) => {
     return Object.keys(options).map((key) => (
       <div key={key} className="checkbox-category">
-        <strong>{key.toUpperCase()}:</strong>
+        <strong>{key}:</strong>
         {options[key].map((option) => (
           <label key={option} className="checkbox-label">
             <input
@@ -206,6 +239,7 @@ const SearchImageAttributes: React.FC = () => {
     setBoxQueryY(null);
     setBoxQueryHeight(null);
     setBoxQueryWidth(null);
+    setSingleLetter(""); // Clear the single letter search
     
     // Clear the search results and message
     setAnnotations([]);
@@ -242,6 +276,17 @@ const SearchImageAttributes: React.FC = () => {
 
         <div className="checkbox-row">
           <h3>Words</h3>
+              {/* Single letter search input */}
+            <div className="single-letter-container">
+              <label htmlFor="single-letter"><strong>Single-Letter:</strong></label>
+              <input
+                type="text"
+                id="single-letter"
+                value={singleLetter}
+                onChange={handleSingleLetterChange}
+                placeholder="a"
+              />
+            </div>
           {renderCheckboxes(wordOptions, 'WORD')}
         </div>
         <Divider></Divider>

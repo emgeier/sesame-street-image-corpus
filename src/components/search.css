@@ -104,3 +104,27 @@ li {
   position: relative; /* Ensure the popup is positioned relative to the page */
   margin-top: 150px;
 }
+
+
+/* Style for the single-letter input box to make it narrower */
+#single-letter {
+  width: 50px;  /* Adjust width to your preference */
+  text-align: center; /* Center text for single-letter input */
+ 
+}
+
+/* Ensure labels and inputs are aligned properly */
+.single-letter-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;  /* Add space below for consistent spacing */
+}
+.single-letter-container label {
+  margin-right: 10px;
+}
+
+/* This is to align multi-letter and single-letter labels and inputs */
+.checkbox-label {
+  display: flex;
+  align-items: center;
+}

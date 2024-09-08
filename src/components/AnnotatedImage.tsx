@@ -41,7 +41,7 @@ const AnnotatedImage: React.FC<AnnotatedImageProps> = ({ imageUrl, boundingBoxes
         boundingBoxes.forEach(box => {
           const color = getColorFromId(box.id);
           context.strokeStyle = color;
-          context.lineWidth = 2;
+          context.lineWidth = 3;
           context.fillStyle = color;
           context.font = '16px Arial';
 

@@ -117,6 +117,7 @@ const Search: React.FC = () => {
     setCurrentPageIndex(0); // Reset to the first page
   };
   const handleImageClick = (imageId: string) => {
+    setSelectedImage(undefined);
     const selectedAnnotations = groupedAnnotations[imageId];
     setSelectedAnnotations(selectedAnnotations);
     if (!selectedAnnotations || selectedAnnotations.length === 0) return;
@@ -177,7 +178,7 @@ const Search: React.FC = () => {
                     {({  }) => (
     <div>
       <main className='main-content'>
-        <h2>Search</h2>
+        <h1 className="intro">Search</h1>
         <div className="search-controls">
       <div className="search-control">
         <label htmlFor="category">Category: </label>
@@ -228,7 +229,7 @@ const Search: React.FC = () => {
         {selectedImageUrl && (
           <div>
             {selectedImage && (
-            <h3>{selectedImage?.episode_title} <br/>Season {selectedImage?.season}<br/> {selectedImage?.air_year}</h3>
+            <h3>{selectedImage?.episode_title} <br/>Season {selectedImage?.season}<br/> Episode {selectedImage?.episode_id}<br/> {selectedImage?.air_year}</h3>
           )}
             <AnnotatedImage imageUrl={selectedImageUrl} boundingBoxes={boundingBoxes} />
             <AttributeDetails annotations={selectedAnnotations}/>

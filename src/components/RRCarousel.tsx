@@ -31,7 +31,7 @@ const RRCarousel: React.FC = () => (
     autoFocus={false} 
     animationHandler="fade" 
     swipeable={false} 
-    showArrows={false} 
+    showArrows={true} 
     showIndicators={false}
     showThumbs={false}
     stopOnHover={true}

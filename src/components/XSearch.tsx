@@ -3,6 +3,7 @@ import type { Schema } from "../../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
 import { getUrl } from 'aws-amplify/storage';
 import AnnotatedImage from "./AnnotatedImage";
+import EpisodeCarousel from "./EpisodeCarousel";
 
 interface BoundingBox {
     x: number;
@@ -284,7 +285,7 @@ const XSearch: React.FC = () => {
   return (
     <main className="main-content">
       <div className='separator'></div>
-      <h2>Episode Search </h2>
+      <h1 className="intro">Episode Search </h1>
       <div className="search-controls">
       <div className="search-control">
           <label htmlFor="episodeNumber">Episode:</label>
@@ -337,10 +338,13 @@ const XSearch: React.FC = () => {
           {images.slice(currentPageIndex * itemsPerPage, currentPageIndex*itemsPerPage + itemsPerPage).map((image) => (
               <ul className="annotation-item" key={`${image.image_id}`} onClick={() => handleImageClick(image)}>
                 {image.imageUrl && <img src={image.imageUrl} style={{ maxWidth: '200px', height: 'auto', cursor: 'pointer' }} />}
-                <br></br><strong>Image:</strong> {image.image_id}<br />
+                <br></br>
+                Time: {Math.floor(parseInt(image.image_id) / 60)}:{String(parseInt(image.image_id)% 60).padStart(2, '0')}<br />
+                <br />
                 </ul>
           ))}
         </ul>
+        <p>Click image to see annotations</p>
         <div>{searchMessage && <p>{searchMessage}</p>} </div>
         <div className="page-buttons">
         <button onClick={handlePreviousPage} disabled={currentPageIndex === 0 || loading}>Previous</button>
@@ -355,6 +359,11 @@ const XSearch: React.FC = () => {
             <AnnotatedImage imageUrl={selectedImage} boundingBoxes={boundingBoxes}></AnnotatedImage>
         </ul>
       )}
+      <br></br>
+      <br></br>
+      <EpisodeCarousel images={images}></EpisodeCarousel>
+      <br></br>
+      <br></br>
     </main>
   );
 };

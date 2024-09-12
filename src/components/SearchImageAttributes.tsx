@@ -251,7 +251,7 @@ const SearchImageAttributes: React.FC = () => {
     {({  }) => (
     <main className="main-content">
       <div className="separator"></div>
-      <h3>Annotation Search</h3>
+      <h1 className="intro">Multi-Category Annotation Search</h1>
       <Divider></Divider>
 
       <div className="search-controls">

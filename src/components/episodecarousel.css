@@ -1,0 +1,94 @@
+.carousel-wrapper {
+    width: 60%;
+  }
+
+.carousel .slide {
+  transition: transform 1s ease;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.carousel .slide img {
+  transform: rotateY(0deg);
+  transition: transform 2s ease;
+  max-width: 100%;
+}
+
+
+.carousel .carousel-slider .control-arrow:hover {
+  cursor: pointer;
+}
+
+.carousel .carousel-slider .control-arrow {
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+
+.carousel .carousel-slider .control-arrow.control-prev {
+  left: 10px;
+}
+
+.carousel .carousel-slider .control-arrow.control-next {
+  right: 10px;
+}
+
+.carousel .carousel-slider .slide {
+  transition: transform 1.6s;
+}
+
+.carousel .carousel-slider .slide.selected {
+  transform: rotateY(0deg);
+}
+
+.carousel .carousel-slider .slide.prevSlide,
+.carousel .carousel-slider .slide.nextSlide {
+  transform: rotateY(-180deg);
+}
+.carousel .thumbs-wrapper {
+    max-width: 100%; /* Ensure the thumbnails take up the full width of the container */
+    overflow:scroll;
+    padding: 10px;
+    white-space: nowrap; /* Prevent thumbnails from wrapping to the next line */
+  }
+  
+  .carousel .thumbs {
+    display: inline-block; /* Display thumbnails in a horizontal line */
+    white-space: nowrap; /* Prevent thumbnails from wrapping */
+  }
+  
+  .carousel .thumb {
+    width: 200px !important; /* Adjust the size of the thumbnail */
+    height: auto;
+    margin: 0 5px;
+    display: inline-block;
+    object-fit: contain;
+  }
+  
+  .carousel .thumb img {
+    width: 100%;
+    height: auto;
+    object-fit: cover; /* Ensure the image fits within the thumbnail */
+    display: block;
+  }
+  .carousel .slide img {
+  transition: opacity 2s ease-in-out; /* Make the fade smooth */
+  opacity: 1;
+}
+
+.carousel .slide {
+  transition: opacity 2s ease-in-out;
+  opacity: 1;
+}
+
+.carousel .slide.fade.selected {
+  opacity: 1; /* The selected slide should be fully opaque */
+}
+
+.carousel .slide.fade:not(.selected) {
+  opacity: 0; /* All other slides should be fully transparent */
+}
+
+  

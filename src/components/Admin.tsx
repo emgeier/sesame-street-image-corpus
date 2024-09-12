@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { uploadData, getUrl } from 'aws-amplify/storage';
+import { Divider } from '@aws-amplify/ui-react';
 
 
 const Admin: React.FC = () => {
@@ -121,6 +122,8 @@ const Admin: React.FC = () => {
   return (
   
     <div className="main-content">
+      <h1 className='intro'>Add Images and Annotations to Archive</h1>
+      <Divider></Divider>
       <h3>Upload Folder</h3>
       <input
         type="file"
@@ -135,6 +138,7 @@ const Admin: React.FC = () => {
       <div className="separator" />
       <div>{message && <p>{message}</p>}</div>
       <div className="separator" />
+      <Divider></Divider>
       <h3>Upload Individual Image File</h3>
       <input
         type="file"

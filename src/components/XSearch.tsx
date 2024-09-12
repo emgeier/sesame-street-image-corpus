@@ -24,6 +24,7 @@ const XSearch: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [selectedImage, setSelectedImage] = useState<string>("");
+  const[image, setImage] = useState<Schema["Image"]["type"]>();
   const [selectedFullImageId, setSelectedFullImageId] = useState<string>("");
 
   const [images, setImages] = useState<Array<Schema["Image"]["type"] & { imageUrl?: string }>>([]);
@@ -259,10 +260,12 @@ const XSearch: React.FC = () => {
   };
 
   const handleImageClick = (image :Schema["Image"]["type"]  & { imageUrl?: string }) => {
+
     if (!image.imageUrl) return;
     const fullImageId = concatenateImageIdForAnnotations(image);
     setSelectedFullImageId(fullImageId);
     setSelectedImage(image.imageUrl);
+    setImage(image);
   };
   useEffect(() => {
     if (selectedFullImageId && selectedImage) {
@@ -355,8 +358,8 @@ const XSearch: React.FC = () => {
       )}
       {selectedFullImageId && (
         <ul>
-            <h4>Annotated Image</h4>
-            <AnnotatedImage imageUrl={selectedImage} boundingBoxes={boundingBoxes}></AnnotatedImage>
+          {image?.episode_title} <br/>Season {image?.season}<br/> Episode {image?.episode_id}<br/> {image?.air_year}
+          <AnnotatedImage imageUrl={selectedImage} boundingBoxes={boundingBoxes}></AnnotatedImage>
         </ul>
       )}
       <br></br>

@@ -16,7 +16,6 @@ const SearchImageAttributes: React.FC = () => {
   const [boxQueryY, setBoxQueryY]= useState<number | null>(null); // 
   const [boxQueryHeight, setBoxQueryHeight]= useState<number | null>(null); // 
   const [boxQueryWidth, setBoxQueryWidth]= useState<number | null>(null); // 
-  // const [keywords] = useState<string[]>([]);  
   const [singleLetter, setSingleLetter] = useState<string>(""); // New state for single letter search
 
   const [selectedCategories, setSelectedCategories] = useState<{ [key: string]: string[] }>({
@@ -28,160 +27,204 @@ const SearchImageAttributes: React.FC = () => {
 
   const fetchSearchResultAnnotations = async () => {
     try {
-      const categoryImageIdSets: Array<Set<string>> = []; // Array to hold sets of image IDs for each category
+      const categoryAnnotationsMap: { [category: string]: { annotations: any[]; imageIds: Set<string> } } = {}; // Map to hold annotations and image IDs for each category
   
-      // 1. Collect Image IDs for Each Selected Category
-      for (const category of Object.keys(selectedCategories)) {
-        const attributes = selectedCategories[category];
+      // 1. Collect Annotations and Image IDs for Each Selected Category or only Single Letter Search or only bounding box search
+      const hasSelectedCategories = Object.keys(selectedCategories).length > 0;
+      const hasSingleLetter = singleLetter.trim() !== "";
+      const hasBoundingBoxFilters = boxQueryX || boxQueryY || boxQueryHeight || boxQueryWidth;
+
+      if (hasSelectedCategories || hasSingleLetter || hasBoundingBoxFilters) {
+        //If it has single letter, add word category if not already added, use single letter in filter
+        // Handle selected categories
+        for (const category of Object.keys(selectedCategories)) {
+          const attributes = selectedCategories[category];
   
-        if (attributes.length > 0) {
           // Build the filter for the current category
           const filter: any = {
-            and: [
-              { category: { eq: category } }, // Filter by category
-            ],
+            and: [],
           };
+          //If it has single letter, use single letter in filter
+          if (hasSingleLetter && category=='WORD') {
+            filter.and.push({singleletter: {eq: singleLetter}});
+            };
+          
+          // Add category filter
+          filter.and.push({ category: { eq: category } });
   
           // Add attribute filters
-          attributes.forEach((attribute) => {
-            filter.and.push({ keywords: { contains: attribute } });
-          });
+          if (attributes.length > 0) {
+            attributes.forEach((attribute) => {
+              filter.and.push({ keywords: { contains: attribute } });
+            });
+          }
   
           // Add bounding box filters if applicable
-          if (boxQueryX) {
+          if (boxQueryX !== null) {
             filter.and.push({ x: { ge: boxQueryX } });
           }
-          if (boxQueryY) {
+          if (boxQueryY !== null) {
             filter.and.push({ y: { ge: boxQueryY } });
           }
-          if (boxQueryHeight) {
+          if (boxQueryHeight !== null) {
             filter.and.push({ height: { le: boxQueryHeight } });
           }
-          if (boxQueryWidth) {
+          if (boxQueryWidth !== null) {
             filter.and.push({ width: { le: boxQueryWidth } });
           }
   
           // Query annotations for the current category
           const result: any = await client.models.Annotation.list({
             filter: filter,
-            limit: 10000, // Adjust limit as needed
+            limit: 40000, // Adjust limit as needed
           });
   
-          // Collect image IDs from the results
+          // Collect annotations and image IDs from the results
+          const annotations = result.data;
           const imageIds = new Set<string>();
-          result.data.forEach((annotation: any) => {
+          annotations.forEach((annotation: any) => {
             imageIds.add(annotation.image_id);
           });
   
-          // Add the set of image IDs to the array
-          categoryImageIdSets.push(imageIds);
+          // Store the annotations and image IDs in the map
+          categoryAnnotationsMap[category] = { annotations, imageIds };
         }
-      }
-  
-      // If single letter search is selected (for 'WORD' category)
-      if (singleLetter) {
-        const filter: any = {
-          and: [
-            { category: { eq: 'WORD' } },
-            { singleletter: { eq: singleLetter } },
-          ],
-        };
-  
-        // Add bounding box filters if applicable
-        if (boxQueryX) {
-          filter.and.push({ x: { ge: boxQueryX } });
-        }
-        if (boxQueryY) {
-          filter.and.push({ y: { ge: boxQueryY } });
-        }
-        if (boxQueryHeight) {
-          filter.and.push({ height: { le: boxQueryHeight } });
-        }
-        if (boxQueryWidth) {
-          filter.and.push({ width: { le: boxQueryWidth } });
-        }
-  
-        const result: any = await client.models.Annotation.list({
-          filter: filter,
-          limit: 10000, // Adjust limit as needed
-        });
-  
-        // Collect image IDs from the results
-        const imageIds = new Set<string>();
-        result.data.forEach((annotation: any) => {
-          imageIds.add(annotation.image_id);
-        });
-  
-        // Add the set of image IDs to the array
-        categoryImageIdSets.push(imageIds);
-      }
-  
-      // 2. Compute the Intersection of Image IDs
-      let commonImageIds: Set<string>;
-  
-      if (categoryImageIdSets.length > 0) {
-        // Start with the image IDs from the first category
-        commonImageIds = categoryImageIdSets[0];
-  
-        // Intersect with image IDs from other categories
-        for (let i = 1; i < categoryImageIdSets.length; i++) {
-          commonImageIds = new Set([...commonImageIds].filter(imageId => categoryImageIdSets[i].has(imageId)));
-        }
-      } else {
-        // If no categories are selected, handle accordingly
-        setSearchMessage('No categories or attributes selected.');
-        return;
-      }
-  
-      // 3. Fetch Annotations for Common Image IDs
-      const allAnnotations: any[] = [];
-  
-      if (commonImageIds.size > 0) {
-        // Batch fetch annotations using image IDs
-        const imageIdArray = Array.from(commonImageIds);
-  
-        // Due to limits on batch operations, you may need to batch the image IDs
-        const batchSize = 100; // Adjust as needed
-        for (let i = 0; i < imageIdArray.length; i += batchSize) {
-          const batchIds = imageIdArray.slice(i, i + batchSize);
-  
-          // Build an 'or' filter with multiple 'eq' conditions
-          const imageIdFilters = batchIds.map(id => ({ image_id: { eq: id } }));
-          const batchFilter = {
-            or: imageIdFilters,
+        
+        // Handle single letter search separately if other 'WORD' category attribute isn't selected
+        if (hasSingleLetter && !selectedCategories['WORD']) {
+          const filter: any = {
+            and: [
+              { category: { eq: 'WORD' } },
+              { singleletter: { eq: singleLetter } },
+            ],
           };
   
+          // Add bounding box filters if exist
+          if (boxQueryX !== null) {
+            filter.and.push({ x: { ge: boxQueryX } });
+          }
+          if (boxQueryY !== null) {
+            filter.and.push({ y: { ge: boxQueryY } });
+          }
+          if (boxQueryHeight !== null) {
+            filter.and.push({ height: { le: boxQueryHeight } });
+          }
+          if (boxQueryWidth !== null) {
+            filter.and.push({ width: { le: boxQueryWidth } });
+          }
+  
           const result: any = await client.models.Annotation.list({
-            filter: batchFilter,
-            limit: 10000,
+            filter: filter,
+            limit: 40000, // Adjust limit as needed
           });
   
-          // Fetch image URLs and combine with annotations
-          const annotationsWithUrls = await Promise.all(
-            result.data.map(async (annotation: any) => {
-              const imageUrl = await fetchImageUrl(annotation.image_id);
-              return { ...annotation, imageUrl };
-            })
-          );
+          // Collect annotations and image IDs from the results
+          const annotations = result.data;
+          const imageIds = new Set<string>();
+          annotations.forEach((annotation: any) => {
+            imageIds.add(annotation.image_id);
+          });
   
-          allAnnotations.push(...annotationsWithUrls);
+          // Store the annotations and image IDs in the map under 'WORD' category
+          categoryAnnotationsMap['WORD'] = { annotations, imageIds };
         }
-      } else {
-        setSearchMessage('No results found matching all selected criteria.');
-        return;
+        // Handle case where only bounding box parameters are provided
+        if (!hasSelectedCategories && !hasSingleLetter && hasBoundingBoxFilters) {
+          // Build the filter
+          const filter: any = {
+            and: [],
+          };
+          // Add bounding box filters if applicable
+          if (boxQueryX !== null) {
+            filter.and.push({ x: { ge: boxQueryX } });
+          }
+          if (boxQueryY !== null) {
+            filter.and.push({ y: { ge: boxQueryY } });
+          }
+          if (boxQueryHeight !== null) {
+            filter.and.push({ height: { le: boxQueryHeight } });
+          }
+          if (boxQueryWidth !== null) {
+            filter.and.push({ width: { le: boxQueryWidth } });
+          }
+        // Query annotations with only bounding box filters
+        const result: any = await client.models.Annotation.list({
+          filter: filter,
+          limit: 40000, // Adjust limit as needed
+        });
+
+        // Collect annotations and image IDs from the results
+        const annotations = result.data;
+        const imageIds = new Set<string>();
+        annotations.forEach((annotation: any) => {
+          imageIds.add(annotation.image_id);
+        });
+
+        // Store the annotations and image IDs in the map under a placeholder category
+        categoryAnnotationsMap["ALL"] = { annotations, imageIds };
       }
   
-      // 4. Update the State with Final Annotations
-      setAnnotations(allAnnotations);
-      const numberSearchResults = allAnnotations.length.toString();
-      setSearchMessage(`Search results returned: ${numberSearchResults}`);
+        // 2. Compute the Intersection of Image IDs
+        let finalImageIds: Set<string>;
   
+        const categories = Object.keys(categoryAnnotationsMap);
+        if (categories.length > 0) {
+          // If multiple categories are selected, compute the intersection
+          if (categories.length > 1) {
+            finalImageIds = categoryAnnotationsMap[categories[0]].imageIds;
+  
+            for (let i = 1; i < categories.length; i++) {
+              finalImageIds = new Set(
+                [...finalImageIds].filter((imageId) => categoryAnnotationsMap[categories[i]].imageIds.has(imageId))
+              );
+            }
+          } else {
+            // If only one category or single letter is selected, use its image IDs
+            finalImageIds = categoryAnnotationsMap[categories[0]].imageIds;
+          }
+          
+        } else {
+          setSearchMessage('No search criteria provided.');
+          return;
+        }
+  
+        // 3. Filter Annotations to Only Include Those from Final Image IDs
+        const allAnnotations: any[] = [];
+  
+        if (finalImageIds.size > 0) {
+          // For each category, filter annotations to only include those with image IDs in finalImageIds
+          for (const category of categories) {
+            const { annotations } = categoryAnnotationsMap[category];
+  
+            const filteredAnnotations = annotations.filter((annotation) => finalImageIds.has(annotation.image_id));
+  
+            // Fetch image URLs for filtered annotations
+            const annotationsWithUrls = await Promise.all(
+              filteredAnnotations.map(async (annotation: any) => {
+                const imageUrl = await fetchImageUrl(annotation.image_id);
+                return { ...annotation, imageUrl };
+              })
+            );
+  
+            allAnnotations.push(...annotationsWithUrls);
+          }
+        } else {
+          setSearchMessage('No results found matching the search criteria.');
+          return;
+        }
+  
+        // 4. Update the State with Final Annotations
+        setAnnotations(allAnnotations);
+        const numberSearchResults = allAnnotations.length.toString();
+        setSearchMessage(`Search results returned: ${numberSearchResults}`);
+      } else {
+        setSearchMessage('Please provide search criteria.');
+      }
     } catch (error) {
       console.error('Failed to fetch annotations:', error);
       setSearchMessage('Failed to return search results.');
     }
   };
-  
   
   // Code retained for if we want to restore the visualization of the search in this component  
   const fetchImageUrl = async (imageId: string): Promise<string> => {
@@ -367,6 +410,7 @@ const SearchImageAttributes: React.FC = () => {
           type="number"
           id="x-coordinate"
           placeholder="x"
+          value={boxQueryX !== null ? boxQueryX : ""}
           onChange={handleBoxXLocationChange}
         /></div>
                 <div >
@@ -375,6 +419,7 @@ const SearchImageAttributes: React.FC = () => {
           type="number"
           id="y-coordinate"
           placeholder="y"
+          value={boxQueryY !== null ? boxQueryY : ""}
           onChange={handleBoxYLocationChange}
         /></div>
         <div>
@@ -383,6 +428,7 @@ const SearchImageAttributes: React.FC = () => {
           type="number"
           id="height"
           placeholder="50"
+          value={boxQueryHeight !== null ? boxQueryHeight : ""}
           onChange={handleBoxHeightLocationChange}
         /></div>
         <div >
@@ -390,6 +436,7 @@ const SearchImageAttributes: React.FC = () => {
           <input
           type="number"
           id="width"
+          value={boxQueryWidth !== null ? boxQueryWidth : ""}
           placeholder="100"
           onChange={handleBoxWidthLocationChange}
           />

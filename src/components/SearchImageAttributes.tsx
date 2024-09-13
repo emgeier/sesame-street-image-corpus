@@ -16,7 +16,7 @@ const SearchImageAttributes: React.FC = () => {
   const [boxQueryY, setBoxQueryY]= useState<number | null>(null); // 
   const [boxQueryHeight, setBoxQueryHeight]= useState<number | null>(null); // 
   const [boxQueryWidth, setBoxQueryWidth]= useState<number | null>(null); // 
-  const [keywords] = useState<string[]>([]);  
+  // const [keywords] = useState<string[]>([]);  
   const [singleLetter, setSingleLetter] = useState<string>(""); // New state for single letter search
 
   const [selectedCategories, setSelectedCategories] = useState<{ [key: string]: string[] }>({
@@ -26,94 +26,163 @@ const SearchImageAttributes: React.FC = () => {
     Header: CustomHeader,
   };
 
-  const fetchSearchResultAnnotations = async (token: string | null = null) => {
-    console.log(singleLetter);
-    const allAnnotations: any[] = [];
-    let nextToken: string | null = token;
+  const fetchSearchResultAnnotations = async () => {
     try {
-      const filter: any = {
-        and: []
-      };
-      if (boxQueryX) {
-        filter.and.push({ x: { ge: boxQueryX } });
-      }
-      if (boxQueryY) {
-        filter.and.push({ y: { ge: boxQueryY } });
-      }
-      if (boxQueryHeight) {
-        filter.and.push({ height: { le: boxQueryHeight } });
-      }
-      if (boxQueryWidth) {
-        filter.and.push({ width: { le: boxQueryWidth } });
-      }
-      // Add single letter filter if it's selected
-      if (singleLetter) {
-        filter.and.push({ singleletter: { eq: singleLetter } });
-
-        
-        console.log("Letter: "+singleLetter);
-
-        console.log("Categories selected: "+Object.keys(selectedCategories).length)
-        if(Object.keys(selectedCategories).length == 0){
-          filter.and.push({ category: { eq: "WORD" } });
-          console.log("if selected categories are empty");
-          const result: any = await client.models.Annotation.list({
-            filter: filter.and.length ? filter : undefined,
-            limit: 40000,
-            nextToken: token,
-          });
-
-          //Currently urls will expire due to security requirements, eliminate ?
-
-          const annotationsWithUrls = await Promise.all(
-            result.data.map(async (annotation: any) => {
-              const imageUrl = await fetchImageUrl(annotation.image_id);
-              return { ...annotation, imageUrl };
-            })
-          );
-
-          allAnnotations.push(...annotationsWithUrls);
-
-        }
-      }
-      //Set up for multiple category searches, but currently works for only one 
+      const categoryImageIdSets: Array<Set<string>> = []; // Array to hold sets of image IDs for each category
+  
+      // 1. Collect Image IDs for Each Selected Category
       for (const category of Object.keys(selectedCategories)) {
-        if (selectedCategories[category].length > 0 || keywords.length > 0) {
-         
-          filter.and.push({ category: { eq: category } });
-          
-          selectedCategories[category].forEach((attribute) => {
+        const attributes = selectedCategories[category];
+  
+        if (attributes.length > 0) {
+          // Build the filter for the current category
+          const filter: any = {
+            and: [
+              { category: { eq: category } }, // Filter by category
+            ],
+          };
+  
+          // Add attribute filters
+          attributes.forEach((attribute) => {
             filter.and.push({ keywords: { contains: attribute } });
           });
-          
-        }
-        
+  
+          // Add bounding box filters if applicable
+          if (boxQueryX) {
+            filter.and.push({ x: { ge: boxQueryX } });
+          }
+          if (boxQueryY) {
+            filter.and.push({ y: { ge: boxQueryY } });
+          }
+          if (boxQueryHeight) {
+            filter.and.push({ height: { le: boxQueryHeight } });
+          }
+          if (boxQueryWidth) {
+            filter.and.push({ width: { le: boxQueryWidth } });
+          }
+  
+          // Query annotations for the current category
           const result: any = await client.models.Annotation.list({
-            filter: filter.and.length ? filter : undefined,
-            limit: 40000,
-            nextToken: token,
+            filter: filter,
+            limit: 10000, // Adjust limit as needed
           });
-
-          //Currently urls will expire due to security requirements, eliminate ?
-
+  
+          // Collect image IDs from the results
+          const imageIds = new Set<string>();
+          result.data.forEach((annotation: any) => {
+            imageIds.add(annotation.image_id);
+          });
+  
+          // Add the set of image IDs to the array
+          categoryImageIdSets.push(imageIds);
+        }
+      }
+  
+      // If single letter search is selected (for 'WORD' category)
+      if (singleLetter) {
+        const filter: any = {
+          and: [
+            { category: { eq: 'WORD' } },
+            { singleletter: { eq: singleLetter } },
+          ],
+        };
+  
+        // Add bounding box filters if applicable
+        if (boxQueryX) {
+          filter.and.push({ x: { ge: boxQueryX } });
+        }
+        if (boxQueryY) {
+          filter.and.push({ y: { ge: boxQueryY } });
+        }
+        if (boxQueryHeight) {
+          filter.and.push({ height: { le: boxQueryHeight } });
+        }
+        if (boxQueryWidth) {
+          filter.and.push({ width: { le: boxQueryWidth } });
+        }
+  
+        const result: any = await client.models.Annotation.list({
+          filter: filter,
+          limit: 10000, // Adjust limit as needed
+        });
+  
+        // Collect image IDs from the results
+        const imageIds = new Set<string>();
+        result.data.forEach((annotation: any) => {
+          imageIds.add(annotation.image_id);
+        });
+  
+        // Add the set of image IDs to the array
+        categoryImageIdSets.push(imageIds);
+      }
+  
+      // 2. Compute the Intersection of Image IDs
+      let commonImageIds: Set<string>;
+  
+      if (categoryImageIdSets.length > 0) {
+        // Start with the image IDs from the first category
+        commonImageIds = categoryImageIdSets[0];
+  
+        // Intersect with image IDs from other categories
+        for (let i = 1; i < categoryImageIdSets.length; i++) {
+          commonImageIds = new Set([...commonImageIds].filter(imageId => categoryImageIdSets[i].has(imageId)));
+        }
+      } else {
+        // If no categories are selected, handle accordingly
+        setSearchMessage('No categories or attributes selected.');
+        return;
+      }
+  
+      // 3. Fetch Annotations for Common Image IDs
+      const allAnnotations: any[] = [];
+  
+      if (commonImageIds.size > 0) {
+        // Batch fetch annotations using image IDs
+        const imageIdArray = Array.from(commonImageIds);
+  
+        // Due to limits on batch operations, you may need to batch the image IDs
+        const batchSize = 100; // Adjust as needed
+        for (let i = 0; i < imageIdArray.length; i += batchSize) {
+          const batchIds = imageIdArray.slice(i, i + batchSize);
+  
+          // Build an 'or' filter with multiple 'eq' conditions
+          const imageIdFilters = batchIds.map(id => ({ image_id: { eq: id } }));
+          const batchFilter = {
+            or: imageIdFilters,
+          };
+  
+          const result: any = await client.models.Annotation.list({
+            filter: batchFilter,
+            limit: 10000,
+          });
+  
+          // Fetch image URLs and combine with annotations
           const annotationsWithUrls = await Promise.all(
             result.data.map(async (annotation: any) => {
               const imageUrl = await fetchImageUrl(annotation.image_id);
               return { ...annotation, imageUrl };
             })
           );
-
+  
           allAnnotations.push(...annotationsWithUrls);
+        }
+      } else {
+        setSearchMessage('No results found matching all selected criteria.');
+        return;
       }
-        setAnnotations(allAnnotations);
-        const numberSearchResults = allAnnotations.length.toString();
-        setSearchMessage(nextToken ? `Search results returned: ${numberSearchResults}. More results available.` : `Search results returned: ${numberSearchResults}`);
-    
-      } catch (error) {
-        console.error("Failed to fetch annotations:", error);
-        setSearchMessage("Failed to return search results.");
-      }
-    };
+  
+      // 4. Update the State with Final Annotations
+      setAnnotations(allAnnotations);
+      const numberSearchResults = allAnnotations.length.toString();
+      setSearchMessage(`Search results returned: ${numberSearchResults}`);
+  
+    } catch (error) {
+      console.error('Failed to fetch annotations:', error);
+      setSearchMessage('Failed to return search results.');
+    }
+  };
+  
+  
   // Code retained for if we want to restore the visualization of the search in this component  
   const fetchImageUrl = async (imageId: string): Promise<string> => {
     try {
@@ -251,7 +320,7 @@ const SearchImageAttributes: React.FC = () => {
     {({  }) => (
     <main className="main-content">
       <div className="separator"></div>
-      <h1 className="intro">Multi-Category Annotation Search</h1>
+      <h2>Annotation Search</h2>
       <Divider></Divider>
 
       <div className="search-controls">

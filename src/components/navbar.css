@@ -10,9 +10,10 @@
   justify-content: space-between; 
   align-items: center; 
   padding: 5px 5px;
-  z-index: 1000;
   /* overflow: hidden;  causes the dropdown menu to disappear*/ 
   transition: top 0.3s;
+  z-index: 4000;
+
 }
 .navbar-icon {
   width: 50px;

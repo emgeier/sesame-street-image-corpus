@@ -82,10 +82,10 @@ const Navbar: React.FC = () => {
         <li><Link to="/"  onClick={closeMenu} className={currentPath === '/' ? 'current-page' : ''} >Home</Link></li>
         <li><Link to="/guide"  onClick={closeMenu} className={currentPath === '/guide' ? 'current-page' : ''}>Guide</Link></li>
         <li><Link to="/about"  onClick={closeMenu} className={currentPath === '/about' ? 'current-page' : ''}>About</Link></li>
-        <li><Link to="/metrics"  onClick={closeMenu} className={currentPath === '/metrics' ? 'current-page' : ''}>Metrics</Link></li>
         <li><Link to="/search"  onClick={closeMenu} className={currentPath === '/search' ? 'current-page' : ''}>Search</Link></li>
         <li><Link to="/download"  onClick={closeMenu} className={currentPath === '/download' ? 'current-page' : ''}>Download</Link></li>
         <li><Link to="/admin"  onClick={closeMenu} className={currentPath === '/admin' ? 'current-page' : ''}>Upload</Link></li>
+        <li><a href='/ssic_analysis.html'target="_blank" rel="noopener noreferrer">Metrics</a></li>
         <li><a href="https://peabody.az1.qualtrics.com/jfe/form/SV_eRQUVmfS4d7q4yq" target="_blank" rel="noopener noreferrer">
               Survey
             </a></li>

@@ -5,15 +5,11 @@ import landlabicon from '../assets/images/LandLab.png';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="footer">
+    <footer className="footer">      
       <div className="footer-links">
         <Link to="/">Home</Link>
         <Link to="/guide">Guide</Link>
         <Link to="/about">About</Link>
-        <Link to="/metrics">Metrics</Link>
-        <a href="https://peabody.az1.qualtrics.com/jfe/form/SV_eRQUVmfS4d7q4yq" target="_blank" rel="noopener noreferrer">
-              Survey
-            </a>
       </div>
       <div className="footer-text">
         © 2024 LANDLAB    
@@ -23,7 +19,6 @@ const Footer: React.FC = () => {
         <img src={landlabicon} alt="LANDLab icon" width={50} />
         </a>
       </div>
-
     </footer>
   );
 };

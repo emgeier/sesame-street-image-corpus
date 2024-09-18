@@ -1,7 +1,7 @@
 /* carousel.css */
 .carousel-container {
   width: 100%;            /* Carousel takes up full width of the screen */
-  max-width: 800px;      /* Maximum width for larger screens */
+  max-width: 1200px;      /* Maximum width for larger screens */
   margin: 0 auto;         /* Center the carousel horizontally */
   display: flex;          /* Use flexbox for alignment */
   justify-content: center;/* Center the carousel content */

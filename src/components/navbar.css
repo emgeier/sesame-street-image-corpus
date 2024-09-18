@@ -164,6 +164,9 @@
     padding: 8px;
     margin-right: 1px;
   }
+  .navbar {
+    z-index: 4000;
+  }
 }
 
 @media (max-width: 820px) {

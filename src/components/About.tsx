@@ -5,7 +5,12 @@ function About() {
   return (
     <div>
       <div className='separator'></div>
-      <header className="banner"></header>
+      <div className='separator'></div>
+      <div className='separator'></div>
+      <div className='separator'></div>
+
+      <header className="banner1"></header>
+      
       <div className='separator'></div>
     <main>
       <h1 className='intro'>About the<i>Sesame Street</i>Image Archive</h1>

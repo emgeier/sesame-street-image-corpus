@@ -364,6 +364,7 @@ const XSearch: React.FC = () => {
       )}
       <br></br>
       <br></br>
+      <h3>Slideshow</h3>
       <EpisodeCarousel images={images}></EpisodeCarousel>
       <br></br>
       <br></br>

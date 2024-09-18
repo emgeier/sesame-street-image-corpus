@@ -6,7 +6,10 @@ function Guide() {
   return (
     <div>
       <div className='separator'></div>
-      <header className="banner"></header>
+      <div className='separator'></div>
+      <div className='separator'></div>
+      <div className='separator'></div>
+      <header className="banner2"></header>
       <div className='separator'></div>
     <main>
       

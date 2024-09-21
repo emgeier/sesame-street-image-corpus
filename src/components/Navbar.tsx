@@ -85,10 +85,8 @@ const Navbar: React.FC = () => {
         <li><Link to="/search"  onClick={closeMenu} className={currentPath === '/search' ? 'current-page' : ''}>Search</Link></li>
         <li><Link to="/download"  onClick={closeMenu} className={currentPath === '/download' ? 'current-page' : ''}>Download</Link></li>
         <li><Link to="/admin"  onClick={closeMenu} className={currentPath === '/admin' ? 'current-page' : ''}>Upload</Link></li>
-        <li><a href='/ssic_analysis.html'target="_blank" rel="noopener noreferrer">Metrics</a></li>
-        <li><a href="https://peabody.az1.qualtrics.com/jfe/form/SV_eRQUVmfS4d7q4yq" target="_blank" rel="noopener noreferrer">
-              Survey
-            </a></li>
+        <li><Link to="/contact"  onClick={closeMenu} className={currentPath === '/contact' ? 'current-page' : ''}>Contact</Link></li>
+ 
       </ul>
       { isAuthenticated && 
       (<button onClick={handleSignOut}>Sign out</button>)

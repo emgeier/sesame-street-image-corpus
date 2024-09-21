@@ -121,7 +121,14 @@ const Admin: React.FC = () => {
 
   return (
   
-    <div className="main-content">
+    <div >
+      <div className='separator'></div>
+      <div className='separator'></div>
+      <div className='separator'></div>
+      <div className='separator'></div>
+      <header className="banner1"></header>
+      <div className='separator'></div>
+      <div className='upload-content'>
       <h1 className='intro'>Add Images and Annotations to Archive</h1>
       <Divider></Divider>
       <h3>Upload Folder</h3>
@@ -153,7 +160,7 @@ const Admin: React.FC = () => {
       </button>
       {url && <img src={url} alt="Uploaded file" style={{ maxWidth: '100%', height: 'auto' }} />}
     </div>
-
+    </div>
   );
 };
 

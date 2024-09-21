@@ -11,6 +11,7 @@ import Navbar from './components/Navbar';
 import Search from "./components/Search";
 import Footer from "./components/Footer";
 import Metrics from './components/Metrics';
+import Contact from './components/Contact.tsx';
 
 function App() {
   return (
@@ -27,7 +28,8 @@ function App() {
                     <Route path="/admin" element={<Admin />} />
                     <Route path="/episodes" element={<XSearch />} />
                     <Route path="/guide" element={<Guide />} />
-                    <Route path="/metrics" element={<Metrics/>} /> 
+                    <Route path="/metrics" element={<Metrics/>} />
+                    <Route path="/contact" element={<Contact/>} />  
                   </Routes>
                   <div className='separator'></div>
                   <Footer></Footer>

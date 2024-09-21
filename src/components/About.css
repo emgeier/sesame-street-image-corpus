@@ -51,7 +51,13 @@ background-position: center;
     background-size: cover;
     background-position: center;
     }
-
+.banner3 {
+  width: 100%;
+  height: 400px; /* Adjust height as needed */
+  background-image: url('../assets/images/Banner3.webp');
+  background-size: cover;
+   background-position: center;
+ }    
 .intro {
 font-size: 28px;
 font-family: 'Helvetica Neue', Helvetica, Arial,'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -106,7 +112,16 @@ place-items: center;
 display: flex;
 flex-direction: column;
 align-items: center;
-max-width: 99%; /* Adjust the width as needed */
+max-width: 99%; 
 margin: auto ;
 }
+.upload-content {
+  text-align: center;
+  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 99%; 
+  margin: auto ;
+  }
 

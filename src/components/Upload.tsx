@@ -208,14 +208,14 @@ const Upload: React.FC = () => {
       <div>{folderMessage && <p>{folderMessage}</p>}</div>
       <div className="separator" />
       <Divider></Divider>
-      <h3>Upload Individual Image File</h3>
+      <h3>Upload File</h3>
       <input
         type="file"
         onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
         ref={inputRefFile}
       />
       <button onClick={handleSingleFileUpload} disabled={!file}>
-        Upload Single File
+        Upload File
       </button>
       <div>{fileMessage && <p>{fileMessage}</p>}</div>
       <div className="separator" />

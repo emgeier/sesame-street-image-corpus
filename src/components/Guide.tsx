@@ -1,8 +1,10 @@
 import './About.css';
 import '@aws-amplify/ui-react/styles.css';
 import example from "../assets/images/AnnotatedImageExample.png";
+import useScrollToTop from '../ScrollToTop';
 
 function Guide() {
+  useScrollToTop();
   return (
     <div>
       <div className='separator'></div>

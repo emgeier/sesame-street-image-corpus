@@ -4,6 +4,7 @@ import { generateClient } from "aws-amplify/data";
 import { getUrl } from 'aws-amplify/storage';
 import AnnotatedImage from "./AnnotatedImage";
 import EpisodeCarousel from "./EpisodeCarousel";
+import useScrollToTop from "../ScrollToTop";
 
 interface BoundingBox {
     x: number;
@@ -15,6 +16,7 @@ interface BoundingBox {
   }
 
 const XSearch: React.FC = () => {
+  useScrollToTop();
   const client = generateClient<Schema>();
   
   const [boundingBoxes, setBoundingBoxes] = useState<BoundingBox[]>([]);

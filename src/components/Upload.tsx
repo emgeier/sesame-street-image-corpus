@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { uploadData, getUrl} from 'aws-amplify/storage';
 import { Divider } from '@aws-amplify/ui-react';
 import {getCurrentUser } from 'aws-amplify/auth';
+import useScrollToTop from '../ScrollToTop';
 
 
 const Upload: React.FC = () => {
+
   //Individual image file upload
   const [file, setFile] = useState<File | null>(null);
   //Folder upload
@@ -20,6 +22,7 @@ const Upload: React.FC = () => {
   // Visualize file uploaded
   const [fileContent, setFileContent] = useState<string | null>(null); // For non-image files like XML
 
+  useScrollToTop();
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.setAttribute("webkitdirectory", "true");

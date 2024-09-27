@@ -1,7 +1,9 @@
 import './About.css';
 import '@aws-amplify/ui-react/styles.css';
+import useScrollToTop from '../ScrollToTop';
 
 function About() {
+  useScrollToTop();
   return (
     <div>
       <div className='separator'></div>

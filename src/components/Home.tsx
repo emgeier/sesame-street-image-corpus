@@ -1,9 +1,11 @@
 
 import './About.css';
+import useScrollToTop from '../ScrollToTop.tsx';
 
 import RRCarousel from './RRCarousel.tsx';
 
 function Home() {
+  useScrollToTop();
   return (
     <div>      
       <div className='separator'></div>

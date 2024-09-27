@@ -176,7 +176,7 @@ li {
   
 }
 .upload-tooltip {
-  position: relative;
+  position: sticky;
   display: inline-block;
   cursor: pointer;
   top: 40%;
@@ -185,16 +185,16 @@ li {
 }
 .upload-tooltip .upload-tooltiptext {
   visibility: hidden;
-  width: 80%;
+  width: 65%;
   background-color: #f9f9f9;
+  text-justify: left;
+  text-align: justify;
   color:rgb(0, 0, 1);
-  text-align: center;
   border-radius: 6px;
   padding: 5px;
   position: absolute;
   bottom: 125%; /* Position the tooltip above the text */
   left: 30%;
-  margin-left: 10px; /* Use margin to center the tooltip */
   opacity: 0;
   transition: opacity 0.3s;
 }

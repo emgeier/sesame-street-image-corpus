@@ -171,7 +171,7 @@ const Upload: React.FC = () => {
         <div className="upload-tooltip">
           <span>ℹ️</span>
           <div className="upload-tooltiptext">
-          <p>For appropriate matching of image and annotation data, annotations should reference image ids in their filename field. </p>Preferred filename format is : S season number -E episode number_image number.png. Example: S13-E4055_00129.png. Currently, only xml files for annotation data and png files for images can be uploaded.           
+          <p>To correlate image and annotation data, annotations should reference image ids in their filename field. </p><p>Preferred filename format is : S season number -E episode number_image number.png.<br/>Example: S13-E4055_00129.png.</p> <p> Currently, only xml files for annotation data and png files for images can be uploaded. </p>          
           </div>
           </div>
         </div>

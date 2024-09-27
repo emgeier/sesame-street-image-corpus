@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { uploadData, getUrl, list } from 'aws-amplify/storage';
+import { uploadData, getUrl} from 'aws-amplify/storage';
 import { Divider } from '@aws-amplify/ui-react';
-import {fetchAuthSession, getCurrentUser } from 'aws-amplify/auth';
+import {getCurrentUser } from 'aws-amplify/auth';
 
 
 const Upload: React.FC = () => {
@@ -20,8 +20,6 @@ const Upload: React.FC = () => {
   // Visualize file uploaded
   const [fileContent, setFileContent] = useState<string | null>(null); // For non-image files like XML
 
-  
-
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.setAttribute("webkitdirectory", "true");
@@ -34,30 +32,19 @@ const Upload: React.FC = () => {
     }
   }, [files]); // Run this effect when `files` changes
 
-    // Function to check if user is authorized by attempting a "list" action
-    const checkUserAuthorization = async () => {
-      try {
-        // Attempting to list objects in the bucket (this will fail if unauthorized)
-
-        const { username, userId, signInDetails } = await getCurrentUser();
-
-        console.log("username", username);
-        console.log("user id", userId);
-        console.log("sign-in details", signInDetails);
-
-      
-        if(!userId ){return false;}
-       // await list();  // List root directory as a simple permission check
-        return true; // User is authorized
+  // Function to check if user is logged in
+  const checkUserAuthorization = async () => {
+    try {
+      const { userId } = await getCurrentUser();
+      if (!userId ) {return false;}
+      return true; // User is logged in
       } catch (error) {
-
         console.error("Error checking user authorization:", error);
         return false;
       }
     };
 
   //See the image selected for upload
-
   const seeFile = async () => {
     if (!file) {
       console.error("no file selected");
@@ -89,17 +76,16 @@ const Upload: React.FC = () => {
     setFiles(selectedFiles);
     console.log("files:", selectedFiles);
   };
-
+  //Single file upload in response to button
   const handleSingleFileUpload = async () => {
     if (!file) {
       console.error("No file selected");
       return;
     }
-
     try {
       const isAuthorized = await checkUserAuthorization();
       if (!isAuthorized) {
-        setFileMessage("User unauthorized to upload file.");
+        setFileMessage("User not authorized to upload file.");
         return; // Stop if user is unauthorized
       }
       const filePath = file.type === 'text/xml' ? 'data' : 'images';
@@ -110,7 +96,6 @@ const Upload: React.FC = () => {
         data: file,
       });
       console.log(`File ${file.name} uploaded successfully`);
-      // setFile(null);
       setFileMessage("File uploaded successfully");
       if (inputRefFile.current) {
         inputRefFile.current.value = ""; // Reset the file input field
@@ -136,7 +121,7 @@ const Upload: React.FC = () => {
     try {
       const isAuthorized = await checkUserAuthorization();
       if (!isAuthorized) {
-        setFolderMessage("User unauthorized to upload folder.");
+        setFolderMessage("User not authorized to upload folder.");
         return; // Stop if user is unauthorized
       }
       for (let i = 0; i < files.length; i += BATCH_SIZE) {

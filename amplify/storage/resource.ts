@@ -10,6 +10,14 @@ export const storage = defineStorage({
     'input/*': [
       allow.authenticated.to(['read','write']),
       allow.guest.to(['read','write'])
+    ],
+    'data/*': [
+      allow.authenticated.to(['read','write']),
+      allow.guest.to(['read'])
+    ],
+    'images/*': [
+      allow.authenticated.to(['read','write']),
+      allow.guest.to(['read'])
     ]
   })
 });

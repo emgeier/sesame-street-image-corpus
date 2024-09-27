@@ -209,6 +209,7 @@ const Search: React.FC = () => {
         {loading ? (
           <p>Loading...</p>
         ) : (
+          <div><p>Click image for annotation details.</p>
           <div className="annotation-grid-container">
           <ul className="annotation-grid">
             {Object.keys(groupedAnnotations).slice(currentPageIndex * itemsPerPage, currentPageIndex * itemsPerPage + itemsPerPage).map((imageId) => (
@@ -219,6 +220,7 @@ const Search: React.FC = () => {
               </ul>
             ))}
           </ul>
+          </div>
           </div>
         )}
         <div className="page-buttons">

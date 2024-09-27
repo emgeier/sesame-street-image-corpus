@@ -168,12 +168,46 @@ li {
   border-radius: 6px;
   padding: 5px;
   position: absolute;
-  z-index: 1;
   bottom: 125%; /* Position the tooltip above the text */
   left: 30%;
   margin-left: 10px; /* Use margin to center the tooltip */
   opacity: 0;
   transition: opacity 0.3s;
+  
+}
+.upload-tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  top: 40%;
+  text-align: center;
+  place-items: center;
+}
+.upload-tooltip .upload-tooltiptext {
+  visibility: hidden;
+  width: 80%;
+  background-color: #f9f9f9;
+  color:rgb(0, 0, 1);
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  bottom: 125%; /* Position the tooltip above the text */
+  left: 30%;
+  margin-left: 10px; /* Use margin to center the tooltip */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+/* Show the tooltip text when you mouse over the tooltip container */
+.upload-tooltip:hover .upload-tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+.upload-tooltip-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */

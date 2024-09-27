@@ -3,8 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import Home from './components/Home';
 import About from './components/About';
-import Admin from './components/Admin.tsx';
-import XSearch from './components/XSearch.tsx';
+import XSearch from './components/EpisodeSearch.tsx';
 import SearchImageAttributes from './components/SearchImageAttributes';
 import Guide from './components/Guide';
 import Navbar from './components/Navbar';
@@ -12,6 +11,7 @@ import Search from "./components/Search";
 import Footer from "./components/Footer";
 import Metrics from './components/Metrics';
 import Contact from './components/Contact.tsx';
+import Upload from './components/Upload.tsx';
 
 function App() {
   return (
@@ -25,7 +25,7 @@ function App() {
                     <Route path="/about" element={<About />} />
                     <Route path="/search" element={<Search />} />
                     <Route path="/download" element={<SearchImageAttributes />} />
-                    <Route path="/admin" element={<Admin />} />
+                    <Route path="/upload" element={<Upload />} />
                     <Route path="/episodes" element={<XSearch />} />
                     <Route path="/guide" element={<Guide />} />
                     <Route path="/metrics" element={<Metrics/>} />

@@ -114,7 +114,7 @@ const XSearch: React.FC = () => {
     // Function to fetch URL for each image ID
   const fetchImageUrl = async (imageId: string): Promise<string> => {
     try {
-      const result = await getUrl({ path: `dev/${imageId}` });
+      const result = await getUrl({ path: `images/${imageId}` });
       return result.url.href;
     } catch (error) {
       console.error(`Failed to fetch URL for image ID: ${imageId}`, error);
@@ -288,6 +288,7 @@ const XSearch: React.FC = () => {
   return (
     <main className="main-content">
       <div className='separator'></div>
+      <EpisodeCarousel images={images}></EpisodeCarousel>
       <h1 className="intro">Episode Search </h1>
       <div className="search-controls">
       <div className="search-control">

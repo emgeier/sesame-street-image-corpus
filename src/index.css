@@ -180,14 +180,17 @@ li {
   visibility: hidden;
   width: 65%;
   background-color: #f9f9f9;
-  text-justify: left;
-  text-align: justify;
+  text-justify: right;
+  text-align: match-parent;
   color:rgb(0, 0, 1);
   border-radius: 6px;
   padding: 5px;
   position: absolute;
   bottom: 125%; /* Position the tooltip above the text */
-  left: 30%;
+  left: 10%;
+  right: 10%;
+  margin-left: 10%;
+  margin-right: 10%;
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -201,6 +204,7 @@ li {
   flex-direction: column;
   gap: 10px;
   text-align: center;
+ 
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */

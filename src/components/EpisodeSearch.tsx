@@ -5,6 +5,7 @@ import { getUrl } from 'aws-amplify/storage';
 import AnnotatedImage from "./AnnotatedImage";
 import EpisodeCarousel from "./EpisodeCarousel";
 import useScrollToTop from "../ScrollToTop";
+import DownloadResults from "./DownloadResults";
 
 interface BoundingBox {
     x: number;
@@ -15,7 +16,7 @@ interface BoundingBox {
     annotation: Schema["Annotation"]["type"]; 
   }
 
-const XSearch: React.FC = () => {
+const EpisodeSearch: React.FC = () => {
   useScrollToTop();
   const client = generateClient<Schema>();
   
@@ -28,6 +29,7 @@ const XSearch: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<string>("");
   const[image, setImage] = useState<Schema["Image"]["type"]>();
   const [selectedFullImageId, setSelectedFullImageId] = useState<string>("");
+  const [resultAnnotations, setResultAnnotations] = useState<Array<Schema["Annotation"]["type"] & { imageUrl?: string } >>([]);
 
   const [images, setImages] = useState<Array<Schema["Image"]["type"] & { imageUrl?: string }>>([]);
  
@@ -67,10 +69,13 @@ const XSearch: React.FC = () => {
                 annotation: annotation
               };
               allBoundingBoxes.push(box);
+              resultAnnotations.push({...annotation,
+                imageUrl: selectedImage, });
             }
           });
  
       setBoundingBoxes(allBoundingBoxes);
+      setResultAnnotations(resultAnnotations);
       console.log("boundingBoxes: " + JSON.stringify(allBoundingBoxes));
       
 
@@ -363,6 +368,7 @@ const XSearch: React.FC = () => {
         <ul>
           {image?.episode_title} <br/>Season {image?.season}<br/> Episode {image?.episode_id}<br/> {image?.air_year}
           <AnnotatedImage imageUrl={selectedImage} boundingBoxes={boundingBoxes}></AnnotatedImage>
+          <DownloadResults annotations={resultAnnotations}></DownloadResults>
         </ul>
       )}
       <br></br>
@@ -375,4 +381,4 @@ const XSearch: React.FC = () => {
   );
 };
 
-export default XSearch;
+export default EpisodeSearch;

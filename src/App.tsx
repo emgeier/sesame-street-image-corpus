@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import Home from './components/Home';
 import About from './components/About';
-import XSearch from './components/EpisodeSearch.tsx';
+import EpisodeSearch from './components/EpisodeSearch.tsx';
 import SearchImageAttributes from './components/SearchImageAttributes';
 import Guide from './components/Guide';
 import Navbar from './components/Navbar';
@@ -26,7 +26,7 @@ function App() {
                     <Route path="/search" element={<Search />} />
                     <Route path="/download" element={<SearchImageAttributes />} />
                     <Route path="/upload" element={<Upload />} />
-                    <Route path="/episodes" element={<XSearch />} />
+                    <Route path="/episodes" element={<EpisodeSearch />} />
                     <Route path="/guide" element={<Guide />} />
                     <Route path="/metrics" element={<Metrics/>} />
                     <Route path="/contact" element={<Contact/>} />  

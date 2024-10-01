@@ -17,9 +17,13 @@ const SearchImageAttributes: React.FC = () => {
   const [boxQueryHeight, setBoxQueryHeight]= useState<number | null>(null); // 
   const [boxQueryWidth, setBoxQueryWidth]= useState<number | null>(null); // 
   const [singleLetter, setSingleLetter] = useState<string>(""); // New state for single letter search
+  const subcategoryFieldMap: { [key: string]: string } = {
+    "Camera angle": "angle",
+    "Single letter": "singleletter",
+    "Multi-letter": "multiletter"
+  };
 
-  const [selectedCategories, setSelectedCategories] = useState<{ [key: string]: string[] }>({
-  }); 
+ const [selectedCategories, setSelectedCategories] = useState<{ [category: string]: { [subcategory: string]: string[] } }>({});
 
   const components = {
     Header: CustomHeader,
@@ -38,7 +42,7 @@ const SearchImageAttributes: React.FC = () => {
         //If it has single letter, add word category if not already added, use single letter in filter
         // Handle selected categories
         for (const category of Object.keys(selectedCategories)) {
-          const attributes = selectedCategories[category];
+          const subcategories = selectedCategories[category];
   
           // Build the filter for the current category
           const filter: any = {
@@ -51,14 +55,22 @@ const SearchImageAttributes: React.FC = () => {
           
           // Add category filter
           filter.and.push({ category: { eq: category } });
-  
-          // Add attribute filters
-          if (attributes.length > 0) {
-            attributes.forEach((attribute) => {
-              filter.and.push({ keywords: { contains: attribute } });
-            });
+          // Iterate over subcategories and their attributes
+          for (const subcategory of Object.keys(subcategories)) {
+            const attributes = subcategories[subcategory];
+            const dbField = subcategoryFieldMap[subcategory] || subcategory.toLowerCase(); // Use mapped field or default to subcategory name
+            // Add attribute filters for the subcategory
+            if (attributes.length > 0) {
+              attributes.forEach((attribute) => {
+                if(attribute === 'proper noun'){
+                  filter.and.push({['noun']: {eq: true}})
+                } else {
+                    // Apply the filter directly to the subcategory key (assuming the subcategory key corresponds to a field in the database)
+                    filter.and.push({ [dbField]: { eq: attribute } });      
+                }
+              });
+            }
           }
-  
           // Add bounding box filters if applicable
           if (boxQueryX !== null) {
             filter.and.push({ x: { ge: boxQueryX } });
@@ -226,10 +238,10 @@ const SearchImageAttributes: React.FC = () => {
     }
   };
   
-  // Code retained for if we want to restore the visualization of the search in this component  
+  // Code retained in the event that we want to restore the visualization of the search in this component  
   const fetchImageUrl = async (imageId: string): Promise<string> => {
     try {
-      const result = await getUrl({ path: `dev/${imageId}` });
+      const result = await getUrl({ path: `images/${imageId}` });
       return result.url.href;
     } catch (error) {
       console.error(`Failed to fetch URL for image ID: ${imageId}`, error);
@@ -237,27 +249,35 @@ const SearchImageAttributes: React.FC = () => {
     }
   };
 
-  const handleKeywordChange = (keyword: string, checked: boolean, category: string) => {
+  const handleKeywordChange = (keyword: string, checked: boolean, category: string, subcategory: string) => {
     setSelectedCategories((prevCategories) => {
-      // If the checkbox is checked, add the keyword to the category array
-      if (checked) {
-        const updatedCategory = [...(prevCategories[category] || []), keyword];
-        return { ...prevCategories, [category]: updatedCategory }; // Return the updated categories
-      } else {
-        // If unchecked, remove the keyword from the category array
-        const updatedCategory = prevCategories[category].filter((kw) => kw !== keyword);
-        
-        // If the category is empty after removing the keyword, remove the category entirely
-        if (updatedCategory.length === 0) {
-          const { [category]: _, ...remainingCategories } = prevCategories; // Destructure to remove the category
-          return remainingCategories; // Return the categories without the empty category
-        }
+      // Initialize the category and subcategory if they don't exist
+      const updatedCategory = prevCategories[category] ? { ...prevCategories[category] } : {};
+      const updatedSubcategory = updatedCategory[subcategory] ? [...updatedCategory[subcategory]] : [];
   
-        // Otherwise, return the updated categories with the modified category
-        return { ...prevCategories, [category]: updatedCategory };
+      if (checked) {
+        // Add the keyword if checked and it's not already in the list
+        if (!updatedSubcategory.includes(keyword)) {
+          updatedSubcategory.push(keyword);
+        }
+      } else {
+        // Remove the keyword if unchecked
+        const index = updatedSubcategory.indexOf(keyword);
+        if (index > -1) {
+          updatedSubcategory.splice(index, 1);
+        }
       }
+      // Update the category with the modified subcategory
+      updatedCategory[subcategory] = updatedSubcategory;
+  
+      // Return the updated state
+      return {
+        ...prevCategories,
+        [category]: updatedCategory,
+      };
     });
   };
+  
   const handleSingleLetterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSingleLetter(e.target.value); 
   };
@@ -305,17 +325,16 @@ const SearchImageAttributes: React.FC = () => {
   };
 
   const renderCheckboxes = (options: { [key: string]: string[] }, category: string) => {
-    return Object.keys(options).map((key) => (
-      <div key={key} className="checkbox-category">
-        <strong>{key}:</strong>
-        {options[key].map((option) => (
+    return Object.keys(options).map((subcategory) => (
+      <div key={subcategory} className="checkbox-category">
+        <strong>{subcategory}:</strong>
+        {options[subcategory].map((option) => (
           <label key={option} className="checkbox-label">
             <input
               type="checkbox"
               value={option}
-              checked={selectedCategories[category]?.includes(option) || false} 
-
-              onChange={(e) => handleKeywordChange(option, e.target.checked, category)}
+              checked={selectedCategories[category]?.[subcategory]?.includes(option) || false}
+              onChange={(e) => handleKeywordChange(option, e.target.checked, category, subcategory)}
             />
             {option}
           </label>
@@ -390,7 +409,7 @@ const SearchImageAttributes: React.FC = () => {
           <h3>Words</h3>
               {/* Single letter search input */}
             <div className="single-letter-container">
-              <label htmlFor="single-letter"><strong>Single-Letter:</strong></label>
+              <label htmlFor="single-letter"><strong>Single letter:</strong></label>
               <input
                 type="text"
                 id="single-letter"
@@ -413,7 +432,7 @@ const SearchImageAttributes: React.FC = () => {
           value={boxQueryX !== null ? boxQueryX : ""}
           onChange={handleBoxXLocationChange}
         /></div>
-                <div >
+        <div >
         <label htmlFor="y-coordinate">y-coordinate of top left corner: </label>
         <input
           type="number"

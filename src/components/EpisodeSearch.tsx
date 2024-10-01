@@ -355,8 +355,7 @@ const EpisodeSearch: React.FC = () => {
                 </ul>
           ))}
         </ul>
-        <p>Click image to see annotations</p>
-        <div>{searchMessage && <p>{searchMessage}</p>} </div>
+        <div>{searchMessage && <p>{searchMessage}</p > && <p>Click image to see annotations</p>} </div>
         <div className="page-buttons">
         <button onClick={handlePreviousPage} disabled={currentPageIndex === 0 || loading}>Previous</button>
         <button onClick={handleNextPage} disabled={currentPageIndex*itemsPerPage+itemsPerPage >= images.length - 1 || loading}>Next</button>

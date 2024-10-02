@@ -295,7 +295,6 @@ const EpisodeSearch: React.FC = () => {
   return (
     <main className="main-content">
       <div className='separator'></div>
-      <EpisodeCarousel images={images}></EpisodeCarousel>
       <h1 className="intro">Episode Search </h1>
       <div className="search-controls">
       <div className="search-control">
@@ -355,11 +354,14 @@ const EpisodeSearch: React.FC = () => {
                 </ul>
           ))}
         </ul>
-        <div>{searchMessage && <p>{searchMessage}</p > && <p>Click image to see annotations</p>} </div>
-        <div className="page-buttons">
-        <button onClick={handlePreviousPage} disabled={currentPageIndex === 0 || loading}>Previous</button>
-        <button onClick={handleNextPage} disabled={currentPageIndex*itemsPerPage+itemsPerPage >= images.length - 1 || loading}>Next</button>
-      </div>
+        <div>{searchMessage && <p>{searchMessage}</p >}</div>
+        <div>{searchMessage && <p>Click image to see annotations.</p >}</div>
+        <div>{searchMessage &&         
+          <div className="page-buttons">
+            <button onClick={handlePreviousPage} disabled={currentPageIndex === 0 || loading}>Previous</button>
+            <button onClick={handleNextPage} disabled={currentPageIndex*itemsPerPage+itemsPerPage >= images.length - 1 || loading}>Next</button>
+          </div>
+          }</div>
         </div>
         
       )}
@@ -367,12 +369,13 @@ const EpisodeSearch: React.FC = () => {
         <ul>
           {image?.episode_title} <br/>Season {image?.season}<br/> Episode {image?.episode_id}<br/> {image?.air_year}
           <AnnotatedImage imageUrl={selectedImage} boundingBoxes={boundingBoxes}></AnnotatedImage>
+          <p>Click annotation to see details.</p>
           <DownloadResults annotations={resultAnnotations}></DownloadResults>
         </ul>
       )}
       <br></br>
       <br></br>
-      <h3>Slideshow</h3>
+      <div>{searchMessage && <h3>Slideshow</h3>}</div>
       <EpisodeCarousel images={images}></EpisodeCarousel>
       <br></br>
       <br></br>

@@ -8,22 +8,43 @@ interface AttributePopupProps {
 }
 
 const AttributePopup: React.FC<AttributePopupProps> = ({ annotation, onClose }) => {
+  // Render annotation details as table rows
   const renderDetails = () => {
     const entries = Object.entries(annotation);
-    return entries.map(([key, value]) => {
-      console.log("key is: " + key);
-      console.log("value is: " + value);
-      if (key === 'imageUrl'|| key === 'createdAt' || key === 'updatedAt' || key === 'keywords' || key === 'attributes'){return}
 
-      if (value === true || value === 0 || value === 'TRUE' || (value && typeof value !== 'object' && value.toString().trim() !== '') ) {
-        if( key === 'noun'){value = 'proper noun';}
+    return entries.map(([key, value]) => {
+      // Filter out unwanted fields
+      if (key === 'imageUrl' || key === 'createdAt' || key === 'updatedAt' || key === 'keywords' || key === 'attributes' || 
+        key === 'x' || key === 'y' || key == 'height' || key === 'width' || !value) {
+        return null;
+      }
+
+      // Handle value types (e.g., boolean, numbers, etc.)
+      let displayValue: string;
+      if (typeof value === 'object') {
+        displayValue = JSON.stringify(value);
+      } else if (value === true || value === 'false' || value === 'TRUE' || value === 'FALSE') {
+        displayValue = value ? 'true' : 'false';
+      } else {
+        displayValue = value !== null && value !== undefined ? value.toString() : '';
+      }
+
+      // Format specific fields if needed
+      if (key === 'noun' && value === true) {
+        displayValue = 'proper noun';
+      }
+
+      // Only render rows with valid data
+      if (displayValue.trim() !== '') {
         return (
-          <ul key={key}>
-            <strong>{key}:</strong> {value.toString()}
-          </ul>
+          <tr key={key}>
+            <td><strong>{key}</strong></td>
+            <td>{displayValue}</td>
+          </tr>
         );
       }
 
+      return null;
     });
   };
 
@@ -31,17 +52,16 @@ const AttributePopup: React.FC<AttributePopupProps> = ({ annotation, onClose }) 
     <div className="popup">
       <div className="popup-content">
         <div className='attribute-details-container'>
-        <div className="annotation-block">
-          <table>
-            <tbody>{renderDetails()}</tbody>
-          </table>
-          <button className= "attribute-button" onClick={onClose}>Close</button>
-        </div>
+          <div className="annotation-block">
+            <table>
+              <tbody>{renderDetails()}</tbody>
+            </table>
+            <button className="attribute-button" onClick={onClose}>Close</button>
+          </div>
         </div>
       </div>
     </div>
   );
 };
-
 
 export default AttributePopup;

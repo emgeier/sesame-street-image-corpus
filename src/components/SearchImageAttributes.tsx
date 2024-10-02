@@ -413,8 +413,7 @@ const SearchImageAttributes: React.FC = () => {
     {({  }) => (
     <main className="main-content">
       <div className="separator"></div>
-      <h2>Annotation Search</h2>
-      <Divider></Divider>
+      <h1 className="intro">Annotation Search</h1>
 
       <div className="search-controls">
         <div className="checkbox-row">

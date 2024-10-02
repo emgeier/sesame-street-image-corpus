@@ -39,7 +39,7 @@ const Search: React.FC = () => {
   // Function to fetch URL for each image ID
   const fetchImageUrl = async (imageId: string): Promise<string | undefined> => {
     try {
-      const result = await getUrl({ path: `dev/${imageId}` });
+      const result = await getUrl({ path: `images/${imageId}` });
       return result.url.href;
     } catch (error) {
       console.error(`Failed to fetch URL for image ID: ${imageId}`, error);
@@ -114,6 +114,12 @@ const Search: React.FC = () => {
 
   const handleKeywordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setKeywords(event.target.value.split(' ').filter((word) => word.length > 0));
+    setAnnotations([]); // Clear previous annotations
+    setSelectedAnnotations([]); // Clear selected annotations
+    setGroupedAnnotations({}); // Clear grouped annotations
+    setSelectedImage(undefined); // Clear selected image
+    setSelectedImageUrl(""); // Clear the image URL
+    setBoundingBoxes([]); // Clear bounding boxes
     setCurrentPageIndex(0); // Reset to the first page
   };
   const handleImageClick = (imageId: string) => {
@@ -198,7 +204,7 @@ const Search: React.FC = () => {
           placeholder="puppet"
           onChange={handleKeywordChange}
         /></div>
-        <div><p>For a list of keywords, see the tooltip. For a full explanation of the terms used in the SSIA see the Guide.</p></div>
+        <div><p>For a list of keywords, see the tooltip. For a full explanation of the terms used in the SSIA see the <a href="/Guide" target="_blank" rel="noopener noreferrer">Guide</a>.</p></div>
           <div className="tooltip">
             <span>ℹ️</span>
             <div className="tooltiptext">
@@ -232,7 +238,7 @@ const Search: React.FC = () => {
           <div>
             {selectedImage && (
             <h3>{selectedImage?.episode_title} <br/>Season {selectedImage?.season}<br/> Episode {selectedImage?.episode_id}<br/> {selectedImage?.air_year}</h3>
-          )}
+            )}
             <AnnotatedImage imageUrl={selectedImageUrl} boundingBoxes={boundingBoxes} />
             <AttributeDetails annotations={selectedAnnotations}/>
           </div>

@@ -10,6 +10,11 @@ const Footer: React.FC = () => {
         <Link to="/">Home</Link>
         <Link to="/guide">Guide</Link>
         <Link to="/about">About</Link>
+        <Link to="/contact">Contact</Link>
+        <Link to="/search">Search</Link>
+        <Link to="/episodes">Episodes</Link>
+        <Link to="/download">Download</Link>
+        <Link to="/upload">Upload</Link>
       </div>
       <div className="footer-text">
         © 2024 LANDLAB    

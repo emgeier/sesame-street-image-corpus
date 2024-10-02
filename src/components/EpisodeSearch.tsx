@@ -6,6 +6,8 @@ import AnnotatedImage from "./AnnotatedImage";
 import EpisodeCarousel from "./EpisodeCarousel";
 import useScrollToTop from "../ScrollToTop";
 import DownloadResults from "./DownloadResults";
+import { Authenticator } from "@aws-amplify/ui-react";
+import CustomHeader from "./CustomMessaging";
 
 interface BoundingBox {
     x: number;
@@ -39,6 +41,10 @@ const EpisodeSearch: React.FC = () => {
   const [airYear, setAirYear] = useState<number| undefined>(undefined);
 
   const [searchMessage, setSearchMessage] = useState<string | null>(null); // State to hold the user message
+
+  const components = {
+    Header: CustomHeader,
+  };
 
   // Function to fetch annotation data from DynamoDB based on image selected
   const fetchAnnotations = async () => {
@@ -293,6 +299,8 @@ const EpisodeSearch: React.FC = () => {
   };
 
   return (
+    <Authenticator hideSignUp className="authenticator-popup" components={components}>
+                    {({  }) => (
     <main className="main-content">
       <div className='separator'></div>
       <h1 className="intro">Episode Search </h1>
@@ -380,6 +388,8 @@ const EpisodeSearch: React.FC = () => {
       <br></br>
       <br></br>
     </main>
+    )}
+</Authenticator>
   );
 };
 

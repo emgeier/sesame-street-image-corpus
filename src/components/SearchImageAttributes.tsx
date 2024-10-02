@@ -48,25 +48,36 @@ const SearchImageAttributes: React.FC = () => {
           const filter: any = {
             and: [],
           };
+          const keywords: any = {
+            and: [],
+          };
           //If it has single letter, use single letter in filter
           if (hasSingleLetter && category=='WORD') {
-            filter.and.push({singleletter: {eq: singleLetter}});
+            filter.and.push({content: {eq: singleLetter}});
+            keywords.and.push({keywords: { contains: singleLetter }});    
             };
-          
+
           // Add category filter
           filter.and.push({ category: { eq: category } });
           // Iterate over subcategories and their attributes
           for (const subcategory of Object.keys(subcategories)) {
             const attributes = subcategories[subcategory];
             const dbField = subcategoryFieldMap[subcategory] || subcategory.toLowerCase(); // Use mapped field or default to subcategory name
+
             // Add attribute filters for the subcategory
             if (attributes.length > 0) {
               attributes.forEach((attribute) => {
                 if(attribute === 'proper noun'){
-                  filter.and.push({['noun']: {eq: true}})
+                  console.log("proper noun");
+                  filter.and.push({ noun: { eq: true } });
+                  keywords.and.push({keywords: { contains: 'proper' }});    
+                } else if(subcategory === 'Visibility'){
+                  filter.and.push({ visibility: { contains: attribute }})
+                  keywords.and.push({keywords: { contains: attribute }});    
                 } else {
                     // Apply the filter directly to the subcategory key (assuming the subcategory key corresponds to a field in the database)
-                    filter.and.push({ [dbField]: { eq: attribute } });      
+                    filter.and.push({ [dbField]: { eq: attribute } });  
+                    keywords.and.push({keywords: { contains: attribute }});    
                 }
               });
             }
@@ -86,10 +97,16 @@ const SearchImageAttributes: React.FC = () => {
           }
   
           // Query annotations for the current category
-          const result: any = await client.models.Annotation.list({
+          let result: any = await client.models.Annotation.list({
             filter: filter,
             limit: 40000, // Adjust limit as needed
           });
+
+        // If no results from the subcategory filter, fall back to keyword search
+        if ((!result.data || result.data.length === 0) && keywords.length != 0 ) {
+          result = await keywordSearch(keywords);
+          console.log("No data from subcategory search. Performing keyword search...");
+        }
   
           // Collect annotations and image IDs from the results
           const annotations = result.data;
@@ -107,7 +124,7 @@ const SearchImageAttributes: React.FC = () => {
           const filter: any = {
             and: [
               { category: { eq: 'WORD' } },
-              { singleletter: { eq: singleLetter } },
+              { content: { eq: singleLetter } },
             ],
           };
   
@@ -235,6 +252,20 @@ const SearchImageAttributes: React.FC = () => {
     } catch (error) {
       console.error('Failed to fetch annotations:', error);
       setSearchMessage('Failed to return search results.');
+    }
+  };
+  // Keyword search in case the schema doesn't cover the selected items, fail-safe, more resource intensive
+
+  const keywordSearch = async (keywords: any): Promise<any> => {
+    try {
+      // Query annotations with only keyword filter
+      const result: any = await client.models.Annotation.list({
+        filter: keywords,
+        limit: 40000, // Adjust limit as needed
+      });
+      return result;
+    } catch (error) {
+      console.error(`Failed to fetch annotations for keywords: ${keywords}`, error);
     }
   };
   

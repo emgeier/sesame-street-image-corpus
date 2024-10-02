@@ -366,12 +366,12 @@ const EpisodeSearch: React.FC = () => {
         
       )}
       {selectedFullImageId && (
-        <ul>
+        <div>
           {image?.episode_title} <br/>Season {image?.season}<br/> Episode {image?.episode_id}<br/> {image?.air_year}
           <AnnotatedImage imageUrl={selectedImage} boundingBoxes={boundingBoxes}></AnnotatedImage>
           <p>Click annotation to see details.</p>
           <DownloadResults annotations={resultAnnotations}></DownloadResults>
-        </ul>
+        </div>
       )}
       <br></br>
       <br></br>

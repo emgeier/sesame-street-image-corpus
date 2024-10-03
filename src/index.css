@@ -228,9 +228,10 @@ li {
   background-color: white;
   padding: 20px;
   border-radius: 5px;
-  width: 300px;
+  width: 350px;
   max-width: 80%;
   margin-right: 5%; /* left margin within box */
+  margin-left: 5%;
 }
 .popup-content ul {
   background-color: white;

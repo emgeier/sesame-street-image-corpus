@@ -1,25 +1,24 @@
-## AWS Amplify React+Vite Starter Template
-
-This repository provides a starter template for creating applications using React+Vite and AWS Amplify, emphasizing easy setup for authentication, API, and database capabilities.
-
 ## Overview
 
-This template equips you with a foundational React application integrated with AWS Amplify, streamlined for scalability and performance. It is ideal for developers looking to jumpstart their project with pre-configured AWS services like Cognito, AppSync, and DynamoDB.
+The Sesame Street Image Archive is a repository of images and CVAT annotations that are searchable by all fields and keywords. Users can view stills from video content from the popular children's television show, Sesame Street, with categories of objects and people within those images annotated for various characteristics.
 
 ## Features
 
-- **Authentication**: Setup with Amazon Cognito for secure user authentication.
-- **API**: Ready-to-use GraphQL endpoint with AWS AppSync.
+- **Authentication**: Amazon Cognito for secure user authentication.
+- **API**: GraphQL endpoint with AWS AppSync.
 - **Database**: Real-time database powered by Amazon DynamoDB.
 
 ## Deploying to AWS
 
-For detailed instructions on deploying your application, refer to the [deployment section](https://docs.amplify.aws/react/start/quickstart/#deploy-a-fullstack-app-to-aws) of our documentation.
+- **CI/CD Pipeline**: Commiting changes to the main branch will automatically deploy the code to the AWS-hosted app. Monitoring the deployment can be monitored in the AWS Amplify console.
 
 ## Security
 
 See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
 
+## Development Process
+
+This repository was built on a starter template for creating applications using React+Vite and AWS Amplify, emphasizing easy setup for authentication, API, and database capabilities with pre-configured AWS services like Cognito, AppSync, and DynamoDB.
 ## License
 
 This library is licensed under the MIT-0 License. See the LICENSE file.

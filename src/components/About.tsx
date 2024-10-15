@@ -1,6 +1,7 @@
 import './About.css';
 import '@aws-amplify/ui-react/styles.css';
 import useScrollToTop from '../ScrollToTop';
+import tableauDashboard from '../assets/images/Dashboard.png';
 
 function About() {
   useScrollToTop();
@@ -31,7 +32,8 @@ function About() {
         For this project, the LANDLAB has created the<i>Sesame Street</i>Image Archive to enhance further research into children’s brain development. With more than 4,500 episodes of at least 30 minutes each,<i>Sesame Street</i>provides LANDLAB extensive content to work with. Through machine-learning, a fine-tuned YOLO model trained on 4,000 labeled images is allowing us to label thousands more<i>Sesame Street</i>still images.</p>
         <div className="separator"></div>
       <p className='block-format'>
-      <a href='/ssia_analysis.html'target="_blank" rel="noopener noreferrer">Metrics</a>
+    
+      <img src={tableauDashboard} width={1000}/>
       </p>
       <div className="separator"></div>
       <p className='block-format'>

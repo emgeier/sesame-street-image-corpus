@@ -385,8 +385,6 @@ const EpisodeSearch: React.FC = () => {
       <br></br>
       <div>{searchMessage && <h3>Slideshow</h3>}</div>
       <EpisodeCarousel images={images}></EpisodeCarousel>
-      <br></br>
-      <br></br>
     </main>
     )}
 </Authenticator>

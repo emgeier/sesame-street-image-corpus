@@ -18,11 +18,11 @@ function Guide() {
     <h1 className='intro'>How to find annotation images</h1>
       
     <br></br>
-    <p className='block-format'>
-      The search for images from various episodes of<i>Sesame Street</i>over the course of its history is found on the <a href="/episodes">Episodes</a> search page.  One can search by episode number, title, season, or year the episode first aired. The images are displayed with their annotations details and bounding boxes.</p>
-      <br></br>
+
       <p className='block-format'>
-      The search for annotations with specific characteristics can be done by keyword or by checklist on the <a href="/search">Search</a> and <a href="/download">Download</a> pages. One can search for images that have annotations in a particular category or all categories and by keyword,then see the images annotated with their bounding boxes and annotation details on the "Search" page.  On the "Download" page one can search via checklist for images with annotations across multiple categories and download the search results as a csv file with or without the corresponding image files. The csv files contain the annotation details and also the urls for the corresponding images.</p>
+      The search for annotations with specific characteristics can be done by keyword or by checklist on the Search page. One can search for images that have annotations in a particular category or all categories and by keyword,then see the images annotated with their bounding boxes and annotation details in the Image Search section.  in the Annotation Search section one can search via checklist for images with annotations across multiple categories and download the search results as a csv file with or without the corresponding image files. The csv files contain the annotation details and also the urls for the corresponding images. The search for images from various episodes of<i>Sesame Street</i>over the course of its history is found in the Episodes Search part of the search page. 
+      </p>
+      
       <br></br>
     <p className='indented'>
     Annotation Schema of the<i>Sesame Street</i>Image Archive

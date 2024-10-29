@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { uploadData} from 'aws-amplify/storage';
+import { uploadData, getUrl} from 'aws-amplify/storage';
 import { Divider } from '@aws-amplify/ui-react';
 import {getCurrentUser } from 'aws-amplify/auth';
 import useScrollToTop from '../ScrollToTop';
@@ -12,6 +12,7 @@ const Upload: React.FC = () => {
   //Folder upload
   const [files, setFiles] = useState<FileList | null>(null);
   //Visualize image selected for upload
+  const [url, setUrl] = useState<string | undefined>("");
   //Selected folder and file state
   const inputRefFile = React.useRef<HTMLInputElement | null>(null);
   const inputRef = React.useRef<HTMLInputElement | null>(null);
@@ -19,6 +20,7 @@ const Upload: React.FC = () => {
   const [folderMessage, setFolderMessage] = useState<string | undefined>("");
   const [fileMessage, setFileMessage] = useState<string | undefined>("");
   // Visualize file uploaded
+  const [fileContent, setFileContent] = useState<string | null>(null); // For non-image files like XML
 
   useScrollToTop();
   useEffect(() => {
@@ -45,7 +47,31 @@ const Upload: React.FC = () => {
       }
     };
 
-
+  //See the image or xml (fix formatting) selected for upload
+  const seeFile = async () => {
+    if (!file) {
+      console.error("no file selected");
+      return;
+    }
+    if (file.type === 'text/xml') {
+      // Read and display XML file content
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setFileContent(e.target?.result as string);
+      };
+      reader.readAsText(file);
+    } else {
+        try {
+          const result = await getUrl({
+            path: `images/${file.name}`
+          });
+          console.log(result);
+          setUrl(result.url.href);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+  };
   //When folder is selected, reset messaging and set files
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFolderMessage("");
@@ -134,6 +160,7 @@ const Upload: React.FC = () => {
     }, 5000);
   };
 
+
   return (
     <div >
       <div className='separator'></div>
@@ -180,7 +207,14 @@ const Upload: React.FC = () => {
       </button>
       <div>{fileMessage && <p>{fileMessage}</p>}</div>
       <div className="separator" />
+      <h4>        Verify Upload: View File Contents
+      </h4>
+      <button onClick={seeFile} disabled={!file}>
+        View 
+      </button>
       <br/>
+      {url && <img src={url} alt="Uploaded file" style={{ maxWidth: '100%', height: 'auto' }} />}
+      {fileContent && <pre>{fileContent}</pre>} {/* For XML or other text files */}
     </div>
     </div>
   );

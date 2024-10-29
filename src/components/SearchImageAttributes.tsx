@@ -493,12 +493,16 @@ const SearchImageAttributes: React.FC = () => {
         <h5>Search for annotations within these parameters</h5>
         <div className="separator"></div>
         <Divider></Divider>
+        <br/>
+        <br/>
       </div>
       </div>
       <button onClick={() => fetchSearchResultAnnotations()}>Search</button>
       <button onClick={() => clearSearch()}>Clear Search</button>
       {searchMessage && <p>{searchMessage}</p>} {/* Display the user message for search result numbers */}
+     
       <div><DownloadResults annotations={annotations} /></div>
+      <br/>
       </main>
     )}
     </Authenticator>

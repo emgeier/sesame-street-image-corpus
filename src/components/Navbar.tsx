@@ -83,8 +83,6 @@ const Navbar: React.FC = () => {
         <li><Link to="/guide"  onClick={closeMenu} className={currentPath === '/guide' ? 'current-page' : ''}>Guide</Link></li>
         <li><Link to="/about"  onClick={closeMenu} className={currentPath === '/about' ? 'current-page' : ''}>About</Link></li>
         <li><Link to="/search"  onClick={closeMenu} className={currentPath === '/search' ? 'current-page' : ''}>Search</Link></li>
-        <li><Link to="/episodes"  onClick={closeMenu} className={currentPath === '/episodes' ? 'current-page' : ''}>Episodes</Link></li>
-        <li><Link to="/download"  onClick={closeMenu} className={currentPath === '/download' ? 'current-page' : ''}>Download</Link></li>
         <li><Link to="/upload"  onClick={closeMenu} className={currentPath === '/upload' ? 'current-page' : ''}>Upload</Link></li>
         <li><Link to="/contact"  onClick={closeMenu} className={currentPath === '/contact' ? 'current-page' : ''}>Contact</Link></li>
  

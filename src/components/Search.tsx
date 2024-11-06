@@ -21,13 +21,11 @@ const Search: React.FC = () => {
         <br/>
         <br/>
         <br/>
-     
-        
-        <SearchImageAttributes/>
-        <Divider/>
         <ImageSearch/>
         <Divider></Divider>
         <EpisodeSearch/>
+        <Divider/>
+        <SearchImageAttributes/>
         <Divider/>
       </main>
     </div>

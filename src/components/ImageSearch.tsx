@@ -23,7 +23,6 @@ const ImageSearch: React.FC = () => {
   const [annotations, setAnnotations] = useState<Array<Schema["Annotation"]["type"] & { imageUrl?: string }>>([]);
   const [groupedAnnotations, setGroupedAnnotations] = useState<{ [key: string]: Array<Schema["Annotation"]["type"] & { imageUrl?: string }> }>({});
   const [selectedAnnotations, setSelectedAnnotations] = useState<Array<Schema["Annotation"]["type"] & { imageUrl?: string }>>([]);
-  // const [searchMessage, setSearchMessage] = useState<string | null>(null); // State to hold the user message
   const [selectedImage, setSelectedImage] = useState<Schema["Image"]["type"]>();
   const [category, setCategory] = useState<string>("");
   const [keywords, setKeywords] = useState<string[]>([]);
@@ -33,6 +32,9 @@ const ImageSearch: React.FC = () => {
   const [selectedImageUrl, setSelectedImageUrl] = useState<string>("");
   const [boundingBoxes, setBoundingBoxes] = useState<BoundingBox[]>([]);
   const [viewDataSelected, selectViewData] = useState<boolean>(false);
+  // search counts
+  const [annotationCount, setAnnotationCount] = useState(0); 
+  const [imageCount, setImageCount] = useState(0);
 
   const components = {
     Header: CustomHeader,
@@ -86,6 +88,9 @@ const ImageSearch: React.FC = () => {
       }));
 
       setAnnotations(annotationsWithUrls);
+      
+      setAnnotationCount(annotationsWithUrls.length); // Total annotations
+
       // Group annotations by image ID
       const grouped = annotationsWithUrls.reduce((acc, annotation) => {
         if (!acc[annotation.image_id]) {
@@ -96,8 +101,8 @@ const ImageSearch: React.FC = () => {
       }, {} as { [key: string]: Array<Schema["Annotation"]["type"] & { imageUrl?: string }> });
 
       setGroupedAnnotations(grouped);
-      // const numberSearchResults = Object.keys(grouped).length;
-      // setSearchMessage(`Images found: ${numberSearchResults}`);
+      setImageCount(Object.keys(grouped).length);
+
     } catch (error) {
       console.error("Failed to fetch annotations:", error);
     }
@@ -151,17 +156,17 @@ const ImageSearch: React.FC = () => {
     fetchImageInfo(imageId);
   };
   const fetchImageInfo = async (imageId: string) => {
-    console.log("imageId: "+imageId);
+    
     const episode_number = imageId.split("-")[1].split("_")[0].substring(1);
-    console.log("episode: "+episode_number);
+   
     const image_number = imageId.split("-")[1].split("_")[1].split(".")[0];
-    console.log("image number: "+image_number);
+   
 
     try {
       const result: any = await client.models.Image.get({
         episode_id: episode_number, image_id: image_number}
       )
-      console.log(result);
+      
       if(result.data){setSelectedImage(result.data);}
     } catch (error) {
       console.error("Failed to fetch annotations:", error);
@@ -237,6 +242,8 @@ const ImageSearch: React.FC = () => {
           <button onClick={handlePreviousPage} disabled={currentPageIndex === 0 || loading}>Previous</button>
           <button onClick={handleNextPage} disabled={currentPageIndex * itemsPerPage + itemsPerPage >= annotations.length || loading}>Next</button>
         </div>
+        <div>{imageCount && <p>Matching Images: {imageCount} | Matching Annotations: {annotationCount}</p>
+      }</div>
         <ToggleButton onClick={previewData}>View Data Table</ToggleButton>
         {viewDataSelected && <AnnotationDataViewer annotations={annotations}/> }
         <DownloadResults annotations={annotations}></DownloadResults>

@@ -79,13 +79,13 @@ const AnnotationDataViewer: React.FC<AnnotationDataViewerProps> = ({ annotations
         </thead>
         <tbody>
           {annotations.map((annotation) => (
-            <tr key={annotation.annotation_id}>
+            <tr key={`${annotation.image_id}-${annotation.annotation_id}`}>
               <td style={{ padding: "10px", textAlign: "center", borderBottom: "1px solid #ddd" }}>{annotation.image_id}</td>
               <td style={{ padding: "10px", textAlign: "center", borderBottom: "1px solid #ddd" }}>{annotation.annotation_id}</td>
               {attributeHeaders.map((key) => {
                 const value = renderAttributeValue(annotation, key);
                 return (
-                  <td key={`${annotation.annotation_id}-${key}`} style={{ padding: "10px", textAlign: "center", borderBottom: "1px solid #ddd" }}>
+                  <td key={`${annotation.image_id}-${annotation.annotation_id}-${key}`} style={{ padding: "10px", textAlign: "center", borderBottom: "1px solid #ddd" }}>
                     {value !== null ? value : ""}
                   </td>
                 );

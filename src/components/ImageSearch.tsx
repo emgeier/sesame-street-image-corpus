@@ -4,10 +4,10 @@ import { generateClient } from "aws-amplify/data";
 import { getUrl } from 'aws-amplify/storage';
 import AnnotatedImage from "./AnnotatedImage";
 import AttributeDetails from "./AttributeDetails";
-import { Authenticator } from "@aws-amplify/ui-react";
+import { Authenticator, ToggleButton } from "@aws-amplify/ui-react";
 import CustomHeader from './CustomMessaging';
 import DownloadResults from "./DownloadResults";
-// import AnnotationDataViewer from "./AnnotationDataViewer";
+import AnnotationDataViewer from "./AnnotationDataViewer";
 
 interface BoundingBox {
   x: number;
@@ -32,6 +32,7 @@ const ImageSearch: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string>("");
   const [boundingBoxes, setBoundingBoxes] = useState<BoundingBox[]>([]);
+  const [viewDataSelected, selectViewData] = useState<boolean>(false);
 
   const components = {
     Header: CustomHeader,
@@ -179,7 +180,9 @@ const ImageSearch: React.FC = () => {
       setCurrentPageIndex(currentPageIndex - 1);
     }
   };
-
+  const previewData = () => {
+    selectViewData(!viewDataSelected);
+  };
   return (
     <Authenticator hideSignUp className="authenticator-popup" components={components}>
                     {({  }) => (
@@ -234,7 +237,8 @@ const ImageSearch: React.FC = () => {
           <button onClick={handlePreviousPage} disabled={currentPageIndex === 0 || loading}>Previous</button>
           <button onClick={handleNextPage} disabled={currentPageIndex * itemsPerPage + itemsPerPage >= annotations.length || loading}>Next</button>
         </div>
-        {/* <AnnotationDataViewer annotations={annotations}/> */}
+        <ToggleButton onClick={previewData}>View Data Table</ToggleButton>
+        {viewDataSelected && <AnnotationDataViewer annotations={annotations}/> }
         <DownloadResults annotations={annotations}></DownloadResults>
         {selectedImageUrl && (
           <div>

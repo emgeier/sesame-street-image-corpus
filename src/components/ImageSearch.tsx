@@ -7,6 +7,7 @@ import AttributeDetails from "./AttributeDetails";
 import { Authenticator } from "@aws-amplify/ui-react";
 import CustomHeader from './CustomMessaging';
 import DownloadResults from "./DownloadResults";
+// import AnnotationDataViewer from "./AnnotationDataViewer";
 
 interface BoundingBox {
   x: number;
@@ -233,6 +234,7 @@ const ImageSearch: React.FC = () => {
           <button onClick={handlePreviousPage} disabled={currentPageIndex === 0 || loading}>Previous</button>
           <button onClick={handleNextPage} disabled={currentPageIndex * itemsPerPage + itemsPerPage >= annotations.length || loading}>Next</button>
         </div>
+        {/* <AnnotationDataViewer annotations={annotations}/> */}
         <DownloadResults annotations={annotations}></DownloadResults>
         {selectedImageUrl && (
           <div>

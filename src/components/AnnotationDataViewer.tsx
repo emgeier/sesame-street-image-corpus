@@ -9,6 +9,10 @@ const AnnotationDataViewer: React.FC<AnnotationDataViewerProps> = ({ annotations
   if (annotations.length === 0) {
     return <p>No data to display.</p>;
   }
+  // Helper function to capitalize the first letter of a string, maybe?
+// const capitalizeFirstLetter = (str: string) => {
+//   return str.charAt(0).toUpperCase() + str.slice(1);
+// };
 
   // Collect all unique attribute keys from all annotations, excluding "other" values
   const uniqueAttributes = new Set<string>();
@@ -50,13 +54,13 @@ const AnnotationDataViewer: React.FC<AnnotationDataViewerProps> = ({ annotations
   };
 
   return (
-    <div>
+    <div style={{ maxWidth: "1000px", margin: "0 auto", overflowX: "auto"}}>
       <h3>Annotations Data </h3>
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <thead>
           <tr>
-            <th style={{ padding: "10px", minWidth: "100px", textAlign: "center", borderBottom: "1px solid #ddd" }}>Image ID</th>
-            <th style={{ padding: "10px", minWidth: "100px", textAlign: "center", borderBottom: "1px solid #ddd" }}>Annotation ID</th>
+            <th style={{ padding: "10px", minWidth: "100px", textAlign: "center", borderBottom: "1px solid #ddd" }}>Image</th>
+            <th style={{ padding: "10px", minWidth: "100px", textAlign: "center", borderBottom: "1px solid #ddd" }}>Annotation</th>
             {attributeHeaders.map((header) => (
               <th
                 key={header}

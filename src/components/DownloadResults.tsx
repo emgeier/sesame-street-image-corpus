@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import JSZip from "jszip";
 import Papa from "papaparse";
 import { saveAs } from "file-saver";
@@ -9,13 +9,21 @@ interface DownloadResultsProps {
 
 const DownloadResults: React.FC<DownloadResultsProps> = ({ annotations }) => {
 
+  const [message, setMessage] = useState("");
   const downloadCSV = () => {
+    setMessage("Preparing CSV download...");
+
     const csv = Papa.unparse(annotations);
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     saveAs(blob, "annotations.csv");
+
+    setMessage("CSV download prepared.");
+    setTimeout(() => setMessage(""), 2000); // Clear message after 2 seconds    
   };
 
   const downloadAll = async () => {
+    setMessage("Preparing download...");
+
     const zip = new JSZip();
     const folder = zip.folder("images");
 
@@ -33,12 +41,16 @@ const DownloadResults: React.FC<DownloadResultsProps> = ({ annotations }) => {
     zip.generateAsync({ type: "blob" }).then((content) => {
       saveAs(content, "annotations_and_images.zip");
     });
+
+    setMessage("Download prepared.");
+    setTimeout(() => setMessage(""), 2000); // Clear message after 2 seconds    
   };
 
   return (
     <div>
       <button onClick={downloadCSV}>Download CSV </button>
       <button onClick={downloadAll}>Download CSV and Images</button>
+      {message && <p>{message}</p>}
     </div>
   );
 };

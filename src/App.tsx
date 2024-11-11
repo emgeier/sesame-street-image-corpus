@@ -12,6 +12,7 @@ import Footer from "./components/Footer";
 import Metrics from './components/Metrics';
 import Contact from './components/Contact.tsx';
 import Upload from './components/Upload.tsx';
+import ImageSearchDebug from './components/ImageSearchDebug.tsx';
 
 function App() {
   return (
@@ -27,6 +28,8 @@ function App() {
                     <Route path="/download" element={<SearchImageAttributes />} />
                     <Route path="/upload" element={<Upload />} />
                     <Route path="/episodes" element={<EpisodeSearch />} />
+                    <Route path="/debug" element={<ImageSearchDebug />} />
+
                     <Route path="/guide" element={<Guide />} />
                     <Route path="/metrics" element={<Metrics/>} />
                     <Route path="/contact" element={<Contact/>} />  

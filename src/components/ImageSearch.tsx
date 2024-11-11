@@ -8,6 +8,7 @@ import { Authenticator, ToggleButton } from "@aws-amplify/ui-react";
 import CustomHeader from './CustomMessaging';
 import DownloadResults from "./DownloadResults";
 import AnnotationDataViewer from "./AnnotationDataViewer";
+import { FetchImageUrls } from "./FetchImageUrls";
 
 interface BoundingBox {
   x: number;
@@ -21,6 +22,7 @@ interface BoundingBox {
 const ImageSearch: React.FC = () => {
   const client = generateClient<Schema>();
   const [annotations, setAnnotations] = useState<Array<Schema["Annotation"]["type"] & { imageUrl?: string }>>([]);
+  const [downloadAnnotations, setDownloadAnnotations] = useState<Array<Schema["Annotation"]["type"] >>([]);
   const [groupedAnnotations, setGroupedAnnotations] = useState<{ [key: string]: Array<Schema["Annotation"]["type"] & { imageUrl?: string }> }>({});
   const [selectedAnnotations, setSelectedAnnotations] = useState<Array<Schema["Annotation"]["type"] & { imageUrl?: string }>>([]);
   const [selectedImage, setSelectedImage] = useState<Schema["Image"]["type"]>();
@@ -41,9 +43,18 @@ const ImageSearch: React.FC = () => {
   };
 
   // Function to fetch URL for each image ID
+  // const fetchImageUrl = async (imageId: string): Promise<string | undefined> => {
+  //   try {
+  //     const result = await getUrl({ path: `images/${imageId}` });
+  //     return result.url.href;
+  //   } catch (error) {
+  //     console.error(`Failed to fetch URL for image ID: ${imageId}`, error);
+  //     return undefined;
+  //   }
+  // };
   const fetchImageUrl = async (imageId: string): Promise<string | undefined> => {
     try {
-      const result = await getUrl({ path: `images/${imageId}` });
+      const result = await getUrl({ path: `images/${imageId}` });  // Short expiration time
       return result.url.href;
     } catch (error) {
       console.error(`Failed to fetch URL for image ID: ${imageId}`, error);
@@ -80,6 +91,8 @@ const ImageSearch: React.FC = () => {
         limit: 40000,
         nextToken: token,
       });
+
+      setDownloadAnnotations(result.data);
 
       // Fetch image URLs for each annotation
       const annotationsWithUrls = await Promise.all(result.data.map(async (annotation: any) => {
@@ -246,7 +259,8 @@ const ImageSearch: React.FC = () => {
       }</div>
         <ToggleButton onClick={previewData}>View Data Table</ToggleButton>
         {viewDataSelected && <AnnotationDataViewer annotations={annotations}/> }
-        <DownloadResults annotations={annotations}></DownloadResults>
+       
+        <FetchImageUrls annotations = {downloadAnnotations}></FetchImageUrls>
         {selectedImageUrl && (
           <div>
             {selectedImage && (

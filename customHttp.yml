@@ -1,0 +1,13 @@
+customHeaders:
+  - pattern: '**/*.css'
+    headers:
+      - key: 'Content-Type'
+        value: 'text/css'
+  - pattern: '**/*.js'
+    headers:
+      - key: 'Content-Type'
+        value: 'application/javascript'
+  - pattern: '**/*.png'
+    headers:
+      - key: 'Content-Type'
+        value: 'application/javascript'

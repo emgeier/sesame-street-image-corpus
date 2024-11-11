@@ -9,5 +9,5 @@ customHeaders:
         value: 'application/javascript'
   - pattern: '**/*.png'
     headers:
-      - key: 'Content-Type'
-        value: 'application/javascript'
+      - key: 'Cache-Control'
+        value: 'no-store'

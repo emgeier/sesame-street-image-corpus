@@ -6,7 +6,7 @@ import DownloadResults from "./DownloadResults";
 import "./search.css";
 import { Authenticator, Divider } from "@aws-amplify/ui-react";
 import CustomHeader from "./CustomMessaging";
-import AnnotationDataViewer from "./AnnotationDataViewer";
+import AnnotationDataViewerToggle from "./AnnotationDataViewerToggle";
 
 const SearchImageAttributes: React.FC = () => {
   const client = generateClient<Schema>();
@@ -498,10 +498,12 @@ const SearchImageAttributes: React.FC = () => {
         <br/>
       </div>
       </div>
-      <button onClick={() => fetchSearchResultAnnotations()}>Search</button>
-      <button onClick={() => clearSearch()}>Clear Search</button>
+      <div className="button-group">      
+        <button onClick={() => fetchSearchResultAnnotations()}>Search</button>
+        <button onClick={() => clearSearch()}>Clear</button>
+      </div>
       {searchMessage && <p>{searchMessage}</p>} {/* Display the user message for search result numbers */}
-      <div><AnnotationDataViewer annotations={annotations}/></div>
+      <div><AnnotationDataViewerToggle annotations={annotations}/></div>
       <br/>
       <div><DownloadResults annotations={annotations} /></div>
       <br/>

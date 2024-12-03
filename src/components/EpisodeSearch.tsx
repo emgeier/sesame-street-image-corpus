@@ -8,6 +8,7 @@ import useScrollToTop from "../ScrollToTop";
 import DownloadResults from "./DownloadResults";
 import { Authenticator } from "@aws-amplify/ui-react";
 import CustomHeader from "./CustomMessaging";
+import AnnotationDataViewerToggle from "./AnnotationDataViewerToggle";
 
 interface BoundingBox {
     x: number;
@@ -250,13 +251,18 @@ const EpisodeSearch: React.FC = () => {
     setSeason(undefined);
     setEpisodeNumber("");
     setAirYear(undefined);
-
+    setSelectedFullImageId("");
+    setSelectedImage("");
+    setImage(undefined);
   };
   const handleEpisodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEpisodeNumber(e.target.value);
     setSeason(undefined);
     setTitle("");
     setAirYear(undefined);
+    setSelectedFullImageId("");
+    setSelectedImage("");
+    setImage(undefined);
 
   };
   const handleSeasonChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -264,11 +270,17 @@ const EpisodeSearch: React.FC = () => {
     setTitle("")
     setEpisodeNumber("")
     setAirYear(undefined);
+    setSelectedFullImageId("");
+    setSelectedImage("");
+    setImage(undefined);
   };
   const handleAirYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSeason(undefined);
     setTitle("")
     setEpisodeNumber("")
+    setSelectedFullImageId("");
+    setSelectedImage("");
+    setImage(undefined);
     setAirYear(e.target.valueAsNumber);
   };
 
@@ -297,6 +309,21 @@ const EpisodeSearch: React.FC = () => {
       setCurrentPageIndex(currentPageIndex - 1);
     }
   };
+  const clearSearch = () => {
+    setEpisodeNumber(""); // Reset episode number
+    setSeason(undefined); // Reset season
+    setTitle(""); // Reset title
+    setAirYear(undefined); // Reset air year
+    setImages([]); // Clear images
+    setSelectedFullImageId(""); // Clear selected image ID
+    setSelectedImage(""); // Clear selected image URL
+    setImage(undefined); // Clear selected image details
+    setBoundingBoxes([]); // Clear bounding boxes
+    setResultAnnotations([]); // Clear result annotations
+    setSearchMessage(null); // Clear search message
+    useScrollToTop();
+  };
+  
 
   return (
     <Authenticator hideSignUp className="authenticator-popup" components={components}>
@@ -304,6 +331,8 @@ const EpisodeSearch: React.FC = () => {
     <main className="main-content">
       <div className='separator'></div>
       <h1 className="intro">Episode Search </h1>
+      <div>{searchMessage && <h3>Slideshow</h3>}</div>
+      <EpisodeCarousel images={images}></EpisodeCarousel>
       <div className="search-controls">
       <div className="search-control">
           <label htmlFor="episodeNumber">Episode:</label>
@@ -347,7 +376,10 @@ const EpisodeSearch: React.FC = () => {
         />
       </div>    
       </div>
-      <button onClick={handleEpisodeRequest}>Search</button>
+      <div className="button-group">
+        <button onClick={handleEpisodeRequest}>Search</button>
+        <button onClick={clearSearch}>Clear</button>
+      </div>
       {loading ? (
         <p>Loading...</p>
       ) : (
@@ -377,14 +409,12 @@ const EpisodeSearch: React.FC = () => {
         <div>
           {image?.episode_title} <br/>Season {image?.season}<br/> Episode {image?.episode_id}<br/> {image?.air_year}
           <AnnotatedImage imageUrl={selectedImage} boundingBoxes={boundingBoxes}></AnnotatedImage>
-          <p>Click annotation to see details.</p>
+          <AnnotationDataViewerToggle annotations={resultAnnotations}/>
           <DownloadResults annotations={resultAnnotations}></DownloadResults>
         </div>
       )}
       <br></br>
       <br></br>
-      <div>{searchMessage && <h3>Slideshow</h3>}</div>
-      <EpisodeCarousel images={images}></EpisodeCarousel>
     </main>
     )}
 </Authenticator>

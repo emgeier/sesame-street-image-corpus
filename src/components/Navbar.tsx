@@ -80,10 +80,11 @@ const Navbar: React.FC = () => {
               <img src={icon} alt="ssia logo" className="navbar-icon" />
             </Link> </li>
         <li><Link to="/"  onClick={closeMenu} className={currentPath === '/' ? 'current-page' : ''} >Home</Link></li>
-        <li><Link to="/guide"  onClick={closeMenu} className={currentPath === '/guide' ? 'current-page' : ''}>Guide</Link></li>
         <li><Link to="/about"  onClick={closeMenu} className={currentPath === '/about' ? 'current-page' : ''}>About</Link></li>
+        <li><Link to="/guide"  onClick={closeMenu} className={currentPath === '/guide' ? 'current-page' : ''}>Guide</Link></li>
         <li><Link to="/search"  onClick={closeMenu} className={currentPath === '/search' ? 'current-page' : ''}>Search</Link></li>
         <li><Link to="/upload"  onClick={closeMenu} className={currentPath === '/upload' ? 'current-page' : ''}>Upload</Link></li>
+        <li><Link to="/team"  onClick={closeMenu} className={currentPath === '/team' ? 'current-page' : ''}>Team</Link></li>
         <li><Link to="/contact"  onClick={closeMenu} className={currentPath === '/contact' ? 'current-page' : ''}>Contact</Link></li>
  
       </ul>

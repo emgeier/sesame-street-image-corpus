@@ -95,6 +95,7 @@ const AnnotatedImage: React.FC<AnnotatedImageProps> = ({ imageUrl, boundingBoxes
       {selectedAnnotation && (
         <AttributePopup annotation={selectedAnnotation} onClose={() => setSelectedAnnotation(null)} />
       )}
+      <p>Click bounding box to see annotation details.</p>
     </div>
   );
 };

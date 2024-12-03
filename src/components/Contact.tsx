@@ -15,7 +15,7 @@ function Contact() {
     <main>
     <div className="separator"></div>
     <p className='block-format'>
-      For SSIA and LANDLAB inquiries, contact Sophia Vinci-Booher at sophia.vinci-booher@vanderbilt.edu
+      For SSIA and LaNDLAB inquiries, contact Sophia Vinci-Booher at sophia.vinci-booher@vanderbilt.edu
     </p>
     <p className='block-format'>
         If you would like to test or contribute to the<i>Sesame Street</i>Image Archive, please take this <a href="https://peabody.az1.qualtrics.com/jfe/form/SV_eRQUVmfS4d7q4yq" target="_blank" rel="noopener noreferrer">

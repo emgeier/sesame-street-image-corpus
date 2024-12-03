@@ -17,7 +17,7 @@ const Search: React.FC = () => {
     <Authenticator hideSignUp className="authenticator-popup" components={components}>
                     {({  }) => (
     <div>
-      <main className='main-content'>
+      <main >
         <br/>
         <br/>
         <br/>

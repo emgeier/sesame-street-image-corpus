@@ -38,7 +38,7 @@ const ImageSearch: React.FC = () => {
 
   const fetchImageUrl = async (imageId: string): Promise<string | undefined> => {
     try {
-      const result = await getUrl({ path: `dev/${imageId}` });  
+      const result = await getUrl({ path: `images/${imageId}` });  
       return result.url.href;
     } catch (error) {
       console.error(`Failed to fetch URL for image ID: ${imageId}`, error);

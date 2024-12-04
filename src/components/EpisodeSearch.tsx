@@ -128,7 +128,7 @@ const EpisodeSearch: React.FC = () => {
     // Function to fetch URL for each image ID
   const fetchImageUrl = async (imageId: string): Promise<string> => {
     try {
-      const result = await getUrl({ path: `images/${imageId}` });
+      const result = await getUrl({ path: `dev/${imageId}` });
       return result.url.href;
     } catch (error) {
       console.error(`Failed to fetch URL for image ID: ${imageId}`, error);

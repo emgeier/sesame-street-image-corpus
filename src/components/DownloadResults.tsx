@@ -29,7 +29,7 @@ const DownloadResults: React.FC<DownloadResultsProps> = ({ annotations }) => {
 
     for (const annotation of annotations) {
       if (annotation.imageUrl && folder) {
-        const response = await fetch(annotation.imageUrl);
+        const response = await fetch(annotation.imageUrl, {mode: 'cors', cache: 'no-cache'});
         const blob = await response.blob();
         folder.file(`${annotation.image_id}`, blob);
       }

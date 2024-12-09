@@ -1,6 +1,6 @@
 ## Overview
 
-The Sesame Street Image Archive is a repository of images and CVAT annotations that are searchable by all fields and keywords. Users can view stills from video content from the popular children's television show, Sesame Street, with categories of objects and people within those images annotated for various characteristics.
+The Sesame Street Archive is a repository of images and CVAT annotations that are searchable by all fields and keywords. Users can view stills from video content from the popular children's television show, Sesame Street, with categories of objects and people within those images annotated for various characteristics.
 
 ## Features
 

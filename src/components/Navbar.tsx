@@ -77,7 +77,7 @@ const Navbar: React.FC = () => {
         </div>
         <ul className={`nav-links ${menuOpen ? 'active' : ''}`}>
         <li><Link to="/">
-              <img src={icon} alt="ssia logo" className="navbar-icon" />
+              <img src={icon} alt="ssa logo" className="navbar-icon" />
             </Link> </li>
         <li><Link to="/"  onClick={closeMenu} className={currentPath === '/' ? 'current-page' : ''} >Home</Link></li>
         <li><Link to="/about"  onClick={closeMenu} className={currentPath === '/about' ? 'current-page' : ''}>About</Link></li>

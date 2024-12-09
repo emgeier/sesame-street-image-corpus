@@ -25,11 +25,11 @@ function Guide() {
       
       <br></br>
     <p className='indented'>
-    Annotation Schema of the<i>Sesame Street</i>Image Archive
+    Annotation Schema of the<i>Sesame Street</i>Archive
     </p>
     <br></br>
     <p className='block-format'>
-    The SSIA uses a controlled vocabulary to encode the images with information about various visual aspects of the images. Here is a comprehensive list of the terms used in the development of the metadata for the<i>Sesame Street</i>Image Archive:</p>
+    The SSA uses a controlled vocabulary to encode the images with information about various visual aspects of the images. Here is a comprehensive list of the terms used in the development of the metadata for the<i>Sesame Street</i>Archive:</p>
       <p className='indented'>
         <div>
   <strong>“Face” Category Attributes</strong><br/>

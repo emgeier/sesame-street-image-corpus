@@ -15,7 +15,7 @@ function Team() {
       
       <div className='separator'></div>
     <main>
-      <h1 className='intro'><i>Sesame Street</i>Image Archive </h1>
+      <h1 className='intro'><i>Sesame Street</i>Archive </h1>
       <br></br>
       <p className='block-format'>
         <b>LAND Lab</b>

@@ -210,7 +210,7 @@ const ImageSearch: React.FC = () => {
                 </div>
             </div>
 
-                <div><p>For a list of keywords, see the tooltip. For a full explanation of the terms used in the SSIA see the <a href="/Guide" target="_blank" rel="noopener noreferrer">Guide</a>.</p></div>
+                <div><p>For a list of keywords, see the tooltip. For a full explanation of the terms used in the SSA see the <a href="/Guide" target="_blank" rel="noopener noreferrer">Guide</a>.</p></div>
                 <p>Click image for annotation details.</p>
             <div className="annotation-grid-container-x">
               <ul className="annotation-grid-x">
